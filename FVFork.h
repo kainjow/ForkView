@@ -16,18 +16,18 @@ typedef NSInteger FVForkType;
 
 @interface FVFork : NSObject
 {
-	FSIORefNum forkRef;
-	FVForkType forkType;
+    NSData *data_;
+	FVForkType type_;
+    unsigned pos_;
 }
 
-- (id)initWithURL:(NSURL *)fileURL type:(FVForkType)theForkType;
+- (id)initWithURL:(NSURL *)fileURL type:(FVForkType)type;
 
-- (off_t)length;
-- (off_t)position;
+- (BOOL)read:(unsigned)size into:(void*)buffer;
+- (BOOL)seekTo:(unsigned)offset;
 
-- (BOOL)read:(size_t)size into:(void *)buffer;
-- (BOOL)seekTo:(off_t)offset;
-
-@property (readonly) FVForkType forkType;
+@property (readonly) unsigned length;
+@property (readonly) unsigned position;
+@property (readonly) FVForkType type;
 
 @end

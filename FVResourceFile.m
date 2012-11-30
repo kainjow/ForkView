@@ -160,7 +160,7 @@ struct FVResourceMap {
 	aHeader->dataLength = CFSwapInt32BigToHost(aHeader->dataLength);
 	aHeader->mapLength = CFSwapInt32BigToHost(aHeader->mapLength);
 	
-	off_t fileLength = [fork length];
+	unsigned fileLength = [fork length];
 	if ((aHeader->dataOffset + aHeader->dataLength > fileLength) || (aHeader->mapOffset + aHeader->mapLength > fileLength)) {
 		return NO;
 	}
@@ -209,7 +209,7 @@ struct FVResourceMap {
 
 - (BOOL)readTypes
 {
-	off_t typesOffset = [fork position];
+	unsigned typesOffset = [fork position];
 	
 	uint16_t numberOfTypes;
 	if (![fork read:sizeof(numberOfTypes) into:&numberOfTypes]) {
@@ -330,7 +330,7 @@ struct FVResourceMap {
 
 - (FVForkType)forkType
 {
-	return fork.forkType;
+	return fork.type;
 }
 
 @end

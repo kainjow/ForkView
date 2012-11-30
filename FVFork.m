@@ -3,108 +3,94 @@
 //  ForkView
 //
 //  Created by Kevin Wojniak on 7/9/11.
-//  Copyright 2011 Kevin Wojniak. All rights reserved.
+//  Copyright 2011-2012 Kevin Wojniak. All rights reserved.
 //
 
 #import "FVFork.h"
+#include <sys/stat.h>
+#include <sys/xattr.h>
 
+// Apple's docs say "The maximum size of the resource fork in a file is 16 megabytes"
+#define FVFORK_MAX_RESOURCE_FORK_SIZE 16777216
+#define FVFORK_RESOURCE_NAME "com.apple.ResourceFork"
 
 @implementation FVFork
 
-@synthesize forkType;
+@synthesize type = type_;
+@synthesize position = pos_;
 
-- (id)initWithURL:(NSURL *)fileURL type:(FVForkType)theForkType
++ (NSData*)forkDataForFile:(NSString*)file type:(FVForkType)type
 {
+    const char *path = [file fileSystemRepresentation];
+    struct stat sb;
+    if (stat(path, &sb) != 0) {
+        // Can't get file information
+        return nil;
+    }
+    if (sb.st_size > FVFORK_MAX_RESOURCE_FORK_SIZE) {
+        return nil;
+    }
+    if (type == FVForkTypeData) {
+        return [NSData dataWithContentsOfFile:file];
+    }
+    ssize_t rsrcSize = 0;
+    rsrcSize = getxattr(path, FVFORK_RESOURCE_NAME, NULL, 0, 0, 0);
+    if (rsrcSize <= 0 || rsrcSize > FVFORK_MAX_RESOURCE_FORK_SIZE) {
+        return nil;
+    }
+    NSMutableData *data = [NSMutableData dataWithLength:rsrcSize];
+    if (getxattr(path, FVFORK_RESOURCE_NAME, [data mutableBytes], rsrcSize, 0, 0) != rsrcSize) {
+        // ??? shouldn't happen
+        return nil;
+    }
+    return data;
+}
+
+- (id)initWithURL:(NSURL *)fileURL type:(FVForkType)type
+{
+    NSData *forkData = [[self class] forkDataForFile:[fileURL path] type:type];
+    if (forkData == nil) {
+        return nil;
+    }
+    
 	self = [super init];
 	if (self == nil) {
 		return nil;
 	}
 	
-	FSRef ref;
-	if (!CFURLGetFSRef((CFURLRef)fileURL, &ref)) {
-		[self release];
-		return nil;
-	}
-	
-	HFSUniStr255 forkName;
-	if (theForkType == FVForkTypeResource) {
-		if (FSGetResourceForkName(&forkName) != noErr) {
-			[self release];
-			return nil;
-		}
-	} else {
-		if (FSGetDataForkName(&forkName) != noErr) {
-			[self release];
-			return nil;
-		}
-	}
-	
-	FSIORefNum tmpForkRef;
-	OSErr err = FSOpenFork(&ref, forkName.length, forkName.unicode, fsRdPerm, &tmpForkRef);
-	if (err != noErr) {
-		[self release];
-		return nil;
-	}
-	
-	forkRef = tmpForkRef;
-	
-	if ([self length] <= 0 || ![self seekTo:0]) {
-		[self release];
-		return nil;
-	}
-	
-	forkType = theForkType;
+    data_ = [forkData retain];
+	type_ = type;
 	
 	return self;
 }
 
 - (void)dealloc
 {
-	if (forkRef) {
-		(void)FSCloseFork(forkRef);
-	}
+    [data_ release];
 	[super dealloc];
 }
 
-- (off_t)length
+- (unsigned)length
 {
-	SInt64 size;
-	OSErr err = FSGetForkSize(forkRef, &size);
-	if (err != noErr) {
-		NSLog(@"FSGetForkSize error: %d", err);
-		return -1;
-	}
-	return size;
+    return (unsigned)[data_ length];
 }
 
-- (off_t)position
+- (BOOL)read:(unsigned)size into:(void*)buffer
 {
-	SInt64 pos;
-	OSErr err = FSGetForkPosition(forkRef, &pos);
-	if (err != noErr) {
-		NSLog(@"FSGetForkPosition error: %d", err);
-		return -1;
-	}
-	return pos;
-}
-
-- (BOOL)read:(size_t)size into:(void *)buffer
-{
-	OSErr err = FSReadFork(forkRef, fsAtMark, 0, size, buffer, NULL);
-	if (err != noErr) {
-		NSLog(@"FSReadFork error: %d", err);
-		return NO;
-	}
+    if (pos_ + size > self.length) {
+        return NO;
+    }
+    [data_ getBytes:buffer range:NSMakeRange(pos_, size)];
+    pos_ += size;
 	return YES;
 }
 
-- (BOOL)seekTo:(off_t)offset
+- (BOOL)seekTo:(unsigned)offset
 {
-	OSErr err = FSSetForkPosition(forkRef, fsFromStart, offset);
-	if (err != noErr) {
-		NSLog(@"FSSetForkPosition error: %d", err);
-		return NO;
-	}
+    if (offset >= self.length) {
+        return NO;
+    }
+    pos_ = offset;
 	return YES;
 }
 
