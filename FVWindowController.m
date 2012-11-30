@@ -35,6 +35,9 @@
 		case 'icns':
 		case 'PICT':
 		case 'PNG ':
+        case 'ICON':
+        case 'ICN#':
+        case 'ics#':
 			class = [FVPNGTemplate class];
 			break;
 		default:
@@ -74,7 +77,9 @@
 	//winFrame.origin.x = NSMinX(parentWinFrame) + 15;
 	//winFrame.origin.y = NSMinY(parentWinFrame);// - 15 - NSHeight(winFrame);
 	
-	NSWindow *window = [[NSWindow alloc] initWithContentRect:winFrame styleMask:NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask backing:NSBackingStoreBuffered defer:YES];
+    NSUInteger styleMask = NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask;
+	NSWindow *window = [[NSWindow alloc] initWithContentRect:winFrame styleMask:styleMask backing:NSBackingStoreBuffered defer:YES];
+    [window setReleasedWhenClosed:YES];
 	[window setContentView:[controller view]];
 	[window setMinSize:minSize];
 	
@@ -96,9 +101,14 @@
 	[windowControllers removeObject:windowController];
 }
 
+- (FVResource*)selectedResource
+{
+    return [[resourcesArrayController selectedObjects] lastObject];
+}
+
 - (void)openSelectedResource
 {
-	[self viewResource:[[resourcesArrayController selectedObjects] lastObject]];
+	[self viewResource:[self selectedResource]];
 }
 
 - (void)close
@@ -111,13 +121,19 @@
 
 - (NSMenu *)tableViewMenuForSelection
 {
-#if 0
-	FVResource *resource = [[resourcesArrayController selectedObjects] lastObject];
 	NSMenu *menu = [[[NSMenu alloc] init] autorelease];
-	[[menu addItemWithTitle:@"Open\u2026" action:@selector(openSelectedResource) keyEquivalent:@""] setTarget:self];
+	[[menu addItemWithTitle:@"Export\u2026" action:@selector(writeSelectedResource) keyEquivalent:@""] setTarget:self];
 	return menu;
-#endif
-	return nil;
+}
+
+- (void)writeSelectedResource
+{
+    NSSavePanel *savePanel = [NSSavePanel savePanel];
+    [savePanel beginSheetModalForWindow:[self window] completionHandler:^(NSInteger result){
+        if (result == NSFileHandlingPanelOKButton) {
+            [[[self selectedResource] data] writeToURL:[savePanel URL] atomically:YES];
+        }
+    }];
 }
 
 - (NSString *)windowTitleForDocumentDisplayName:(NSString *)displayName

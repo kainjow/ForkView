@@ -17,6 +17,4 @@
 
 - (NSView *)view;
 
-+ (NSString *)UTTypeForResource:(FVResource *)resource;
-
 @end
