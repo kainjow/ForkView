@@ -6,6 +6,8 @@
 //  Copyright 2011 Kevin Wojniak. All rights reserved.
 //
 
+#import <AppKit/AppKit.h>
+
 @class FVResource;
 
 @protocol FVTemplate
