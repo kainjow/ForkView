@@ -9,7 +9,6 @@
 #import "FVWindowController.h"
 #import "FVDocument.h"
 #import "FVResourceFile.h"
-#import "FVResource.h"
 #import "ForkView-Swift.h"
 
 #import "FVPNGTemplate.h"

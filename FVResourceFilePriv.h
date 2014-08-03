@@ -8,6 +8,8 @@
 
 #import "FVResourceFile.h"
 
+@class FVResource;
+
 @interface FVResourceFile (Data)
 
 - (NSData *)dataForResource:(FVResource *)resource;

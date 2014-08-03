@@ -8,8 +8,6 @@
 
 #import "FVResourceFile.h"
 #import "FVFork.h"
-#import "FVResource.h"
-#import "FVResourcePriv.h"
 #import "ForkView-Swift.h"
 
 @interface NSError (FVResource)
@@ -280,8 +278,9 @@ struct FVResourceMap {
 			
 			//NSLog(@"%@[%u] %u %s", obj.typeString, resourceID, dataLength, name);
 			FVResource *resource = [[FVResource alloc] init];
-			[resource setID:resourceID];
-			[resource setDataSize:dataLength offset:dataOffset + sizeof(dataOffset)];
+            resource.ident = resourceID;
+            resource.dataSize = dataLength;
+            resource.dataOffset = dataOffset + sizeof(dataOffset);
 			if (strlen(name)) {
 				[resource setName:[NSString stringWithCString:name encoding:NSMacOSRomanStringEncoding]];
 			}

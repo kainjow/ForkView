@@ -6,8 +6,6 @@
 //  Copyright 2011 Kevin Wojniak. All rights reserved.
 //
 
-#import "FVResource.h"
-
 @class FVResource;
 
 @protocol FVTemplate
