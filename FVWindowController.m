@@ -18,7 +18,9 @@
 
 - (id)init
 {
-	self = [super initWithWindowNibName:@"FVWindow"];
+    if ((self = [super initWithWindowNibName:@"FVWindow"]) != nil) {
+        windowControllers = [NSMutableArray array];
+    }
 	return self;
 }
 
