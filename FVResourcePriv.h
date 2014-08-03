@@ -19,6 +19,6 @@
 
 @interface FVResource ()
 
-@property (readwrite, assign) FVResourceFile *file;
+@property (readwrite, weak) FVResourceFile *file;
 
 @end

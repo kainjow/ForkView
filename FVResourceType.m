@@ -26,8 +26,7 @@
 - (void)setResources:(NSArray *)theResources
 {
 	if (resources != theResources) {
-		[resources release];
-		resources = [theResources retain];
+        resources = theResources;
 	}
 }
 
@@ -41,13 +40,6 @@
 					  (type & 0x000000FF)];
 	}
 	return typeString;
-}
-
-- (void)dealloc
-{
-	[typeString release];
-	[resources release];
-	[super dealloc];
 }
 
 @end

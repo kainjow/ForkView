@@ -58,16 +58,10 @@
 		return nil;
 	}
 	
-    data_ = [forkData retain];
+    data_ = forkData;
 	type_ = type;
 	
 	return self;
-}
-
-- (void)dealloc
-{
-    [data_ release];
-	[super dealloc];
 }
 
 - (unsigned)length

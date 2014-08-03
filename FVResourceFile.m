@@ -69,7 +69,6 @@ struct FVResourceMap {
 		if (error) {
 			*error = [NSError errorWithDescription:@"Bad file."];
 		}
-		[self release];
 		return nil;
 	}
 	
@@ -78,7 +77,6 @@ struct FVResourceMap {
 		if (error) {
 			*error = [NSError errorWithDescription:@"Invalid header."];
 		}
-		[self release];
 		return nil;
 	}
 	
@@ -88,7 +86,6 @@ struct FVResourceMap {
 		if (error) {
 			*error = [NSError errorWithDescription:@"Invalid map."];
 		}
-		[self release];
 		return nil;
 	}
 	
@@ -96,7 +93,6 @@ struct FVResourceMap {
 		if (error) {
 			*error = [NSError errorWithDescription:@"Invalid types list."];
 		}
-		[self release];
 		return nil;
 	}
 	
@@ -105,7 +101,6 @@ struct FVResourceMap {
 		if (error) {
 			*error = [NSError errorWithDescription:@"No resources."];
 		}
-		[self release];
 		return nil;
 	}
 	
@@ -120,7 +115,7 @@ struct FVResourceMap {
 		file = [[[self class] alloc] initWithContentsOfURL:fileURL error:&tmpError fork:FVForkTypeData];
 	}
 	if (file) {
-		return [file autorelease];
+		return file;
 	}
 	if (error) {
 		*error = tmpError;
@@ -133,15 +128,12 @@ struct FVResourceMap {
 
 - (void)dealloc
 {
-	[fork release];
 	if (header) {
 		free(header);
 	}
 	if (map) {
 		free(map);
 	}
-	[types release];
-	[super dealloc];
 }
 
 - (BOOL)readHeader:(FVResourceHeader *)aHeader
@@ -234,7 +226,7 @@ struct FVResourceMap {
 		numberOfResources = CFSwapInt16BigToHost(numberOfResources) + 1;
 		referenceListOffset = CFSwapInt16BigToHost(referenceListOffset);
 		
-		FVResourceType *obj = [[[FVResourceType alloc] init] autorelease];
+		FVResourceType *obj = [[FVResourceType alloc] init];
 		obj.type = type;
 		obj.count = numberOfResources;
 		obj.offset = referenceListOffset;
@@ -288,7 +280,7 @@ struct FVResourceMap {
 			}
 			
 			//NSLog(@"%@[%u] %u %s", obj.typeString, resourceID, dataLength, name);
-			FVResource *resource = [[[FVResource alloc] init] autorelease];
+			FVResource *resource = [[FVResource alloc] init];
 			[resource setID:resourceID];
 			[resource setDataSize:dataLength offset:dataOffset + sizeof(dataOffset)];
 			if (strlen(name)) {
@@ -299,16 +291,16 @@ struct FVResourceMap {
 			[resourcesTemp addObject:resource];
 		}
 		
-		NSSortDescriptor *sort = [[[NSSortDescriptor alloc] initWithKey:@"ident" ascending:YES] autorelease];
+		NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"ident" ascending:YES];
 		[resourcesTemp sortUsingDescriptors:[NSArray arrayWithObject:sort]];
 		
 		obj.resources = resourcesTemp;
 	}		
 	
-	NSSortDescriptor *sort = [[[NSSortDescriptor alloc] initWithKey:@"typeString" ascending:YES selector:@selector(caseInsensitiveCompare:)] autorelease];
+	NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"typeString" ascending:YES selector:@selector(caseInsensitiveCompare:)];
 	[typesTemp sortUsingDescriptors:[NSArray arrayWithObject:sort]];
 	
-	types = [typesTemp retain];
+	types = typesTemp;
 	
 	return YES;
 }

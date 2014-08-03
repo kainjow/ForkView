@@ -15,13 +15,6 @@
 
 @synthesize resourceFile;
 
-- (void)dealloc
-{
-	[windowController release];
-	[resourceFile release];
-	[super dealloc];
-}
-
 - (void)makeWindowControllers
 {
 	[super makeWindowControllers];

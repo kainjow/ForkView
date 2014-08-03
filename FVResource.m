@@ -22,8 +22,7 @@
 - (void)setName:(NSString *)aName
 {
 	if (name != aName) {
-		[name release];
-		name = [aName copy];
+		name = [name copy];
 	}
 }
 
@@ -41,12 +40,6 @@
 - (NSData *)data
 {
 	return [self.file dataForResource:self];
-}
-
-- (void)dealloc
-{
-	[name release];
-	[super dealloc];
 }
 
 @end

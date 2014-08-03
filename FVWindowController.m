@@ -24,12 +24,6 @@
 	return self;
 }
 
-- (void)dealloc
-{
-	[windowControllers release];
-	[super dealloc];
-}
-
 - (Class)templateClassForResource:(FVResource *)resource
 {
 	Class class = nil;
@@ -56,7 +50,7 @@
 		return;
 	}
 	
-	id <FVTemplate> controller = [[[class alloc] initWithResource:resource] autorelease];
+	id <FVTemplate> controller = [[class alloc] initWithResource:resource];
 	if (!controller) {
 		NSBeep();
 		return;
@@ -88,7 +82,7 @@
 	NSPoint newPoint = [window cascadeTopLeftFromPoint:NSMakePoint(NSMinX(parentWinFrame), NSMaxY(parentWinFrame))];
 	[window cascadeTopLeftFromPoint:newPoint];
 	
-	NSWindowController *windowController = [[[NSWindowController alloc] initWithWindow:window] autorelease];
+	NSWindowController *windowController = [[NSWindowController alloc] initWithWindow:window];
 	[windowController showWindow:nil];
 	[windowControllers addObject:windowController];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowWillClose:) name:NSWindowWillCloseNotification object:window];
@@ -123,7 +117,7 @@
 
 - (NSMenu *)tableViewMenuForSelection
 {
-	NSMenu *menu = [[[NSMenu alloc] init] autorelease];
+	NSMenu *menu = [[NSMenu alloc] init];
 	[[menu addItemWithTitle:@"Export\u2026" action:@selector(writeSelectedResource) keyEquivalent:@""] setTarget:self];
 	return menu;
 }

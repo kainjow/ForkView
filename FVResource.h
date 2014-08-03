@@ -18,7 +18,7 @@
 	uint32_t dataSize;
 	uint32_t dataOffset;
 	FVResourceType *type;
-	FVResourceFile *file;
+	__weak FVResourceFile *file;
 }
 
 @property (readonly) FVResourceType *type;

@@ -40,12 +40,6 @@
 
 @synthesize color;
 
-- (void)dealloc
-{
-	[color release];
-	[super dealloc];
-}
-
 - (void)drawRect:(NSRect)rect
 {
     if (color) {
@@ -69,13 +63,13 @@ struct FVRGBColor {
 		case 'icns':
 		case 'PICT':
 		case 'PNG ':
-            return [[[NSImage alloc] initWithData:rsrcData] autorelease];
+            return [[NSImage alloc] initWithData:rsrcData];
         case 'ICON':
         {
             if ([rsrcData length] == 128) {
                 int width = 32, height = 32;
                 CFBitVectorRef bitVector = CFBitVectorCreate(kCFAllocatorDefault, (const UInt8*)[rsrcData bytes], [rsrcData length]*8);
-                NSBitmapImageRep *bmp = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+                NSBitmapImageRep *bmp = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
                                                                                  pixelsWide:width
                                                                                  pixelsHigh:height
                                                                               bitsPerSample:8
@@ -84,7 +78,7 @@ struct FVRGBColor {
                                                                                    isPlanar:NO
                                                                              colorSpaceName:NSCalibratedRGBColorSpace
                                                                                 bytesPerRow:width*4
-                                                                               bitsPerPixel:32] autorelease];
+                                                                               bitsPerPixel:32];
                 struct FVRGBColor *color = (struct FVRGBColor*)[bmp bitmapData];
                 const unsigned numPixels = width * height;
                 for (int i = 0; i < numPixels; ++i, ++color) {
@@ -96,7 +90,7 @@ struct FVRGBColor {
                     color->a = 255;
                 }
                 CFRelease(bitVector);
-                NSImage *img = [[[NSImage alloc] init] autorelease];
+                NSImage *img = [[NSImage alloc] init];
                 [img addRepresentation:bmp];
                 return img;
             }
@@ -107,7 +101,7 @@ struct FVRGBColor {
             if ([rsrcData length] == 256) {
                 int width = 32, height = 32;
                 CFBitVectorRef bitVector = CFBitVectorCreate(kCFAllocatorDefault, (const UInt8*)[rsrcData bytes], [rsrcData length]*8);
-                NSBitmapImageRep *bmp = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+                NSBitmapImageRep *bmp = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
                                                                                  pixelsWide:width
                                                                                  pixelsHigh:height
                                                                               bitsPerSample:8
@@ -116,7 +110,7 @@ struct FVRGBColor {
                                                                                    isPlanar:NO
                                                                              colorSpaceName:NSCalibratedRGBColorSpace
                                                                                 bytesPerRow:width*4
-                                                                               bitsPerPixel:32] autorelease];
+                                                                               bitsPerPixel:32];
                 struct FVRGBColor *color = (struct FVRGBColor*)[bmp bitmapData];
                 const unsigned numPixels = width * height;
                 for (int i = 0; i < numPixels; ++i, ++color) {
@@ -132,7 +126,7 @@ struct FVRGBColor {
                     }
                 }
                 CFRelease(bitVector);
-                NSImage *img = [[[NSImage alloc] init] autorelease];
+                NSImage *img = [[NSImage alloc] init];
                 [img addRepresentation:bmp];
                 return img;
             }
@@ -143,7 +137,7 @@ struct FVRGBColor {
             if ([rsrcData length] == 64) {
                 int width = 16, height = 16;
                 CFBitVectorRef bitVector = CFBitVectorCreate(kCFAllocatorDefault, (const UInt8*)[rsrcData bytes], [rsrcData length]*8);
-                NSBitmapImageRep *bmp = [[[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+                NSBitmapImageRep *bmp = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
                                                                                  pixelsWide:width
                                                                                  pixelsHigh:height
                                                                               bitsPerSample:8
@@ -152,7 +146,7 @@ struct FVRGBColor {
                                                                                    isPlanar:NO
                                                                              colorSpaceName:NSCalibratedRGBColorSpace
                                                                                 bytesPerRow:width*4
-                                                                               bitsPerPixel:32] autorelease];
+                                                                               bitsPerPixel:32];
                 struct FVRGBColor *color = (struct FVRGBColor*)[bmp bitmapData];
                 const unsigned numPixels = width * height;
                 for (int i = 0; i < numPixels; ++i, ++color) {
@@ -164,7 +158,7 @@ struct FVRGBColor {
                     color->a = 255;
                 }
                 CFRelease(bitVector);
-                NSImage *img = [[[NSImage alloc] init] autorelease];
+                NSImage *img = [[NSImage alloc] init];
                 [img addRepresentation:bmp];
                 return img;
             }
@@ -180,17 +174,16 @@ struct FVRGBColor {
 	if (self != nil) {
         NSImage *img = [[self class] imageFromResource:resource];
 		if (!img) {
-			[self release];
 			return nil;
 		}
 		
 		NSRect rect;
 		rect.origin = NSZeroPoint;
 		rect.size = [img size];
-		FVColorView *colorView = [[[FVColorView alloc] initWithFrame:rect] autorelease];
+		FVColorView *colorView = [[FVColorView alloc] initWithFrame:rect];
 		//colorView.color = [NSColor whiteColor];
 
-		FVImageView *imgView = [[[FVImageView alloc] initWithFrame:[colorView bounds]] autorelease];
+		FVImageView *imgView = [[FVImageView alloc] initWithFrame:[colorView bounds]];
 		[imgView setImage:img];
 		[imgView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
 		[colorView addSubview:imgView];
