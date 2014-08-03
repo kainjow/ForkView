@@ -1,0 +1,18 @@
+//
+//  FVLine.swift
+//  ForkView
+//
+//  Created by Kevin Wojniak on 8/3/14.
+//  Copyright (c) 2014 Kevin Wojniak. All rights reserved.
+//
+
+import AppKit
+
+@objc(FVLine) class FVLine: NSBox {
+    override func drawRect(dirtyRect: NSRect) {
+        var bounds: NSRect = NSInsetRect(self.bounds, -1.0, -1.0)
+        bounds.origin.x += 1
+        NSColor(calibratedWhite: 0.6, alpha: 1.0).set()
+        NSFrameRect(bounds)
+    }
+}
