@@ -8,6 +8,7 @@
 
 #import "FVPNGTemplate.h"
 #import "FVResource.h"
+#import "ForkView-Swift.h"
 
 @interface FVImageView : NSImageView
 

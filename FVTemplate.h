@@ -7,7 +7,6 @@
 //
 
 #import "FVResource.h"
-#import "FVResourceType.h"
 
 @class FVResource;
 

@@ -14,11 +14,11 @@
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		A52DFD1F13C9697B001F6DD6 /* FVFork.m in Sources */ = {isa = PBXBuildFile; fileRef = A52DFD1E13C9697B001F6DD6 /* FVFork.m */; };
 		A54A9B28138DDCB6004F8BB9 /* FVResourceFile.m in Sources */ = {isa = PBXBuildFile; fileRef = A54A9B27138DDCB6004F8BB9 /* FVResourceFile.m */; };
-		A54A9D49138DF37D004F8BB9 /* FVResourceType.m in Sources */ = {isa = PBXBuildFile; fileRef = A54A9D48138DF37D004F8BB9 /* FVResourceType.m */; };
 		A54A9DFE138DFF5B004F8BB9 /* FVLine.m in Sources */ = {isa = PBXBuildFile; fileRef = A54A9DFD138DFF5B004F8BB9 /* FVLine.m */; };
 		A54A9F94138E163A004F8BB9 /* FVResource.m in Sources */ = {isa = PBXBuildFile; fileRef = A54A9F93138E163A004F8BB9 /* FVResource.m */; };
 		A54AA0B8138E2428004F8BB9 /* FVPNGTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = A54AA0B7138E2428004F8BB9 /* FVPNGTemplate.m */; };
 		A5530FAB13FAD0D0003C2275 /* FVWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5530FAA13FAD0D0003C2275 /* FVWindowController.m */; };
+		A5A0779E198E9B6A00AAFF2F /* FVResourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0779D198E9B6A00AAFF2F /* FVResourceType.swift */; };
 		A5F4222B13CEA8FD00C882B8 /* FVTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F4222A13CEA8FD00C882B8 /* FVTableView.m */; };
 /* End PBXBuildFile section */
 
@@ -36,9 +36,6 @@
 		A52DFD1E13C9697B001F6DD6 /* FVFork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVFork.m; sourceTree = "<group>"; };
 		A54A9B26138DDCB6004F8BB9 /* FVResourceFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVResourceFile.h; sourceTree = "<group>"; };
 		A54A9B27138DDCB6004F8BB9 /* FVResourceFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVResourceFile.m; sourceTree = "<group>"; };
-		A54A9D47138DF37D004F8BB9 /* FVResourceType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVResourceType.h; sourceTree = "<group>"; };
-		A54A9D48138DF37D004F8BB9 /* FVResourceType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVResourceType.m; sourceTree = "<group>"; };
-		A54A9D50138DF533004F8BB9 /* FVResourceTypePriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVResourceTypePriv.h; sourceTree = "<group>"; };
 		A54A9DFC138DFF5B004F8BB9 /* FVLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVLine.h; sourceTree = "<group>"; };
 		A54A9DFD138DFF5B004F8BB9 /* FVLine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVLine.m; sourceTree = "<group>"; };
 		A54A9F92138E163A004F8BB9 /* FVResource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVResource.h; sourceTree = "<group>"; };
@@ -50,6 +47,8 @@
 		A54AA0B7138E2428004F8BB9 /* FVPNGTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVPNGTemplate.m; sourceTree = "<group>"; };
 		A5530FA913FAD0D0003C2275 /* FVWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVWindowController.h; sourceTree = "<group>"; };
 		A5530FAA13FAD0D0003C2275 /* FVWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVWindowController.m; sourceTree = "<group>"; };
+		A5A0779D198E9B6A00AAFF2F /* FVResourceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVResourceType.swift; sourceTree = "<group>"; };
+		A5A0779F198EA05000AAFF2F /* ForkView-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ForkView-Bridging-Header.h"; sourceTree = "<group>"; };
 		A5F4222913CEA8FD00C882B8 /* FVTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVTableView.h; sourceTree = "<group>"; };
 		A5F4222A13CEA8FD00C882B8 /* FVTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVTableView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -146,12 +145,11 @@
 				A52DFD1D13C9697B001F6DD6 /* FVFork.h */,
 				A52DFD1E13C9697B001F6DD6 /* FVFork.m */,
 				A54AA022138E1F81004F8BB9 /* FVResourceFilePriv.h */,
-				A54A9D47138DF37D004F8BB9 /* FVResourceType.h */,
-				A54A9D48138DF37D004F8BB9 /* FVResourceType.m */,
-				A54A9D50138DF533004F8BB9 /* FVResourceTypePriv.h */,
+				A5A0779D198E9B6A00AAFF2F /* FVResourceType.swift */,
 				A54A9F92138E163A004F8BB9 /* FVResource.h */,
 				A54A9F93138E163A004F8BB9 /* FVResource.m */,
 				A54A9F9F138E1706004F8BB9 /* FVResourcePriv.h */,
+				A5A0779F198EA05000AAFF2F /* ForkView-Bridging-Header.h */,
 			);
 			name = Library;
 			sourceTree = "<group>";
@@ -235,12 +233,12 @@
 				8D15AC310486D014006FF6A4 /* FVDocument.m in Sources */,
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
 				A54A9B28138DDCB6004F8BB9 /* FVResourceFile.m in Sources */,
-				A54A9D49138DF37D004F8BB9 /* FVResourceType.m in Sources */,
 				A54A9DFE138DFF5B004F8BB9 /* FVLine.m in Sources */,
 				A54A9F94138E163A004F8BB9 /* FVResource.m in Sources */,
 				A54AA0B8138E2428004F8BB9 /* FVPNGTemplate.m in Sources */,
 				A52DFD1F13C9697B001F6DD6 /* FVFork.m in Sources */,
 				A5F4222B13CEA8FD00C882B8 /* FVTableView.m in Sources */,
+				A5A0779E198E9B6A00AAFF2F /* FVResourceType.swift in Sources */,
 				A5530FAB13FAD0D0003C2275 /* FVWindowController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,6 +269,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -279,7 +278,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ForkView_Prefix.pch;
 				INFOPLIST_FILE = "ForkView-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_NAME = ForkView;
+				SWIFT_OBJC_BRIDGING_HEADER = "ForkView-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -287,12 +289,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = ForkView_Prefix.pch;
 				INFOPLIST_FILE = "ForkView-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_NAME = ForkView;
+				SWIFT_OBJC_BRIDGING_HEADER = "ForkView-Bridging-Header.h";
 			};
 			name = Release;
 		};
