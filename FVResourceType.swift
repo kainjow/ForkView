@@ -8,11 +8,11 @@
 
 import Foundation
 
-class FVResourceType: NSObject {
-    public var type: UInt32 = 0;
-    public var count: UInt32 = 0;
-    public var offset: UInt32 = 0;
-    public var resources: NSArray = [];
+public class FVResourceType: NSObject {
+    public var type: UInt32 = 0
+    public var count: UInt32 = 0
+    public var offset: UInt32 = 0
+    public var resources: NSArray = []
 
     public var typeString: NSString {
         return NSString(format:"%c%c%c%c",
