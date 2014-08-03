@@ -20,7 +20,7 @@ typedef struct FVResourceMap FVResourceMap;
 	NSArray *types;
 }
 
-+ (id)resourceFileWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error;
++ (instancetype)resourceFileWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error;
 
 @property (readonly) NSArray *types;
 

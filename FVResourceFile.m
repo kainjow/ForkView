@@ -54,7 +54,7 @@ struct FVResourceMap {
 #pragma mark -
 #pragma mark Public Methods
 
-- (id)initWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error fork:(FVForkType)forkType
+- (instancetype)initWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error fork:(FVForkType)forkType
 {
 	self = [super init];
 	if (self == nil) {
