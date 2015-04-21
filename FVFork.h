@@ -8,11 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-enum {
+typedef NS_ENUM(NSInteger, FVForkType) {
 	FVForkTypeData,
 	FVForkTypeResource,
 };
-typedef NSInteger FVForkType;
 
 @interface FVFork : NSObject
 {
@@ -21,7 +20,7 @@ typedef NSInteger FVForkType;
     unsigned pos_;
 }
 
-- (id)initWithURL:(NSURL *)fileURL type:(FVForkType)type;
+- (instancetype)initWithURL:(NSURL *)fileURL type:(FVForkType)type;
 
 - (BOOL)read:(unsigned)size into:(void*)buffer;
 - (BOOL)seekTo:(unsigned)offset;

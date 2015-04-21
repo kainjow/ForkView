@@ -7,6 +7,7 @@
 //
 
 #import "FVResourceFile.h"
+#import "FVResourceFilePriv.h"
 #import "FVFork.h"
 #import "ForkView-Swift.h"
 
@@ -41,7 +42,7 @@ struct FVResourceMap {
 	uint16_t namesOffset;
 };
 
-@interface FVResourceFile (Private)
+@interface FVResourceFile ()
 - (BOOL)readHeader:(FVResourceHeader *)aHeader;
 - (BOOL)readMap;
 - (BOOL)readTypes;
@@ -104,7 +105,7 @@ struct FVResourceMap {
 	return self;
 }
 
-+ (id)resourceFileWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error
+- (instancetype)initWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error
 {
 	NSError *tmpError = nil;
 	FVResourceFile *file = [[[self class] alloc] initWithContentsOfURL:fileURL error:&tmpError fork:FVForkTypeResource];
@@ -118,6 +119,11 @@ struct FVResourceMap {
 		*error = tmpError;
 	}
 	return nil;
+}
+
++ (id)resourceFileWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error
+{
+	return [(FVResourceFile*)[self alloc] initWithContentsOfURL:fileURL error:error];
 }
 
 #pragma mark -

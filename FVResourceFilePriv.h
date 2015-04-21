@@ -10,9 +10,9 @@
 
 @class FVResource;
 
-@interface FVResourceFile (Data)
+@interface FVResourceFile ()
 
-- (NSData *)dataForResource:(FVResource *)resource;
+- (nullable NSData *)dataForResource:(nonnull FVResource *)resource;
 
 @end
 
