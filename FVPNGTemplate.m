@@ -168,7 +168,7 @@ struct FVRGBColor {
     return nil;
 }
 
-- (id)initWithResource:(FVResource *)resource
+- (instancetype)initWithResource:(FVResource *)resource
 {
 	self = [super init];
 	if (self != nil) {
@@ -181,7 +181,6 @@ struct FVRGBColor {
 		rect.origin = NSZeroPoint;
 		rect.size = [img size];
 		FVColorView *colorView = [[FVColorView alloc] initWithFrame:rect];
-		//colorView.color = [NSColor whiteColor];
 
 		FVImageView *imgView = [[FVImageView alloc] initWithFrame:[colorView bounds]];
 		[imgView setImage:img];

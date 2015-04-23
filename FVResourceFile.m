@@ -121,7 +121,7 @@ struct FVResourceMap {
 	return nil;
 }
 
-+ (id)resourceFileWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error
++ (instancetype)resourceFileWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error
 {
 	return [(FVResourceFile*)[self alloc] initWithContentsOfURL:fileURL error:error];
 }
