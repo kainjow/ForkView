@@ -20,9 +20,10 @@ typedef struct FVResourceMap FVResourceMap;
 	NSArray *types;
 }
 
-+ (instancetype)resourceFileWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error;
+- (nullable instancetype)initWithContentsOfURL:(nonnull NSURL *)fileURL error:(NSError * __nullable * __nullable)error;
++ (nullable instancetype)resourceFileWithContentsOfURL:(nonnull NSURL *)fileURL error:(NSError * __nullable * __nullable)error;
 
-@property (readonly) NSArray *types;
+@property (readonly, nonnull) NSArray *types;
 
 @property (readonly) FVForkType forkType;
 

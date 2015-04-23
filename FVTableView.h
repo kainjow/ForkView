@@ -13,7 +13,7 @@
 
 @end
 
-@interface NSObject (FVTableViewDelegate)
+@protocol FVTableViewDelegate <NSObject>
 
 - (NSMenu *)tableViewMenuForSelection;
 

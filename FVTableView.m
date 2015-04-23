@@ -23,7 +23,7 @@
 	[[self window] makeFirstResponder:self];
 	
 	if ([self delegate] && [[self delegate] respondsToSelector:@selector(tableViewMenuForSelection)]) {
-		return [(id)[self delegate] tableViewMenuForSelection];
+		return [(id<FVTableViewDelegate>)[self delegate] tableViewMenuForSelection];
 	}
 
 	return nil;

@@ -10,9 +10,9 @@
 
 @class FVResource;
 
-@protocol FVTemplate
+@protocol FVTemplate <NSObject>
 
-- (id)initWithResource:(FVResource *)resource;
+- (instancetype)initWithResource:(FVResource *)resource;
 
 - (NSView *)view;
 

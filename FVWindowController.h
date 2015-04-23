@@ -7,9 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "FVTableView.h"
 
-
-@interface FVWindowController : NSWindowController
+@interface FVWindowController : NSWindowController <FVTableViewDelegate>
 {
 	IBOutlet NSArrayController *resourcesArrayController;
 	NSMutableArray *windowControllers;

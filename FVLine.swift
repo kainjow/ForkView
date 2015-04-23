@@ -8,7 +8,7 @@
 
 import AppKit
 
-@objc(FVLine) class FVLine: NSBox {
+final class FVLine: NSBox {
     override func drawRect(dirtyRect: NSRect) {
         var bounds: NSRect = NSInsetRect(self.bounds, -1.0, -1.0)
         bounds.origin.x += 1

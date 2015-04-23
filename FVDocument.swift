@@ -16,11 +16,11 @@ class FVDocument: NSDocument {
         super.makeWindowControllers()
     
         windowController = FVWindowController()
-        addWindowController(windowController)
+        addWindowController(windowController!)
     }
     
-    override func readFromURL(url: NSURL!, ofType typeName: String!, error outError: NSErrorPointer) -> Bool {
-        resourceFile = FVResourceFile.resourceFileWithContentsOfURL(url, error: outError)
+    override func readFromURL(url: NSURL, ofType typeName: String, error outError: NSErrorPointer) -> Bool {
+		resourceFile = FVResourceFile(contentsOfURL: url, error: outError)
         return resourceFile != nil
     }
 }
