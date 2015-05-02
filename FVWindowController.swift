@@ -55,14 +55,14 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate {
         }
     }
     
-    func controllerForResource(resource: FVResource) -> FVTemplate? {
+    func controllerForResource(resource: FVResource) -> FVTemplateController? {
         let str = resource.type?.typeString
         if str == nil {
             return nil
         }
         switch str! {
             case "icns", "PICT", "PNG ", "ICON", "ICN#", "ics#":
-                return FVPNGTemplate(resource: resource)
+                return FVImageTemplate.template(resource)
             default:
                 return nil
         }
@@ -74,7 +74,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate {
             return
         }
         
-        let view = controller?.view()
+        let view = controller?.view
         let minSize = NSMakeSize(150, 150)
         var winFrame = view!.frame
         
@@ -92,7 +92,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate {
         let styleMask = NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask
         let window = NSWindow(contentRect: winFrame, styleMask: styleMask, backing: .Buffered, defer: true)
         window.releasedWhenClosed = true
-        window.contentView = controller!.view()
+        window.contentView = controller!.view
         window.minSize = minSize
         
         let newPoint = window.cascadeTopLeftFromPoint(NSMakePoint(NSMinX(parentWinFrame), NSMaxY(parentWinFrame)))

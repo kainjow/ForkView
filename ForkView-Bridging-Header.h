@@ -4,4 +4,3 @@
 
 #import "FVResourceFile.h"
 #import "FVResourceFilePriv.h"
-#import "FVPNGTemplate.h"
