@@ -8,7 +8,7 @@
 
 import Cocoa
 
-class FVImageView_: NSImageView {
+class FVImageView: NSImageView {
     override var acceptsFirstResponder: Bool {
         get {
             return true
@@ -37,7 +37,7 @@ final class FVImageTemplate: FVTemplateController {
         }
 		
         let rect = NSMakeRect(0, 0, img!.size.width, img!.size.height)
-        let imgView = FVImageView_(frame: rect)
+        let imgView = FVImageView(frame: rect)
         imgView.image = img
         imgView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
         
