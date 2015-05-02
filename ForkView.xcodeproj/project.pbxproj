@@ -9,24 +9,22 @@
 /* Begin PBXBuildFile section */
 		1DDD582C0DA1D0D100B32029 /* FVWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58280DA1D0D100B32029 /* FVWindow.xib */; };
 		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
-		8D15AC320486D014006FF6A4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A37F4B0FDCFA73011CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		A52DFD1F13C9697B001F6DD6 /* FVFork.m in Sources */ = {isa = PBXBuildFile; fileRef = A52DFD1E13C9697B001F6DD6 /* FVFork.m */; };
 		A54A9B28138DDCB6004F8BB9 /* FVResourceFile.m in Sources */ = {isa = PBXBuildFile; fileRef = A54A9B27138DDCB6004F8BB9 /* FVResourceFile.m */; };
 		A54AA0B8138E2428004F8BB9 /* FVPNGTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = A54AA0B7138E2428004F8BB9 /* FVPNGTemplate.m */; };
-		A5530FAB13FAD0D0003C2275 /* FVWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = A5530FAA13FAD0D0003C2275 /* FVWindowController.m */; };
+		A594AD131AF4874100197F25 /* FVTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A594AD121AF4874100197F25 /* FVTableView.swift */; };
+		A594AD161AF48BB600197F25 /* FVWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A594AD151AF48BB600197F25 /* FVWindowController.swift */; };
 		A5A0779E198E9B6A00AAFF2F /* FVResourceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A0779D198E9B6A00AAFF2F /* FVResourceType.swift */; };
 		A5A077A1198EA0C000AAFF2F /* FVResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A077A0198EA0C000AAFF2F /* FVResource.swift */; };
 		A5A077A4198EA5DC00AAFF2F /* FVDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A077A2198EA38B00AAFF2F /* FVDocument.swift */; };
 		A5A077A8198EDF0600AAFF2F /* FVLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A077A7198EDF0600AAFF2F /* FVLine.swift */; };
-		A5F4222B13CEA8FD00C882B8 /* FVTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = A5F4222A13CEA8FD00C882B8 /* FVTableView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1DDD58290DA1D0D100B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/FVWindow.xib; sourceTree = "<group>"; };
 		1DDD582B0DA1D0D100B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		2A37F4B0FDCFA73011CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* ForkView-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ForkView-Info.plist"; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* ForkView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForkView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A52DFD1D13C9697B001F6DD6 /* FVFork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVFork.h; sourceTree = "<group>"; };
@@ -37,15 +35,13 @@
 		A54AA09F138E22E7004F8BB9 /* FVTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVTemplate.h; sourceTree = "<group>"; };
 		A54AA0B6138E2428004F8BB9 /* FVPNGTemplate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVPNGTemplate.h; sourceTree = "<group>"; };
 		A54AA0B7138E2428004F8BB9 /* FVPNGTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVPNGTemplate.m; sourceTree = "<group>"; };
-		A5530FA913FAD0D0003C2275 /* FVWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVWindowController.h; sourceTree = "<group>"; };
-		A5530FAA13FAD0D0003C2275 /* FVWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVWindowController.m; sourceTree = "<group>"; };
+		A594AD121AF4874100197F25 /* FVTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVTableView.swift; sourceTree = "<group>"; };
+		A594AD151AF48BB600197F25 /* FVWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVWindowController.swift; sourceTree = "<group>"; };
 		A5A0779D198E9B6A00AAFF2F /* FVResourceType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVResourceType.swift; sourceTree = "<group>"; };
 		A5A0779F198EA05000AAFF2F /* ForkView-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ForkView-Bridging-Header.h"; sourceTree = "<group>"; };
 		A5A077A0198EA0C000AAFF2F /* FVResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVResource.swift; sourceTree = "<group>"; };
 		A5A077A2198EA38B00AAFF2F /* FVDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVDocument.swift; sourceTree = "<group>"; };
 		A5A077A7198EDF0600AAFF2F /* FVLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVLine.swift; sourceTree = "<group>"; };
-		A5F4222913CEA8FD00C882B8 /* FVTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVTableView.h; sourceTree = "<group>"; };
-		A5F4222A13CEA8FD00C882B8 /* FVTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVTableView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,7 +68,6 @@
 			isa = PBXGroup;
 			children = (
 				2A37F4ABFDCFA73011CA2CEA /* Classes */,
-				2A37F4AFFDCFA73011CA2CEA /* Other Sources */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
 				2A37F4C3FDCFA73011CA2CEA /* Frameworks */,
 				19C28FB0FE9D524F11CA2CBB /* Products */,
@@ -87,14 +82,6 @@
 				A54A9F02138E0E77004F8BB9 /* Library */,
 			);
 			name = Classes;
-			sourceTree = "<group>";
-		};
-		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
-			isa = PBXGroup;
-			children = (
-				2A37F4B0FDCFA73011CA2CEA /* main.m */,
-			);
-			name = "Other Sources";
 			sourceTree = "<group>";
 		};
 		2A37F4B8FDCFA73011CA2CEA /* Resources */ = {
@@ -119,12 +106,9 @@
 			isa = PBXGroup;
 			children = (
 				A5A077A2198EA38B00AAFF2F /* FVDocument.swift */,
-				A5530FA913FAD0D0003C2275 /* FVWindowController.h */,
-				A5530FAA13FAD0D0003C2275 /* FVWindowController.m */,
+				A594AD151AF48BB600197F25 /* FVWindowController.swift */,
 				A5F422C913CEAF5700C882B8 /* Templates */,
-				A5A077A7198EDF0600AAFF2F /* FVLine.swift */,
-				A5F4222913CEA8FD00C882B8 /* FVTableView.h */,
-				A5F4222A13CEA8FD00C882B8 /* FVTableView.m */,
+				A594AD141AF4874800197F25 /* Views */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -142,6 +126,15 @@
 				A5A0779F198EA05000AAFF2F /* ForkView-Bridging-Header.h */,
 			);
 			name = Library;
+			sourceTree = "<group>";
+		};
+		A594AD141AF4874800197F25 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				A5A077A7198EDF0600AAFF2F /* FVLine.swift */,
+				A594AD121AF4874100197F25 /* FVTableView.swift */,
+			);
+			name = Views;
 			sourceTree = "<group>";
 		};
 		A5F422C913CEAF5700C882B8 /* Templates */ = {
@@ -220,16 +213,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D15AC320486D014006FF6A4 /* main.m in Sources */,
 				A54A9B28138DDCB6004F8BB9 /* FVResourceFile.m in Sources */,
 				A54AA0B8138E2428004F8BB9 /* FVPNGTemplate.m in Sources */,
 				A52DFD1F13C9697B001F6DD6 /* FVFork.m in Sources */,
-				A5F4222B13CEA8FD00C882B8 /* FVTableView.m in Sources */,
+				A594AD131AF4874100197F25 /* FVTableView.swift in Sources */,
 				A5A0779E198E9B6A00AAFF2F /* FVResourceType.swift in Sources */,
 				A5A077A1198EA0C000AAFF2F /* FVResource.swift in Sources */,
 				A5A077A8198EDF0600AAFF2F /* FVLine.swift in Sources */,
 				A5A077A4198EA5DC00AAFF2F /* FVDocument.swift in Sources */,
-				A5530FAB13FAD0D0003C2275 /* FVWindowController.m in Sources */,
+				A594AD161AF48BB600197F25 /* FVWindowController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

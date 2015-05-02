@@ -8,14 +8,14 @@
 
 import AppKit
 
-class FVDocument: NSDocument {
+@NSApplicationMain final class FVDocument: NSDocument, NSApplicationDelegate {
     var resourceFile: FVResourceFile? = nil
     var windowController: NSWindowController? = nil
     
     override func makeWindowControllers() {
         super.makeWindowControllers()
     
-        windowController = FVWindowController()
+        windowController = FVWindowController.windowController()
         addWindowController(windowController!)
     }
     
