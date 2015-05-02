@@ -13,6 +13,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate {
     @IBOutlet weak var tableView: FVTableView!
     
     var windowControllers = [NSWindowController]()
+    var typeControllers = [FVTypeController]()
     
     class func windowController() -> Self {
         return self(windowNibName: "FVWindow")
@@ -22,6 +23,8 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate {
         super.windowDidLoad()
         
         tableView.customDelegate = self
+        
+        typeControllers.append(FVImageTypeController())
         
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { (note: NSNotification!) in
             for windowController in self.windowControllers {
@@ -55,17 +58,17 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate {
         }
     }
     
-    func controllerForResource(resource: FVResource) -> FVTemplateController? {
-        let str = resource.type?.typeString
-        if str == nil {
-            return nil
+    func controllerForResource(resource: FVResource) -> NSViewController? {
+        if let type = resource.type?.typeString {
+            for controller in typeControllers {
+                for supportedType in controller.supportedTypes() {
+                    if supportedType == type {
+                        return controller.viewControllerFromResource(resource)
+                    }
+                }
+            }
         }
-        switch str! {
-            case "icns", "PICT", "PNG ", "ICON", "ICN#", "ics#":
-                return FVImageTemplate.template(resource)
-            default:
-                return nil
-        }
+        return nil
     }
 
     func viewResource(resource: FVResource) {

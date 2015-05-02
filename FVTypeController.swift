@@ -8,8 +8,7 @@
 
 import Cocoa
 
-class FVTemplateController: NSViewController {
-    class func template(resource: FVResource) -> Self? {
-        return nil
-    }
+protocol FVTypeController {
+    func supportedTypes() -> [String]
+    func viewControllerFromResource(resource: FVResource) -> NSViewController?
 }

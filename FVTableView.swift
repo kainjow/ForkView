@@ -12,7 +12,7 @@ protocol FVTableViewDelegate {
     func tableViewMenuForSelection() -> NSMenu?
 }
 
-class FVTableView: NSTableView {
+final class FVTableView: NSTableView {
     var customDelegate: FVTableViewDelegate?
     
     override func menuForEvent(event: NSEvent) -> NSMenu? {

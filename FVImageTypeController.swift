@@ -8,38 +8,27 @@
 
 import Cocoa
 
-class FVImageView: NSImageView {
-    override var acceptsFirstResponder: Bool {
-        get {
-            return true
-        }
+final class FVImageTypeController: FVTypeController {
+    func supportedTypes() -> [String] {
+        return ["icns", "PICT", "PNG ", "ICON", "ICN#", "ics#"]
     }
-
-    override var needsPanelToBecomeKey: Bool {
-        get {
-            return true
-        }
-    }
-}
-
-final class FVImageTemplate: FVTemplateController {
-    override class func template(resource: FVResource) -> Self? {
-        let img = FVImageTemplate.imageFromResource(resource)
+    
+    func viewControllerFromResource(resource: FVResource) -> NSViewController? {
+        let img = imageFromResource(resource)
         if img == nil {
             return nil
         }
-		
+        
         let rect = NSMakeRect(0, 0, img!.size.width, img!.size.height)
         let imgView = FVImageView(frame: rect)
         imgView.image = img
         imgView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
-        
-        let me = self()
-        me.view = imgView
-        return me
-	}
+        var viewController = NSViewController()
+        viewController.view = imgView
+        return viewController
+    }
     
-    class func imageFromBitmapData(data: NSData, size: Int) -> NSImage? {
+    func imageFromBitmapData(data: NSData, size: Int) -> NSImage? {
         let ptr: UnsafePointer<UInt8> = UnsafePointer(data.bytes)
         let bitVector = CFBitVectorCreate(kCFAllocatorDefault, ptr, data.length * 8)
         if bitVector == nil {
@@ -80,31 +69,44 @@ final class FVImageTemplate: FVTemplateController {
         img.addRepresentation(bitmap!)
         return img
     }
-
-    class func imageFromResource(resource: FVResource) -> NSImage? {
-        let rsrcData = resource.data
-        if rsrcData == nil {
-            return nil
-        }
-        let type = resource.type?.typeString
-        switch type! {
-            case "icns", "PICT", "PNG ":
-                return NSImage(data: rsrcData!)
-            case "ICON":
-                if rsrcData!.length == 128 {
-                    return imageFromBitmapData(rsrcData!, size: 32)
+    
+    func imageFromResource(resource: FVResource) -> NSImage? {
+        if let rsrcData = resource.data {
+            if let type = resource.type?.typeString {
+                switch type {
+                case "icns", "PICT", "PNG ":
+                    return NSImage(data: rsrcData)
+                case "ICON":
+                    if rsrcData.length == 128 {
+                        return imageFromBitmapData(rsrcData, size: 32)
+                    }
+                case "ICN#":
+                    if rsrcData.length == 256 {
+                        return imageFromBitmapData(rsrcData, size: 32)
+                    }
+                case "ics#":
+                    if rsrcData.length == 64 {
+                        return imageFromBitmapData(rsrcData, size: 16)
+                    }
+                default:
+                    return nil
                 }
-            case "ICN#":
-                if rsrcData!.length == 256 {
-                    return imageFromBitmapData(rsrcData!, size: 32)
-                }
-            case "ics#":
-                if rsrcData!.length == 64 {
-                    return imageFromBitmapData(rsrcData!, size: 16)
-                }
-            default:
-                return nil
+            }
         }
         return nil
+    }
+}
+
+final class FVImageView: NSImageView {
+    override var acceptsFirstResponder: Bool {
+        get {
+            return true
+        }
+    }
+
+    override var needsPanelToBecomeKey: Bool {
+        get {
+            return true
+        }
     }
 }
