@@ -16,7 +16,10 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
     @IBOutlet weak var noSelectionLabel: NSTextField!
     
     var windowControllers = [NSWindowController]()
-    var typeControllers = [FVTypeController]()
+    let typeControllers: [FVTypeController] = [
+        FVImageTypeController(),
+        FVSNDTypeController(),
+    ]
     
     class func windowController() -> Self {
         return self(windowNibName: "FVWindow")
@@ -26,8 +29,6 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         super.windowDidLoad()
         
         tableView.customDelegate = self
-        
-        typeControllers.append(FVImageTypeController())
         
         NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { (note: NSNotification!) in
             for windowController in self.windowControllers {
