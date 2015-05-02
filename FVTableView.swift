@@ -8,12 +8,11 @@
 
 import Cocoa
 
-public protocol FVTableViewDelegate {
+protocol FVTableViewDelegate {
     func tableViewMenuForSelection() -> NSMenu?
 }
 
 class FVTableView: NSTableView {
-    
     var customDelegate: FVTableViewDelegate?
     
     override func menuForEvent(event: NSEvent) -> NSMenu? {
