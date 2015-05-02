@@ -8,9 +8,12 @@
 
 import Cocoa
 
-final class FVWindowController: NSWindowController, FVTableViewDelegate {
+final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTableViewDelegate {
     @IBOutlet weak var resourcesArrayController: NSArrayController!
     @IBOutlet weak var tableView: FVTableView!
+    @IBOutlet weak var typeView: NSView!
+    @IBOutlet weak var noSelectionView: NSView!
+    @IBOutlet weak var noSelectionLabel: NSTextField!
     
     var windowControllers = [NSWindowController]()
     var typeControllers = [FVTypeController]()
@@ -31,6 +34,8 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate {
                 windowController.close()
             }
         }
+        
+        viewSelectedResource()
     }
     
     func tableViewMenuForSelection() -> NSMenu? {
@@ -115,5 +120,30 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate {
     override func windowTitleForDocumentDisplayName(displayName: String) -> String {
         let doc = self.document as? FVDocument
         return String(format: "%@ [%@]", displayName, doc!.resourceFile!.forkType == .Data ? "Data Fork" : "Resource Fork")
+    }
+    
+    func viewSelectedResource() {
+        for subview in self.typeView.subviews {
+            subview.removeFromSuperview()
+        }
+        var view: NSView? = nil
+        if let resource = self.selectedResource() {
+            if let controller = controllerForResource(resource) {
+                view = controller.view
+            } else {
+                self.noSelectionLabel.stringValue = "Unsupported Type"
+            }
+        } else {
+            self.noSelectionLabel.stringValue = "No Selection"
+        }
+        if view == nil {
+            view = self.noSelectionView
+        }
+        view!.frame = self.typeView.bounds
+        self.typeView.addSubview(view!)
+    }
+    
+    func tableViewSelectionDidChange(note: NSNotification) {
+        viewSelectedResource()
     }
 }
