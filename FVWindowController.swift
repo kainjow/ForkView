@@ -59,7 +59,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
     
     func openSelectedResource() {
         if let resource = self.selectedResource() {
-            viewResource(resource)
+            openResource(resource)
         }
     }
     
@@ -74,7 +74,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         return nil
     }
 
-    func viewResource(resource: FVResource) {
+    func openResource(resource: FVResource) {
         let controller = controllerForResource(resource)
         if controller == nil {
             return
