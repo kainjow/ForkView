@@ -5,9 +5,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="7702"/>
     </dependencies>
     <objects>
-        <customObject id="-2" userLabel="File's Owner" customClass="FVWindowController">
+        <customObject id="-2" userLabel="File's Owner" customClass="FVWindowController" customModule="ForkView" customModuleProvider="target">
             <connections>
                 <outlet property="resourcesArrayController" destination="100058" id="100078"/>
+                <outlet property="tableView" destination="100041" id="TwH-iu-GZE"/>
                 <outlet property="window" destination="5" id="18"/>
             </connections>
         </customObject>
@@ -107,7 +108,7 @@
                             <rect key="frame" x="0.0" y="17" width="319" height="284"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" headerView="100053" id="100041" customClass="FVTableView">
+                                <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" headerView="100053" id="100041" customClass="FVTableView" customModule="ForkView" customModuleProvider="target">
                                     <rect key="frame" x="0.0" y="0.0" width="319" height="16"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
