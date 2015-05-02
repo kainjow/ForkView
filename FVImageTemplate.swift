@@ -22,13 +22,6 @@ class FVImageView: NSImageView {
     }
 }
 
-struct FVRGBColor {
-    var r: UInt8
-    var g: UInt8
-    var b: UInt8
-    var a: UInt8
-}
-
 final class FVImageTemplate: FVTemplateController {
     override class func template(resource: FVResource) -> Self? {
         let img = FVImageTemplate.imageFromResource(resource)
@@ -52,25 +45,29 @@ final class FVImageTemplate: FVTemplateController {
         if bitVector == nil {
             return nil
         }
-        let width = size
-        let height = size
         let bitmap = NSBitmapImageRep(
             bitmapDataPlanes: nil,
-            pixelsWide: width,
-            pixelsHigh: height,
+            pixelsWide: size,
+            pixelsHigh: size,
             bitsPerSample: 8,
             samplesPerPixel: 4,
             hasAlpha: true,
             isPlanar: false,
             colorSpaceName: NSCalibratedRGBColorSpace,
-            bytesPerRow: width*4,
+            bytesPerRow: size * 4,
             bitsPerPixel: 32
         )
         if bitmap == nil {
             return nil
         }
+        struct FVRGBColor {
+            var r: UInt8
+            var g: UInt8
+            var b: UInt8
+            var a: UInt8
+        }
         let color = UnsafeMutablePointer<FVRGBColor>(bitmap!.bitmapData)
-        let numPixels = width * height
+        let numPixels = size * size
         for (var i = 0; i < numPixels; ++i) {
             let value: UInt8 = CFBitVectorGetBitAtIndex(bitVector, i) == 1 ? 0 : 255
             color[i].r = value
