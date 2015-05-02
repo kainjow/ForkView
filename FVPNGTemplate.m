@@ -27,29 +27,6 @@
 
 @end
 
-@interface FVColorView : NSView
-{
-	NSColor *color;
-}
-
-@property (readwrite, retain) NSColor *color;
-
-@end
-
-@implementation FVColorView
-
-@synthesize color;
-
-- (void)drawRect:(NSRect)rect
-{
-    if (color) {
-        [color set];
-        [NSBezierPath fillRect:rect];
-    }
-}
-
-@end
-
 struct FVRGBColor {
     uint8_t r, g, b, a;
 };
@@ -180,14 +157,12 @@ struct FVRGBColor {
 		NSRect rect;
 		rect.origin = NSZeroPoint;
 		rect.size = [img size];
-		FVColorView *colorView = [[FVColorView alloc] initWithFrame:rect];
 
-		FVImageView *imgView = [[FVImageView alloc] initWithFrame:[colorView bounds]];
+		FVImageView *imgView = [[FVImageView alloc] initWithFrame:rect];
 		[imgView setImage:img];
 		[imgView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-		[colorView addSubview:imgView];
 		
-		[self setView:colorView];
+		[self setView:imgView];
 	}
 	return self;
 }
