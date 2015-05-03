@@ -20,6 +20,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         FVImageTypeController(),
         FVSNDTypeController(),
     ]
+    var viewController: NSViewController? = nil
     
     class func windowController() -> Self {
         return self(windowNibName: "FVWindow")
@@ -127,9 +128,11 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         for subview in self.typeView.subviews {
             subview.removeFromSuperview()
         }
+        self.viewController = nil
         var view: NSView? = nil
         if let resource = self.selectedResource() {
             if let controller = controllerForResource(resource) {
+                self.viewController = controller
                 view = controller.view
             } else {
                 self.noSelectionLabel.stringValue = "Unsupported Type"

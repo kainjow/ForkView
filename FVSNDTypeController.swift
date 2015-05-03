@@ -22,7 +22,7 @@ final class FVSNDTypeController: FVTypeController {
             playerView.player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
             playerView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
             playerView.player.play()
-            let viewController = NSViewController()
+            let viewController = FVSNDViewController()
             viewController.view = playerView
             return viewController
         }
@@ -110,6 +110,10 @@ final class FVSNDTypeController: FVTypeController {
         stream.mBitsPerChannel = 8
         
         let url = NSURL(fileURLWithPath: NSTemporaryDirectory().stringByAppendingFormat("%d-%f.aif", arc4random(), NSDate().timeIntervalSinceReferenceDate))
+        if url == nil {
+            println("Can't make url")
+            return nil
+        }
         var audioFile: ExtAudioFileRef = nil
         let createStatus = ExtAudioFileCreateWithURL(url, AudioFileTypeID(kAudioFileAIFFType), &stream, nil, UInt32(kAudioFileFlags_EraseFile), &audioFile)
         if createStatus != noErr {
@@ -126,7 +130,6 @@ final class FVSNDTypeController: FVTypeController {
         for var i = 0; i < header_length; ++i {
             audioBufferData[i] ^= 0x80
         }
-
         
         var bufferList = AudioBufferList(mNumberBuffers: 1, mBuffers: audioBuffer)
         let writeStatus = ExtAudioFileWrite(audioFile, UInt32(header_length), &bufferList)
@@ -142,5 +145,13 @@ final class FVSNDTypeController: FVTypeController {
         }
         
         return AVAsset.assetWithURL(url) as? AVAsset
+    }
+}
+
+final class FVSNDViewController: NSViewController {
+    override func viewWillDisappear() {
+        if let playerView = self.view as? AVPlayerView {
+            playerView.player.pause()
+        }
     }
 }
