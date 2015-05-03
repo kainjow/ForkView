@@ -23,7 +23,7 @@ final class FVImageTypeController: FVTypeController {
         let imgView = FVImageView(frame: rect)
         imgView.image = img
         imgView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
-        var viewController = NSViewController()
+        let viewController = NSViewController()
         viewController.view = imgView
         return viewController
     }
