@@ -53,7 +53,7 @@ final class FVDataReader {
         if count(format) == 0 {
             return nil
         }
-        let be = endian == .Big ? true : false
+        let be = endian == .Big
         var ret = [Any]()
         for ch in format {
             switch ch {
