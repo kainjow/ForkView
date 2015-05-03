@@ -8,28 +8,28 @@
 
 import Cocoa
 import AudioToolbox
+import AVKit
+import AVFoundation
 
 final class FVSNDTypeController: FVTypeController {
     func supportedTypes() -> [String] {
         return ["snd "]
     }
     
-    var player: FVSNDPlayer? = nil
-    
     func viewControllerFromResource(resource: FVResource) -> NSViewController? {
-        player = FVSNDPlayer(resource.data!)
-        if player != nil {
-            player!.play()
+        if let asset = assetForSND(resource.data!) {
+            let playerView = AVPlayerView(frame: NSMakeRect(0, 0, 100, 100))
+            playerView.player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
+            playerView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+            playerView.player.play()
+            let viewController = NSViewController()
+            viewController.view = playerView
+            return viewController
         }
         return nil
     }
-}
 
-final class FVSNDPlayer {
-    private var queue: AudioQueueRef = nil
-    private var buffer: AudioQueueBufferRef = nil
-    
-    init?(_ data: NSData) {
+    func assetForSND(data: NSData) -> AVAsset? {
         struct snd_mod_ref_t {
             var mod_number: UInt16
             var mod_init: UInt32
@@ -99,56 +99,48 @@ final class FVSNDPlayer {
             return nil
         }
         
-        //let duration = Float(header_length) / Float(sample_rate >> 16)
-        //println("duration: \(duration)")
-        
         var stream = AudioStreamBasicDescription()
         stream.mSampleRate = Float64(sample_rate >> 16)
         stream.mFormatID = AudioFormatID(kAudioFormatLinearPCM)
-        stream.mFormatFlags = 0
+        stream.mFormatFlags = AudioFormatFlags(kLinearPCMFormatFlagIsSignedInteger)
         stream.mBytesPerPacket = 1
         stream.mFramesPerPacket = 1
         stream.mBytesPerFrame = 1
         stream.mChannelsPerFrame = 1
         stream.mBitsPerChannel = 8
         
-        var status = FVAudioQueueNewOutput(&stream, &queue)
-        if status != noErr {
-            println("AudioQueueNewOutput: \(status)")
+        let url = NSURL(fileURLWithPath: NSTemporaryDirectory().stringByAppendingFormat("%d-%f.aif", arc4random(), NSDate().timeIntervalSinceReferenceDate))
+        var audioFile: ExtAudioFileRef = nil
+        let createStatus = ExtAudioFileCreateWithURL(url, AudioFileTypeID(kAudioFileAIFFType), &stream, nil, UInt32(kAudioFileFlags_EraseFile), &audioFile)
+        if createStatus != noErr {
+            println("ExtAudioFileCreateWithURL: \(createStatus)")
             return nil
         }
         
-        status = AudioQueueAllocateBuffer(queue, UInt32(header_length), &buffer)
-        if status != noErr {
-            println("AudioQueueAllocateBuffer: \(status)")
-            AudioQueueDispose(queue, Boolean(1))
+        let srcData = UnsafePointer<UInt8>(data.bytes + header_offset + snd_header_t_size)
+        var audioBuffer = AudioBuffer()
+        audioBuffer.mNumberChannels = 1
+        audioBuffer.mDataByteSize = UInt32(header_length)
+        audioBuffer.mData = UnsafeMutablePointer(srcData)
+        var audioBufferData = UnsafeMutablePointer<UInt8>(audioBuffer.mData)
+        for var i = 0; i < header_length; ++i {
+            audioBufferData[i] ^= 0x80
+        }
+
+        
+        var bufferList = AudioBufferList(mNumberBuffers: 1, mBuffers: audioBuffer)
+        let writeStatus = ExtAudioFileWrite(audioFile, UInt32(header_length), &bufferList)
+        if writeStatus != noErr {
+            println("ExtAudioFileWrite: \(writeStatus)")
             return nil
         }
         
-        var buf = UnsafeMutablePointer<AudioQueueBuffer>(buffer)
-        buf[0].mAudioDataByteSize = UInt32(header_length)
-        var audioData = UnsafeMutablePointer<UInt8>(buf[0].mAudioData)
-        let srcData = UnsafePointer<UInt8>(data.bytes)
-        memcpy(audioData, srcData, header_length)
-    }
-    
-    func play() -> Bool {
-        if queue == nil || buffer == nil {
-            return false
+        let disposeStatus = ExtAudioFileDispose(audioFile)
+        if disposeStatus != noErr {
+            println("ExtAudioFileDispose: \(disposeStatus)")
+            return nil
         }
         
-        let status1 = AudioQueueEnqueueBuffer(queue, buffer, 0, nil)
-        if status1 != noErr {
-            println("AudioQueueEnqueueBuffer: \(status1)")
-            return false
-        }
-        
-        let status2 = AudioQueueStart(queue, nil)
-        if status2 != noErr {
-            println("AudioQueueStart: \(status2)")
-            return false
-        }
-        
-        return true
+        return AVAsset.assetWithURL(url) as? AVAsset
     }
 }
