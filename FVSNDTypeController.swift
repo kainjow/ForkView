@@ -16,8 +16,8 @@ final class FVSNDTypeController: FVTypeController {
         return ["snd "]
     }
     
-    func viewControllerFromResource(resource: FVResource) -> NSViewController? {
-        if let asset = assetForSND(resource.data!) {
+    func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
+        if let asset = assetForSND(resource.data!, errmsg: &errmsg) {
             let playerView = AVPlayerView(frame: NSMakeRect(0, 0, 100, 100))
             playerView.player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
             playerView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
@@ -29,7 +29,7 @@ final class FVSNDTypeController: FVTypeController {
         return nil
     }
 
-    func assetForSND(data: NSData) -> AVAsset? {
+    func assetForSND(data: NSData, inout errmsg: String) -> AVAsset? {
         struct snd_mod_ref_t {
             var mod_number: UInt16
             var mod_init: UInt32
@@ -63,31 +63,40 @@ final class FVSNDTypeController: FVTypeController {
         let reader = FVDataReader(data)
         let listResource = reader.unpack("hhHIh", endian: .Big)
         if listResource == nil {
+            errmsg = "Missing header"
             return nil
         }
         
         let format = listResource![0] as! Int16
         if format != 1 {
-            // Format is 1 for general format, 2 for newer HyperCard sounds
+            if format == 2 {
+                errmsg = "HyperCard formats not supported"
+            } else {
+                errmsg = "Unknown format \(format)"
+            }
             return nil
         }
         
         let num_modifiers = Int(listResource![1] as! Int16)
         let num_commands = Int(listResource![4] as! Int16)
         if num_modifiers < 1 || num_commands < 1 {
+            errmsg = "Bad header"
             return nil
         }
         
         let header_offset = snd_list_resource_t_size + ((num_modifiers - 1) * snd_mod_ref_t_size) + ((num_commands - 1) * snd_command_t_size)
         if !reader.seekTo(header_offset) {
+            errmsg = "Missing data"
             return nil
         }
         let header = reader.unpack("IIIIIBB", endian: .Big)
         if header == nil {
+            errmsg = "Missing data"
             return nil
         }
         let header_length = Int(header![1] as! UInt32)
         if header_length > (data.length - (header_offset + snd_header_t_size)) {
+            errmsg = "Missing data"
             return nil
         }
         
@@ -96,6 +105,13 @@ final class FVSNDTypeController: FVTypeController {
         let encode = Int(header![5] as! UInt8)
         if encode != 0 {
             // 0x00 for standard, 0xFF for extended, 0xFE for compressed
+            if encode == 0xFF {
+                errmsg = "Extended encoding not supported"
+            } else if encode == 0xFE {
+                errmsg = "Compression not supported"
+            } else {
+                errmsg = String(format: "Unknown encoding 0x%02X", encode)
+            }
             return nil
         }
         
@@ -111,13 +127,13 @@ final class FVSNDTypeController: FVTypeController {
         
         let url = NSURL(fileURLWithPath: NSTemporaryDirectory().stringByAppendingFormat("%d-%f.aif", arc4random(), NSDate().timeIntervalSinceReferenceDate))
         if url == nil {
-            println("Can't make url")
+            errmsg = "Can't make url for conversion"
             return nil
         }
         var audioFile: ExtAudioFileRef = nil
         let createStatus = ExtAudioFileCreateWithURL(url, AudioFileTypeID(kAudioFileAIFFType), &stream, nil, UInt32(kAudioFileFlags_EraseFile), &audioFile)
         if createStatus != noErr {
-            println("ExtAudioFileCreateWithURL: \(createStatus)")
+            errmsg = "ExtAudioFileCreateWithURL failed with status \(createStatus)"
             return nil
         }
         
@@ -134,13 +150,13 @@ final class FVSNDTypeController: FVTypeController {
         var bufferList = AudioBufferList(mNumberBuffers: 1, mBuffers: audioBuffer)
         let writeStatus = ExtAudioFileWrite(audioFile, UInt32(header_length), &bufferList)
         if writeStatus != noErr {
-            println("ExtAudioFileWrite: \(writeStatus)")
+            errmsg = "ExtAudioFileWrite failed with status \(writeStatus)"
             return nil
         }
         
         let disposeStatus = ExtAudioFileDispose(audioFile)
         if disposeStatus != noErr {
-            println("ExtAudioFileDispose: \(disposeStatus)")
+            errmsg = "ExtAudioFileDispose failed with status \(disposeStatus)"
             return nil
         }
         

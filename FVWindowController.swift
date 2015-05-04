@@ -65,11 +65,11 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         }
     }
     
-    func controllerForResource(resource: FVResource) -> NSViewController? {
+    func controllerForResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
         if let type = resource.type?.typeString {
             for controller in typeControllers {
                 if let index = find(controller.supportedTypes(), type) {
-                    return controller.viewControllerFromResource(resource)
+                    return controller.viewControllerFromResource(resource, errmsg: &errmsg)
                 }
             }
         }
@@ -77,7 +77,8 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
     }
 
     func openResource(resource: FVResource) {
-        let controller = controllerForResource(resource)
+        var errmsg = String()
+        let controller = controllerForResource(resource, errmsg: &errmsg)
         if controller == nil {
             return
         }
@@ -131,11 +132,12 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         self.viewController = nil
         var view: NSView? = nil
         if let resource = self.selectedResource() {
-            if let controller = controllerForResource(resource) {
+            var errmsg = String()
+            if let controller = controllerForResource(resource, errmsg: &errmsg) {
                 self.viewController = controller
                 view = controller.view
             } else {
-                self.noSelectionLabel.stringValue = "Unsupported Type"
+                self.noSelectionLabel.stringValue = !errmsg.isEmpty ? errmsg : "Unsupported Type"
             }
         } else {
             self.noSelectionLabel.stringValue = "No Selection"

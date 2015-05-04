@@ -13,7 +13,7 @@ final class FVImageTypeController: FVTypeController {
         return ["icns", "PICT", "PNG ", "ICON", "ICN#", "ics#"]
     }
     
-    func viewControllerFromResource(resource: FVResource) -> NSViewController? {
+    func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
         let img = imageFromResource(resource)
         if img == nil {
             return nil

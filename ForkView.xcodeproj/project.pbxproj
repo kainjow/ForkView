@@ -12,6 +12,7 @@
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		A52DFD1F13C9697B001F6DD6 /* FVFork.m in Sources */ = {isa = PBXBuildFile; fileRef = A52DFD1E13C9697B001F6DD6 /* FVFork.m */; };
 		A54A9B28138DDCB6004F8BB9 /* FVResourceFile.m in Sources */ = {isa = PBXBuildFile; fileRef = A54A9B27138DDCB6004F8BB9 /* FVResourceFile.m */; };
+		A55408FE1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55408FD1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift */; };
 		A594AD131AF4874100197F25 /* FVTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A594AD121AF4874100197F25 /* FVTableView.swift */; };
 		A594AD161AF48BB600197F25 /* FVWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A594AD151AF48BB600197F25 /* FVWindowController.swift */; };
 		A594AD1A1AF53AAD00197F25 /* FVImageTypeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A594AD191AF53AAD00197F25 /* FVImageTypeController.swift */; };
@@ -35,6 +36,7 @@
 		A54A9B26138DDCB6004F8BB9 /* FVResourceFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVResourceFile.h; sourceTree = "<group>"; };
 		A54A9B27138DDCB6004F8BB9 /* FVResourceFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVResourceFile.m; sourceTree = "<group>"; };
 		A54AA022138E1F81004F8BB9 /* FVResourceFilePriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVResourceFilePriv.h; sourceTree = "<group>"; };
+		A55408FD1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RSVerticallyCenteredTextFieldCell.swift; sourceTree = "<group>"; };
 		A594AD121AF4874100197F25 /* FVTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVTableView.swift; sourceTree = "<group>"; };
 		A594AD151AF48BB600197F25 /* FVWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVWindowController.swift; sourceTree = "<group>"; };
 		A594AD191AF53AAD00197F25 /* FVImageTypeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVImageTypeController.swift; sourceTree = "<group>"; };
@@ -112,7 +114,7 @@
 				A5A077A2198EA38B00AAFF2F /* FVDocument.swift */,
 				A594AD151AF48BB600197F25 /* FVWindowController.swift */,
 				A5F422C913CEAF5700C882B8 /* Type Controllers */,
-				A594AD141AF4874800197F25 /* Custom Views */,
+				A594AD141AF4874800197F25 /* UI Components */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -133,13 +135,14 @@
 			name = Model;
 			sourceTree = "<group>";
 		};
-		A594AD141AF4874800197F25 /* Custom Views */ = {
+		A594AD141AF4874800197F25 /* UI Components */ = {
 			isa = PBXGroup;
 			children = (
 				A5A077A7198EDF0600AAFF2F /* FVLine.swift */,
 				A594AD121AF4874100197F25 /* FVTableView.swift */,
+				A55408FD1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift */,
 			);
-			name = "Custom Views";
+			name = "UI Components";
 			sourceTree = "<group>";
 		};
 		A5F422C913CEAF5700C882B8 /* Type Controllers */ = {
@@ -223,6 +226,7 @@
 				A594AD131AF4874100197F25 /* FVTableView.swift in Sources */,
 				A594AD1C1AF5403800197F25 /* FVTypeController.swift in Sources */,
 				A5A0779E198E9B6A00AAFF2F /* FVResourceType.swift in Sources */,
+				A55408FE1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift in Sources */,
 				A5A077A1198EA0C000AAFF2F /* FVResource.swift in Sources */,
 				A5A077A8198EDF0600AAFF2F /* FVLine.swift in Sources */,
 				A5A077A4198EA5DC00AAFF2F /* FVDocument.swift in Sources */,
