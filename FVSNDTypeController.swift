@@ -87,7 +87,7 @@ final class FVSNDTypeController: FVTypeController {
             return nil
         }
         let header_length = Int(header![1] as! UInt32)
-        if header_length != (data.length - (header_offset + snd_header_t_size)) {
+        if header_length > (data.length - (header_offset + snd_header_t_size)) {
             return nil
         }
         
