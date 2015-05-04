@@ -77,97 +77,84 @@ final class FVSNDTypeController: FVTypeController {
         
         let reader = FVDataReader(data)
         
+        // Read the SndListResource or Snd2ListResource
         var format = Int16()
         if !reader.readInt16(.Big, &format) {
             errmsg = "Missing header"
             return nil
         }
-        var header_offset = Int()
         if format == firstSoundFormat {
-            var listResource = SndListResource()
-            if !reader.readInt16(.Big, &listResource.numModifiers) ||
-                !reader.readUInt16(.Big, &listResource.modifierPart.modNumber) ||
-                !reader.readInt32(.Big, &listResource.modifierPart.modInit) ||
-                !reader.readInt16(.Big, &listResource.numCommands) {
+            var numModifiers = Int16()
+            var modifierPart = ModRef()
+            if !reader.readInt16(.Big, &numModifiers) ||
+                !reader.readUInt16(.Big, &modifierPart.modNumber) ||
+                !reader.readInt32(.Big, &modifierPart.modInit) {
                 errmsg = "Missing header"
                 return nil
             }
-            if listResource.numModifiers != 1 || listResource.numCommands == 0 {
+            if numModifiers != 1 {
                 errmsg = "Bad header"
                 return nil
             }
-            if listResource.modifierPart.modNumber != 5  {
-                errmsg = "Unknown modNumber value \(listResource.modifierPart.modNumber)"
+            if modifierPart.modNumber != 5  {
+                errmsg = "Unknown modNumber value \(modifierPart.modNumber)"
                 return nil
             }
-            if listResource.modifierPart.modInit & initStereo == 1 {
+            if modifierPart.modInit & initStereo == 1 {
                 errmsg = "Only mono channel supported"
                 return nil
             }
-            if listResource.modifierPart.modInit & initMACE3 == 1 || listResource.modifierPart.modInit & initMACE6 == 1 {
+            if modifierPart.modInit & initMACE3 == 1 || modifierPart.modInit & initMACE6 == 1 {
                 errmsg = "Compression not supported"
                 return nil
             }
-            for var i = Int16(0); i < listResource.numCommands; ++i {
-                if !reader.readUInt16(.Big, &listResource.commandPart.cmd) ||
-                    !reader.readInt16(.Big, &listResource.commandPart.param1) ||
-                    !reader.readInt32(.Big, &listResource.commandPart.param2) {
-                    errmsg = "Missing command"
-                    return nil
-                }
-                listResource.commandPart.cmd &= ~0x8000
-                switch listResource.commandPart.cmd {
-                case soundCmd, bufferCmd:
-                    if header_offset != 0 {
-                        errmsg = "Duplicate commands"
-                        return nil
-                    }
-                    header_offset = Int(listResource.commandPart.param2)
-                case nullCmd:
-                    break
-                default:
-                    errmsg = "Unknown command \(listResource.commandPart.cmd)"
-                    return nil
-                }
-            }
         } else if format == secondSoundFormat {
-            var listResource = Snd2ListResource()
-            if !reader.readInt16(.Big, &listResource.refCount) ||
-                !reader.readInt16(.Big, &listResource.numCommands) {
+            var refCount = Int16()
+            if !reader.readInt16(.Big, &refCount) {
                 errmsg = "Missing header"
                 return nil
-            }
-            if listResource.numCommands == 0 {
-                errmsg = "Bad header"
-                return nil
-            }
-            for var i = Int16(0); i < listResource.numCommands; ++i {
-                if !reader.readUInt16(.Big, &listResource.commandPart.cmd) ||
-                    !reader.readInt16(.Big, &listResource.commandPart.param1) ||
-                    !reader.readInt32(.Big, &listResource.commandPart.param2) {
-                    errmsg = "Missing command"
-                    return nil
-                }
-                listResource.commandPart.cmd &= ~0x8000
-                switch listResource.commandPart.cmd {
-                case soundCmd, bufferCmd:
-                    if header_offset != 0 {
-                        errmsg = "Duplicate commands"
-                        return nil
-                    }
-                    header_offset = Int(listResource.commandPart.param2)
-                case nullCmd:
-                    break
-                default:
-                    errmsg = "Unknown command \(listResource.commandPart.cmd)"
-                    return nil
-                }
             }
         } else {
             errmsg = "Unknown format \(format)"
             return nil
         }
         
+        // Read SndCommands
+        var header_offset = Int()
+        var numCommands = Int16()
+        var commandPart = SndCommand()
+        if !reader.readInt16(.Big, &numCommands) {
+            errmsg = "Missing header"
+            return nil
+        }
+        if numCommands == 0 {
+            errmsg = "Bad header"
+            return nil
+        }
+        for var i = Int16(0); i < numCommands; ++i {
+            if !reader.readUInt16(.Big, &commandPart.cmd) ||
+                !reader.readInt16(.Big, &commandPart.param1) ||
+                !reader.readInt32(.Big, &commandPart.param2) {
+                    errmsg = "Missing command"
+                    return nil
+            }
+            commandPart.cmd &= ~0x8000
+            switch commandPart.cmd {
+            case soundCmd, bufferCmd:
+                if header_offset != 0 {
+                    errmsg = "Duplicate commands"
+                    return nil
+                }
+                header_offset = Int(commandPart.param2)
+            case nullCmd:
+                break
+            default:
+                errmsg = "Unknown command \(commandPart.cmd)"
+                return nil
+            }
+        }
+        
+        // Read SoundHeader
         let header = reader.unpack("IIIIIBB", endian: .Big)
         if header == nil {
             errmsg = "Missing data"
@@ -179,9 +166,7 @@ final class FVSNDTypeController: FVTypeController {
             errmsg = "Missing samples"
             return nil
         }
-        
         let sample_rate = Int(header![2] as! UInt32)
-        
         let encode = header![5] as! UInt8
         if encode != stdSH {
             if encode == extSH {
@@ -194,6 +179,7 @@ final class FVSNDTypeController: FVTypeController {
             return nil
         }
         
+        // Generate an AudioStreamBasicDescription for conversion
         var stream = AudioStreamBasicDescription()
         stream.mSampleRate = Float64(sample_rate >> 16)
         stream.mFormatID = AudioFormatID(kAudioFormatLinearPCM)
@@ -204,6 +190,7 @@ final class FVSNDTypeController: FVTypeController {
         stream.mChannelsPerFrame = 1
         stream.mBitsPerChannel = 8
         
+        // Create a temporary file for storage
         let url = NSURL(fileURLWithPath: NSTemporaryDirectory().stringByAppendingFormat("%d-%f.aif", arc4random(), NSDate().timeIntervalSinceReferenceDate))
         if url == nil {
             errmsg = "Can't make url for conversion"
@@ -216,6 +203,7 @@ final class FVSNDTypeController: FVTypeController {
             return nil
         }
         
+        // Configure the AudioBufferList
         let srcData = UnsafePointer<UInt8>(sampleData!.bytes)
         var audioBuffer = AudioBuffer()
         audioBuffer.mNumberChannels = 1
@@ -225,20 +213,23 @@ final class FVSNDTypeController: FVTypeController {
         for var i = 0; i < header_length; ++i {
             audioBufferData[i] ^= 0x80
         }
-        
         var bufferList = AudioBufferList(mNumberBuffers: 1, mBuffers: audioBuffer)
+        
+        // Write the data to the file
         let writeStatus = ExtAudioFileWrite(audioFile, UInt32(header_length), &bufferList)
         if writeStatus != noErr {
             errmsg = "ExtAudioFileWrite failed with status \(writeStatus)"
             return nil
         }
         
+        // Finish up
         let disposeStatus = ExtAudioFileDispose(audioFile)
         if disposeStatus != noErr {
             errmsg = "ExtAudioFileDispose failed with status \(disposeStatus)"
             return nil
         }
         
+        // Generate an AVAsset
         return AVAsset.assetWithURL(url) as? AVAsset
     }
 }
