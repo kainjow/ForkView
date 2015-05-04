@@ -31,6 +31,7 @@ final class FVSNDTypeController: FVTypeController {
 
     func assetForSND(data: NSData, inout errmsg: String) -> AVAsset? {
         // See Sound.h in Carbon
+        // Also see "Sound Manager" legacy PDF
         let firstSoundFormat: Int16  = 0x0001 /*general sound format*/
         let secondSoundFormat: Int16 = 0x0002 /*special sampled sound format (HyperCard)*/
         let initMono:   Int32 = 0x0080 /*monophonic channel*/
@@ -138,6 +139,8 @@ final class FVSNDTypeController: FVTypeController {
                     errmsg = "Missing command"
                     return nil
             }
+            // "If soundCmd is contained within an 'snd ' resource, the high bit of the command must be set."
+            // Apple docs says this for bufferCmd as well, so we clear the bit.
             commandPart.cmd &= ~0x8000
             switch commandPart.cmd {
             case soundCmd, bufferCmd:
