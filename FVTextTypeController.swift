@@ -9,9 +9,7 @@
 import Cocoa
 
 final class FVTextTypeController: FVTypeController {
-    func supportedTypes() -> [String] {
-        return ["plst", "TEXT"]
-    }
+    let supportedTypes = ["plst", "TEXT"]
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
 		if let str = stringFromResource(resource) {

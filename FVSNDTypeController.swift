@@ -12,9 +12,7 @@ import AVKit
 import AVFoundation
 
 final class FVSNDTypeController: FVTypeController {
-    func supportedTypes() -> [String] {
-        return ["snd "]
-    }
+    let supportedTypes = ["snd "]
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
         if let asset = assetForSND(resource.data!, errmsg: &errmsg) {
