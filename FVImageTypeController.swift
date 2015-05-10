@@ -10,7 +10,7 @@ import Cocoa
 
 final class FVImageTypeController: FVTypeController {
     func supportedTypes() -> [String] {
-        return ["icns", "PICT", "PNG ", "ICON", "ICN#", "ics#", "CURS", "PAT ", "icl4", "icl8"]
+        return ["icns", "PICT", "PNG ", "ICON", "ICN#", "ics#", "CURS", "PAT ", "icl4", "icl8", "kcns"]
     }
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
@@ -430,7 +430,7 @@ final class FVImageTypeController: FVTypeController {
         if let rsrcData = resource.data {
             if let type = resource.type?.typeString {
                 switch type {
-                case "icns", "PICT", "PNG ":
+                case "icns", "PICT", "PNG ", "kcns":
                     return NSImage(data: rsrcData)
                 case "ICON":
                     if rsrcData.length == 128 {
