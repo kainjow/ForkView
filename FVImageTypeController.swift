@@ -10,7 +10,7 @@ import Cocoa
 
 final class FVImageTypeController: FVTypeController {
     func supportedTypes() -> [String] {
-        return ["icns", "PICT", "PNG ", "ICON", "ICN#", "ics#", "CURS", "PAT ", "icl4", "icl8", "kcns"]
+        return ["icns", "PICT", "PNG ", "ICON", "ICN#", "ics#", "CURS", "PAT ", "icl4", "icl8", "kcns", "ics4", "ics8"]
     }
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
@@ -461,6 +461,14 @@ final class FVImageTypeController: FVTypeController {
                 case "icl8":
                     if rsrcData.length == 1024 {
                         return imageFrom8BitColorData(rsrcData, size: 32)
+                    }
+                case "ics4":
+                    if rsrcData.length == 128 {
+                        return imageFrom4BitColorData(rsrcData, size: 16)
+                    }
+                case "ics8":
+                    if rsrcData.length == 256 {
+                        return imageFrom8BitColorData(rsrcData, size: 16)
                     }
                 default:
                     return nil
