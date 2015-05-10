@@ -19,6 +19,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
     let typeControllers: [FVTypeController] = [
         FVImageTypeController(),
         FVSNDTypeController(),
+        FVTextTypeController(),
     ]
     var viewController: NSViewController? = nil
     
