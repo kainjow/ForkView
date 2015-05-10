@@ -67,13 +67,13 @@ final class FVSNDTypeController: FVTypeController {
             var commandPart = SndCommand()
         }
         struct SoundHeader {
-            var samplePtr: UInt32
-            var length: UInt32
-            var sampleRate: UInt32
-            var loopStart: UInt32
-            var loopEnd: UInt32
-            var encode: UInt8
-            var baseFrequency: UInt8
+            var samplePtr: UInt32 = 0
+            var length: UInt32 = 0
+            var sampleRate: UInt32 = 0
+            var loopStart: UInt32 = 0
+            var loopEnd: UInt32 = 0
+            var encode: UInt8 = 0
+            var baseFrequency: UInt8 = 0
         }
         
         let reader = FVDataReader(data)
@@ -158,33 +158,36 @@ final class FVSNDTypeController: FVTypeController {
         }
         
         // Read SoundHeader
-        let header = reader.unpack("IIIIIBB", endian: .Big)
-        if header == nil {
-            errmsg = "Missing data"
+        var header = SoundHeader()
+        if !reader.readUInt32(.Big, &header.samplePtr) ||
+            !reader.readUInt32(.Big, &header.length) ||
+            !reader.readUInt32(.Big, &header.sampleRate) ||
+            !reader.readUInt32(.Big, &header.loopStart) ||
+            !reader.readUInt32(.Big, &header.loopEnd) ||
+            !reader.readUInt8(&header.encode) ||
+            !reader.readUInt8(&header.baseFrequency) {
+            errmsg = "Missing header data"
             return nil
         }
-        let header_length = Int(header![1] as! UInt32)
-        let sampleData = reader.read(header_length)
+        let sampleData = reader.read(Int(header.length))
         if sampleData == nil {
             errmsg = "Missing samples"
             return nil
         }
-        let sample_rate = Int(header![2] as! UInt32)
-        let encode = header![5] as! UInt8
-        if encode != stdSH {
-            if encode == extSH {
+        if header.encode != stdSH {
+            if header.encode == extSH {
                 errmsg = "Extended encoding not supported"
-            } else if encode == cmpSH {
+            } else if header.encode == cmpSH {
                 errmsg = "Compression not supported"
             } else {
-                errmsg = String(format: "Unknown encoding 0x%02X", encode)
+                errmsg = String(format: "Unknown encoding 0x%02X", header.encode)
             }
             return nil
         }
         
         // Generate an AudioStreamBasicDescription for conversion
         var stream = AudioStreamBasicDescription()
-        stream.mSampleRate = Float64(sample_rate >> 16)
+        stream.mSampleRate = Float64(header.sampleRate >> 16)
         stream.mFormatID = AudioFormatID(kAudioFormatLinearPCM)
         stream.mFormatFlags = AudioFormatFlags(kLinearPCMFormatFlagIsSignedInteger)
         stream.mBytesPerPacket = 1
@@ -210,16 +213,16 @@ final class FVSNDTypeController: FVTypeController {
         let srcData = UnsafePointer<UInt8>(sampleData!.bytes)
         var audioBuffer = AudioBuffer()
         audioBuffer.mNumberChannels = 1
-        audioBuffer.mDataByteSize = UInt32(header_length)
+        audioBuffer.mDataByteSize = header.length
         audioBuffer.mData = UnsafeMutablePointer(srcData)
         var audioBufferData = UnsafeMutablePointer<UInt8>(audioBuffer.mData)
-        for var i = 0; i < header_length; ++i {
+        for var i = 0; i < Int(header.length); ++i {
             audioBufferData[i] ^= 0x80
         }
         var bufferList = AudioBufferList(mNumberBuffers: 1, mBuffers: audioBuffer)
         
         // Write the data to the file
-        let writeStatus = ExtAudioFileWrite(audioFile, UInt32(header_length), &bufferList)
+        let writeStatus = ExtAudioFileWrite(audioFile, header.length, &bufferList)
         if writeStatus != noErr {
             errmsg = "ExtAudioFileWrite failed with status \(writeStatus)"
             return nil

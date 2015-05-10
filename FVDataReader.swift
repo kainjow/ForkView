@@ -85,73 +85,19 @@ final class FVDataReader {
         return false
     }
     
-    func readUInt8() -> UInt8? {
+    func readUInt8(inout val: UInt8) -> Bool {
         if let dat = read(sizeof(UInt8)) {
-            return UnsafePointer<UInt8>(dat.bytes)[0]
+            dat.getBytes(&val)
+            return true
         }
-        return nil
+        return false
     }
 
-    func readInt8() -> Int8? {
+    func readInt8(inout val: Int8) -> Bool {
         if let dat = read(sizeof(Int8)) {
-            return UnsafePointer<Int8>(dat.bytes)[0]
+            dat.getBytes(&val)
+            return true
         }
-        return nil
-    }
-
-    func unpack(format: String, endian: Endian) -> [Any]? {
-        if count(format) == 0 {
-            return nil
-        }
-        let be = endian == .Big
-        var ret = [Any]()
-        for ch in format {
-            switch ch {
-            case "H": // UInt16
-                var val = UInt16()
-                if readUInt16(endian, &val) {
-                    ret.append(val)
-                } else {
-                    return nil
-                }
-            case "h": // Int16
-                var val = Int16()
-                if readInt16(endian, &val) {
-                    ret.append(val)
-                } else {
-                    return nil
-                }
-            case "I": // UInt32
-                var val = UInt32()
-                if readUInt32(endian, &val) {
-                    ret.append(val)
-                } else {
-                    return nil
-                }
-            case "i": // Int32
-                var val = Int32()
-                if readInt32(endian, &val) {
-                    ret.append(val)
-                } else {
-                    return nil
-                }
-            case "B": // UInt8
-                if let val = readUInt8() {
-                    ret.append(val)
-                } else {
-                    return nil
-                }
-            case "b": // Int8
-                if let val = readInt8() {
-                    ret.append(val)
-                } else {
-                    return nil
-                }
-            default:
-                println("Unknown format code \(ch)")
-                return nil
-            }
-        }
-        return ret
+        return false
     }
 }
