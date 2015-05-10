@@ -10,7 +10,7 @@ import Cocoa
 
 final class FVTextTypeController: FVTypeController {
     func supportedTypes() -> [String] {
-        return ["plst", "TEXT"]
+        return ["plst", "TEXT", "utf8", "utxt", "ut16", "weba"]
     }
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
@@ -53,7 +53,7 @@ final class FVTextTypeController: FVTypeController {
         }
         let type = resource.type?.typeString
         switch type! {
-        case "plst":
+        case "plst", "weba":
             let plist: AnyObject? = NSPropertyListSerialization.propertyListWithData(rsrcData!, options: NSPropertyListReadOptions(NSPropertyListMutabilityOptions.Immutable.rawValue), format: nil, error: nil)
             if plist != nil {
                 if let data = NSPropertyListSerialization.dataWithPropertyList(plist!, format: .XMLFormat_v1_0, options: NSPropertyListWriteOptions(0), error: nil) {
@@ -62,6 +62,12 @@ final class FVTextTypeController: FVTypeController {
             }
         case "TEXT":
             return NSString(data: rsrcData!, encoding: NSMacOSRomanStringEncoding) as? String
+        case "utf8":
+            return NSString(data: rsrcData!, encoding: NSUTF8StringEncoding) as? String
+        case "utxt":
+            return NSString(data: rsrcData!, encoding: NSUTF16BigEndianStringEncoding) as? String
+        case "ut16":
+            return NSString(data: rsrcData!, encoding: NSUnicodeStringEncoding) as? String
         default:
             break;
         }
