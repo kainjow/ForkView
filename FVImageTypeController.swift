@@ -10,7 +10,7 @@ import Cocoa
 
 final class FVImageTypeController: FVTypeController {
     func supportedTypes() -> [String] {
-        return ["icns", "PICT", "PNG ", "ICON", "ICN#", "ics#", "CURS"]
+        return ["icns", "PICT", "PNG ", "ICON", "ICN#", "ics#", "CURS", "PAT "]
     }
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
@@ -108,6 +108,10 @@ final class FVImageTypeController: FVTypeController {
                         let data = rsrcData.subdataWithRange(NSMakeRange(0, 32))
                         let mask = rsrcData.subdataWithRange(NSMakeRange(32, 32))
                         return imageFromBitmapData(data, maskData: mask, size: 16)
+                    }
+                case "PAT ":
+                    if rsrcData.length == 8 {
+                        return imageFromBitmapData(rsrcData, size: 8)
                     }
                 default:
                     return nil
