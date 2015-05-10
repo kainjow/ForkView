@@ -73,9 +73,7 @@ final class StringListObject: NSObject {
 }
 
 final class StringListView: FVTypeController {
-	func supportedTypes() -> [String] {
-		return ["STR#"]
-	}
+	let supportedTypes = ["STR#"]
 	
 	func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
 		return StringListTemplate(resource: resource)

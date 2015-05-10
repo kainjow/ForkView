@@ -9,9 +9,7 @@
 import Cocoa
 
 final class FVTextTypeController: FVTypeController {
-    func supportedTypes() -> [String] {
-        return ["plst", "TEXT", "utf8", "utxt", "ut16", "weba", "RTF ", "rtfd"]
-    }
+    let supportedTypes = ["plst", "TEXT", "utf8", "utxt", "ut16", "weba", "RTF ", "rtfd"]
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
         let str = attributedStringFromResource(resource)
