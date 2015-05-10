@@ -10,7 +10,7 @@ import Cocoa
 
 final class FVImageTypeController: FVTypeController {
     func supportedTypes() -> [String] {
-        return ["icns", "PICT", "PNG ", "ICON", "ICN#", "ics#"]
+        return ["icns", "PICT", "PNG ", "ICON", "ICN#", "ics#", "CURS"]
     }
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
@@ -28,12 +28,27 @@ final class FVImageTypeController: FVTypeController {
         return viewController
     }
     
-    func imageFromBitmapData(data: NSData, size: Int) -> NSImage? {
+    func imageFromBitmapData(data: NSData, maskData: NSData? = nil, size: Int) -> NSImage? {
         let ptr: UnsafePointer<UInt8> = UnsafePointer(data.bytes)
         let bitVector = CFBitVectorCreate(kCFAllocatorDefault, ptr, data.length * 8)
         if bitVector == nil {
             return nil
         }
+        
+        let haveAlpha  = maskData != nil
+        var maskBitVector: CFBitVectorRef
+        if haveAlpha {
+            if data.length != maskData!.length {
+                println("Data and mask lengths mismatch!")
+                return nil
+            }
+            let maskPtr: UnsafePointer<UInt8> = UnsafePointer(maskData!.bytes)
+            maskBitVector = CFBitVectorCreate(kCFAllocatorDefault, maskPtr, maskData!.length * 8)
+        } else {
+            // create a dummy value since CFBitVector can't be nil
+            maskBitVector = CFBitVectorCreate(kCFAllocatorDefault, ptr, data.length * 8)
+        }
+        
         let bitmap = NSBitmapImageRep(
             bitmapDataPlanes: nil,
             pixelsWide: size,
@@ -62,7 +77,7 @@ final class FVImageTypeController: FVTypeController {
             color[i].r = value
             color[i].g = value
             color[i].b = value
-            color[i].a = 255
+            color[i].a = !haveAlpha ? 255 : (CFBitVectorGetBitAtIndex(maskBitVector, i) == 1 ? 255 : 0)
         }
         
         let img = NSImage()
@@ -87,6 +102,12 @@ final class FVImageTypeController: FVTypeController {
                 case "ics#":
                     if rsrcData.length == 64 {
                         return imageFromBitmapData(rsrcData, size: 16)
+                    }
+                case "CURS":
+                    if rsrcData.length == 68 {
+                        let data = rsrcData.subdataWithRange(NSMakeRange(0, 32))
+                        let mask = rsrcData.subdataWithRange(NSMakeRange(32, 32))
+                        return imageFromBitmapData(data, maskData: mask, size: 16)
                     }
                 default:
                     return nil
