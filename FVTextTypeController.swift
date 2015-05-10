@@ -18,31 +18,13 @@ final class FVTextTypeController: FVTypeController {
         if str == nil {
             return nil
         }
-        
-        let scrollView = NSScrollView(frame: NSMakeRect(0, 0, 100, 100))
-        let contentSize = scrollView.contentSize
-        scrollView.borderType = .NoBorder
-        scrollView.hasVerticalScroller = true
-        scrollView.hasHorizontalScroller = false
-        scrollView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
-        
-        let textView = NSTextView(frame: NSMakeRect(0, 0, contentSize.width, contentSize.height))
-        textView.editable = false
-        textView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
-        textView.minSize = NSMakeSize(0, contentSize.height)
-        textView.maxSize = NSMakeSize(CGFloat.max, CGFloat.max)
-        textView.verticallyResizable = true
-        textView.horizontallyResizable = false
-        textView.autoresizingMask = .ViewWidthSizable
-        textView.textContainer?.containerSize = NSMakeSize(contentSize.width, CGFloat.max)
-        textView.textContainer?.widthTracksTextView = true
-        
-        scrollView.documentView = textView
-        
+        let viewController = NSViewController(nibName: "TextView", bundle: nil)
+        if viewController == nil {
+            return nil
+        }
+        let scrollView = viewController!.view as! NSScrollView
+        let textView = scrollView.documentView as! NSTextView
         textView.string = str!
-        
-        let viewController = NSViewController()
-        viewController.view = scrollView
         return viewController
     }
     
