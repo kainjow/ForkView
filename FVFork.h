@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, FVForkType) {
 - (instancetype)initWithURL:(NSURL *)fileURL type:(FVForkType)type;
 
 - (BOOL)read:(unsigned)size into:(void*)buffer;
+- (BOOL)read:(unsigned)size intoData:(NSData**)buffer;
 - (BOOL)seekTo:(unsigned)offset;
 
 @property (readonly) unsigned length;

@@ -79,6 +79,20 @@
 	return YES;
 }
 
+- (BOOL)read:(unsigned)size intoData:(NSData**)buffer
+{
+    if (!buffer) {
+        return NO;
+    }
+    
+    if (pos_ + size > self.length) {
+        return NO;
+    }
+    *buffer = [data_ subdataWithRange:NSMakeRange(pos_, size)];
+    pos_ += size;
+    return YES;
+}
+
 - (BOOL)seekTo:(unsigned)offset
 {
     if (offset >= self.length) {
