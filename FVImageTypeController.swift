@@ -438,7 +438,9 @@ final class FVImageTypeController: FVTypeController {
                     }
                 case "ICN#":
                     if rsrcData.length == 256 {
-                        return imageFromBitmapData(rsrcData, size: 32)
+                        let data = rsrcData.subdataWithRange(NSMakeRange(0, 128))
+                        let mask = rsrcData.subdataWithRange(NSMakeRange(128, 128))
+                        return imageFromBitmapData(data, maskData: mask, size: 32)
                     }
                 case "ics#":
                     if rsrcData.length == 64 {
