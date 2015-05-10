@@ -8,12 +8,12 @@
 
 import Cocoa
 
-protocol FVTableViewDelegate {
+protocol FVTableViewDelegate: NSObjectProtocol {
     func tableViewMenuForSelection() -> NSMenu?
 }
 
 final class FVTableView: NSTableView {
-    var customDelegate: FVTableViewDelegate?
+    weak var customDelegate: FVTableViewDelegate?
     
     override func menuForEvent(event: NSEvent) -> NSMenu? {
         let row = rowAtPoint(convertPoint(event.locationInWindow, fromView:nil))

@@ -14,10 +14,7 @@ final class FVTextTypeController: FVTypeController {
     }
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
-        let str = stringFromResource(resource)
-        if str == nil {
-            return nil
-        }
+		if let str = stringFromResource(resource) {
         
         let scrollView = NSScrollView(frame: NSMakeRect(0, 0, 100, 100))
         let contentSize = scrollView.contentSize
@@ -39,31 +36,32 @@ final class FVTextTypeController: FVTypeController {
         
         scrollView.documentView = textView
         
-        textView.string = str!
+        textView.string = str
         
         let viewController = NSViewController()
         viewController.view = scrollView
         return viewController
+        } else {
+            return nil
+        }
     }
     
     func stringFromResource(resource: FVResource) -> String? {
-        let rsrcData = resource.data
-        if rsrcData == nil {
-            return nil
-        }
-        let type = resource.type?.typeString
-        switch type! {
-        case "plst":
-            let plist: AnyObject? = NSPropertyListSerialization.propertyListWithData(rsrcData!, options: NSPropertyListReadOptions(NSPropertyListMutabilityOptions.Immutable.rawValue), format: nil, error: nil)
-            if plist != nil {
-                if let data = NSPropertyListSerialization.dataWithPropertyList(plist!, format: .XMLFormat_v1_0, options: NSPropertyListWriteOptions(0), error: nil) {
-                    return NSString(data: data, encoding: NSUTF8StringEncoding) as? String
+        if let rsrcData = resource.data {
+            let type = resource.type!.typeString
+            switch type {
+            case "plst":
+                let plist: AnyObject? = NSPropertyListSerialization.propertyListWithData(rsrcData, options: NSPropertyListReadOptions(NSPropertyListMutabilityOptions.Immutable.rawValue), format: nil, error: nil)
+                if plist != nil {
+                    if let data = NSPropertyListSerialization.dataWithPropertyList(plist!, format: .XMLFormat_v1_0, options: NSPropertyListWriteOptions(0), error: nil) {
+                        return NSString(data: data, encoding: NSUTF8StringEncoding) as? String
+                    }
                 }
+            case "TEXT":
+                return NSString(data: rsrcData, encoding: NSMacOSRomanStringEncoding) as? String
+            default:
+                break;
             }
-        case "TEXT":
-            return NSString(data: rsrcData!, encoding: NSMacOSRomanStringEncoding) as? String
-        default:
-            break;
         }
         return nil
     }
