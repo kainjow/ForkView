@@ -10,7 +10,7 @@ import Cocoa
 
 final class FVTextTypeController: FVTypeController {
     func supportedTypes() -> [String] {
-        return ["plst", "TEXT", "utf8", "utxt", "ut16", "weba", "RTF "]
+        return ["plst", "TEXT", "utf8", "utxt", "ut16", "weba", "RTF ", "rtfd"]
     }
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
@@ -37,6 +37,8 @@ final class FVTextTypeController: FVTypeController {
         switch type! {
         case "RTF ":
             return NSAttributedString(RTF: rsrcData!, documentAttributes: nil)
+        case "rtfd":
+            return NSAttributedString(RTFD: rsrcData!, documentAttributes: nil)
         default:
             if let str = stringFromResource(rsrcData!, type: type!) {
                 return NSAttributedString(string: str)
