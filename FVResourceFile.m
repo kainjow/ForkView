@@ -44,13 +44,12 @@ struct FVResourceMap {
 @implementation FVResourceFile
 {
     FVDataReader *dataReader_;
-    BOOL isResourceFork_;
     FVResourceHeader *header;
     FVResourceMap *map;
-    NSArray *types;
 }
 
 @synthesize types;
+@synthesize isResourceFork = isResourceFork_;
 
 #pragma mark -
 #pragma mark Public Methods
@@ -324,11 +323,6 @@ struct FVResourceMap {
 		return nil;
 	}
 	return data;
-}
-
-- (BOOL)isResourceFork
-{
-    return isResourceFork_;
 }
 
 @end
