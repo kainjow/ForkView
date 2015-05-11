@@ -34,7 +34,7 @@ private func pascalStringFromData(aResource: NSData, index indexID: Int16) -> [U
 		if (curSize >= handSize) {
 			return nil;
 		}
-		data = data.advancedBy(toAdd);
+		data += toAdd
 	}
 	
 	return {
