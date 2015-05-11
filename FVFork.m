@@ -15,6 +15,11 @@
 #define FVFORK_RESOURCE_NAME "com.apple.ResourceFork"
 
 @implementation FVFork
+{
+    NSData *data_;
+    FVForkType type_;
+    unsigned pos_;
+}
 
 @synthesize type = type_;
 @synthesize position = pos_;

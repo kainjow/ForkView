@@ -42,13 +42,13 @@ struct FVResourceMap {
 	uint16_t namesOffset;
 };
 
-@interface FVResourceFile ()
-- (BOOL)readHeader:(FVResourceHeader *)aHeader;
-- (BOOL)readMap;
-- (BOOL)readTypes;
-@end
-
 @implementation FVResourceFile
+{
+    FVFork *fork;
+    FVResourceHeader *header;
+    FVResourceMap *map;
+    NSArray *types;
+}
 
 @synthesize types;
 

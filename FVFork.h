@@ -14,11 +14,6 @@ typedef NS_ENUM(NSInteger, FVForkType) {
 };
 
 @interface FVFork : NSObject
-{
-    NSData *data_;
-	FVForkType type_;
-    unsigned pos_;
-}
 
 - (instancetype)initWithURL:(NSURL *)fileURL type:(FVForkType)type;
 
