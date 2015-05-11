@@ -9,8 +9,8 @@
 import Foundation
 
 final class FVDataReader {
-    private var data: NSData
-    private var pos: Int = 0
+    private var data = NSData()
+    private var pos = 0
     
     var length: Int {
         get {
@@ -26,6 +26,40 @@ final class FVDataReader {
     
     init(_ data: NSData) {
         self.data = data
+    }
+    
+    init?(URL: NSURL, resourceFork: Bool) {
+        // Apple's docs say "The maximum size of the resource fork in a file is 16 megabytes"
+        let maxResourceSize = 16777216
+        if !resourceFork {
+            var fileSize: AnyObject?
+            URL.getResourceValue(&fileSize, forKey: NSURLFileSizeKey, error: nil)
+            let fileSizeNum = fileSize as? NSNumber
+            if fileSizeNum == nil {
+                return nil
+            }
+            if fileSizeNum!.integerValue == 0 || fileSizeNum!.integerValue >= maxResourceSize {
+                return nil
+            }
+            let data = NSData(contentsOfURL: URL)
+            if data == nil {
+                return nil
+            }
+            self.data = data!
+        } else {
+            let rsrcSize = getxattr(URL.path!, XATTR_RESOURCEFORK_NAME, nil, 0, 0, 0)
+            if rsrcSize <= 0 || rsrcSize >= maxResourceSize {
+                return nil
+            }
+            let data = NSMutableData(length: rsrcSize)
+            if data == nil {
+                return nil
+            }
+            if getxattr(URL.path!, XATTR_RESOURCEFORK_NAME, data!.mutableBytes, rsrcSize, 0, 0) != rsrcSize {
+                return nil
+            }
+            self.data = data!
+        }
     }
     
     func read(size: Int) -> NSData? {

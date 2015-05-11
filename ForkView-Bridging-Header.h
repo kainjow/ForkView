@@ -4,3 +4,4 @@
 
 #import "FVResourceFile.h"
 #import "FVResourceFilePriv.h"
+#import <sys/xattr.h>
