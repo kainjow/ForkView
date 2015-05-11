@@ -75,6 +75,15 @@ import Foundation
         return subdata
     }
     
+    func read(size: CUnsignedInt, into buf: UnsafeMutablePointer<Void>) -> Bool {
+        let data = self.read(Int(size))
+        if data == nil {
+            return false
+        }
+        data!.getBytes(buf)
+        return true
+    }
+    
     func seekTo(offset: Int) -> Bool {
         if (offset >= self.length) {
             return false

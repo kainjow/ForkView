@@ -8,7 +8,6 @@
 
 #import "FVResourceFile.h"
 #import "FVResourceFilePriv.h"
-#import "FVFork.h"
 #import "ForkView-Swift.h"
 
 @interface NSError (FVResource)
@@ -44,7 +43,8 @@ struct FVResourceMap {
 
 @implementation FVResourceFile
 {
-    FVFork *fork;
+    FVDataReader *dataReader_;
+    BOOL isResourceFork_;
     FVResourceHeader *header;
     FVResourceMap *map;
     NSArray *types;
@@ -55,15 +55,15 @@ struct FVResourceMap {
 #pragma mark -
 #pragma mark Public Methods
 
-- (instancetype)initWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error fork:(FVForkType)forkType
+- (instancetype)initWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error resourceFork:(BOOL)resourceFork
 {
 	self = [super init];
 	if (self == nil) {
 		return nil;
 	}
 	
-	fork = [[FVFork alloc] initWithURL:fileURL type:forkType];
-	if (!fork) {
+	dataReader_ = [FVDataReader dataReader:fileURL resourceFork:resourceFork];
+	if (!dataReader_) {
 		if (error) {
 			*error = [NSError errorWithDescription:@"Bad file."];
 		}
@@ -108,9 +108,11 @@ struct FVResourceMap {
 - (instancetype)initWithContentsOfURL:(NSURL *)fileURL error:(NSError **)error
 {
 	NSError *tmpError = nil;
-	FVResourceFile *file = [[[self class] alloc] initWithContentsOfURL:fileURL error:&tmpError fork:FVForkTypeResource];
-	if (!file) {
-		file = [[[self class] alloc] initWithContentsOfURL:fileURL error:&tmpError fork:FVForkTypeData];
+    FVResourceFile *file = [[[self class] alloc] initWithContentsOfURL:fileURL error:&tmpError resourceFork:YES];
+    if (file) {
+        file->isResourceFork_ = YES;
+    } else {
+		file = [[[self class] alloc] initWithContentsOfURL:fileURL error:&tmpError resourceFork:NO];
 	}
 	if (file) {
 		return file;
@@ -142,10 +144,10 @@ struct FVResourceMap {
 - (BOOL)readHeader:(FVResourceHeader *)aHeader
 {
 	// read the header values
-	if (![fork read:sizeof(aHeader->dataOffset) into:&aHeader->dataOffset] ||
-		![fork read:sizeof(aHeader->mapOffset) into:&aHeader->mapOffset] ||
-		![fork read:sizeof(aHeader->dataLength) into:&aHeader->dataLength] ||
-		![fork read:sizeof(aHeader->mapLength) into:&aHeader->mapLength]) {
+	if (![dataReader_ read:sizeof(aHeader->dataOffset) into:&aHeader->dataOffset] ||
+		![dataReader_ read:sizeof(aHeader->mapOffset) into:&aHeader->mapOffset] ||
+		![dataReader_ read:sizeof(aHeader->dataLength) into:&aHeader->dataLength] ||
+		![dataReader_ read:sizeof(aHeader->mapLength) into:&aHeader->mapLength]) {
 		return NO;
 	}
 	
@@ -155,7 +157,7 @@ struct FVResourceMap {
 	aHeader->dataLength = CFSwapInt32BigToHost(aHeader->dataLength);
 	aHeader->mapLength = CFSwapInt32BigToHost(aHeader->mapLength);
 	
-	unsigned fileLength = [fork length];
+	unsigned fileLength = (unsigned)[dataReader_ length];
 	if ((aHeader->dataOffset + aHeader->dataLength > fileLength) || (aHeader->mapOffset + aHeader->mapLength > fileLength)) {
 		return NO;
 	}
@@ -166,7 +168,7 @@ struct FVResourceMap {
 - (BOOL)readMap
 {
 	// seek to the map offset
-	if (![fork seekTo:header->mapOffset]) {
+	if (![dataReader_ seekTo:header->mapOffset]) {
 		return NO;
 	}
 	
@@ -182,11 +184,11 @@ struct FVResourceMap {
 		printf("Bad match!\n");
 	}
 	
-	if (![fork read:sizeof(map->nextMap) into:&map->nextMap] ||
-		![fork read:sizeof(map->fileRef) into:&map->fileRef] ||
-		![fork read:sizeof(map->attributes) into:&map->attributes] ||
-		![fork read:sizeof(map->typesOffset) into:&map->typesOffset] ||
-		![fork read:sizeof(map->namesOffset) into:&map->namesOffset]) {
+	if (![dataReader_ read:sizeof(map->nextMap) into:&map->nextMap] ||
+		![dataReader_ read:sizeof(map->fileRef) into:&map->fileRef] ||
+		![dataReader_ read:sizeof(map->attributes) into:&map->attributes] ||
+		![dataReader_ read:sizeof(map->typesOffset) into:&map->typesOffset] ||
+		![dataReader_ read:sizeof(map->namesOffset) into:&map->namesOffset]) {
 		return NO;
 	}
 	
@@ -204,10 +206,10 @@ struct FVResourceMap {
 
 - (BOOL)readTypes
 {
-	unsigned typesOffset = [fork position];
+	unsigned typesOffset = (unsigned)[dataReader_ position];
 	
 	uint16_t numberOfTypes;
-	if (![fork read:sizeof(numberOfTypes) into:&numberOfTypes]) {
+	if (![dataReader_ read:sizeof(numberOfTypes) into:&numberOfTypes]) {
 		return NO;
 	}
 	numberOfTypes = CFSwapInt16BigToHost(numberOfTypes) + 1;
@@ -219,9 +221,9 @@ struct FVResourceMap {
 		uint16_t numberOfResources;
 		uint16_t referenceListOffset;
 		
-		if (![fork read:sizeof(type) into:&type] ||
-			![fork read:sizeof(numberOfResources) into:&numberOfResources] ||
-			![fork read:sizeof(referenceListOffset) into:&referenceListOffset]) {
+		if (![dataReader_ read:sizeof(type) into:&type] ||
+			![dataReader_ read:sizeof(numberOfResources) into:&numberOfResources] ||
+			![dataReader_ read:sizeof(referenceListOffset) into:&referenceListOffset]) {
 			return NO;
 		}
 		
@@ -242,7 +244,7 @@ struct FVResourceMap {
 		NSMutableArray *resourcesTemp = [NSMutableArray array];
 		
 		for (uint16_t resIndex=0; resIndex<obj.count; resIndex++) {
-			if (![fork seekTo:typesOffset + obj.offset + (resIndex * 12)]) {
+			if (![dataReader_ seekTo:typesOffset + obj.offset + (resIndex * 12)]) {
 				return NO;
 			}
 			
@@ -251,11 +253,11 @@ struct FVResourceMap {
 			uint8_t attributes;
 			uint8_t dataOffsetBytes[3];
 			uint32_t resHandle;
-			if (![fork read:sizeof(resourceID) into:&resourceID] ||
-				![fork read:sizeof(nameOffset) into:&nameOffset] ||
-				![fork read:sizeof(attributes) into:&attributes] ||
-				![fork read:sizeof(dataOffsetBytes) into:&dataOffsetBytes] ||
-				![fork read:sizeof(resHandle) into:&resHandle]) {
+			if (![dataReader_ read:sizeof(resourceID) into:&resourceID] ||
+				![dataReader_ read:sizeof(nameOffset) into:&nameOffset] ||
+				![dataReader_ read:sizeof(attributes) into:&attributes] ||
+				![dataReader_ read:sizeof(dataOffsetBytes) into:&dataOffsetBytes] ||
+				![dataReader_ read:sizeof(resHandle) into:&resHandle]) {
 					return NO;
 			}
 			
@@ -270,15 +272,15 @@ struct FVResourceMap {
 			
 			char name[256];
 			uint8_t nameLength = 0;
-			if ((nameOffset != -1) && ([fork seekTo:header->mapOffset + map->namesOffset + nameOffset])) {
-				if (![fork read:sizeof(nameLength) into:&nameLength] || ![fork read:nameLength into:name]) {
+			if ((nameOffset != -1) && ([dataReader_ seekTo:header->mapOffset + map->namesOffset + nameOffset])) {
+				if (![dataReader_ read:sizeof(nameLength) into:&nameLength] || ![dataReader_ read:nameLength into:name]) {
 					nameLength = 0;
 				}
 			}
 			name[nameLength] = 0;
 			
 			uint32_t dataLength = 0;
-			if ([fork seekTo:header->dataOffset + dataOffset] && [fork read:sizeof(dataLength) into:&dataLength]) {
+			if ([dataReader_ seekTo:header->dataOffset + dataOffset] && [dataReader_ read:sizeof(dataLength) into:&dataLength]) {
 				dataLength = CFSwapInt32BigToHost(dataLength);
 			}
 			
@@ -311,22 +313,22 @@ struct FVResourceMap {
 
 - (NSData *)dataForResource:(FVResource *)resource
 {
-	if (![fork seekTo:header->dataOffset + resource.dataOffset]) {
+	if (![dataReader_ seekTo:header->dataOffset + resource.dataOffset]) {
 		return nil;
 	}
 	NSMutableData *data = [NSMutableData dataWithLength:resource.dataSize];
 	if (!data) {
 		return nil;
 	}
-	if (![fork read:resource.dataSize into:[data mutableBytes]]) {
+	if (![dataReader_ read:resource.dataSize into:[data mutableBytes]]) {
 		return nil;
 	}
 	return data;
 }
 
-- (FVForkType)forkType
+- (BOOL)isResourceFork
 {
-	return fork.type;
+    return isResourceFork_;
 }
 
 @end

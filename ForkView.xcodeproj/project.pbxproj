@@ -10,7 +10,6 @@
 		1DDD582C0DA1D0D100B32029 /* FVWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58280DA1D0D100B32029 /* FVWindow.xib */; };
 		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
-		A52DFD1F13C9697B001F6DD6 /* FVFork.m in Sources */ = {isa = PBXBuildFile; fileRef = A52DFD1E13C9697B001F6DD6 /* FVFork.m */; };
 		A54A9B28138DDCB6004F8BB9 /* FVResourceFile.m in Sources */ = {isa = PBXBuildFile; fileRef = A54A9B27138DDCB6004F8BB9 /* FVResourceFile.m */; };
 		A55408FE1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55408FD1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift */; };
 		A594AD131AF4874100197F25 /* FVTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A594AD121AF4874100197F25 /* FVTableView.swift */; };
@@ -33,8 +32,6 @@
 		1DDD582B0DA1D0D100B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* ForkView-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ForkView-Info.plist"; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* ForkView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForkView.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A52DFD1D13C9697B001F6DD6 /* FVFork.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVFork.h; sourceTree = "<group>"; };
-		A52DFD1E13C9697B001F6DD6 /* FVFork.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVFork.m; sourceTree = "<group>"; };
 		A54A9B26138DDCB6004F8BB9 /* FVResourceFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVResourceFile.h; sourceTree = "<group>"; };
 		A54A9B27138DDCB6004F8BB9 /* FVResourceFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVResourceFile.m; sourceTree = "<group>"; };
 		A54AA022138E1F81004F8BB9 /* FVResourceFilePriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVResourceFilePriv.h; sourceTree = "<group>"; };
@@ -130,8 +127,6 @@
 				A54A9B26138DDCB6004F8BB9 /* FVResourceFile.h */,
 				A54A9B27138DDCB6004F8BB9 /* FVResourceFile.m */,
 				A54AA022138E1F81004F8BB9 /* FVResourceFilePriv.h */,
-				A52DFD1D13C9697B001F6DD6 /* FVFork.h */,
-				A52DFD1E13C9697B001F6DD6 /* FVFork.m */,
 				A594AD1F1AF5693600197F25 /* FVDataReader.swift */,
 				A5A0779D198E9B6A00AAFF2F /* FVResourceType.swift */,
 				A5A077A0198EA0C000AAFF2F /* FVResource.swift */,
@@ -229,7 +224,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				A54A9B28138DDCB6004F8BB9 /* FVResourceFile.m in Sources */,
-				A52DFD1F13C9697B001F6DD6 /* FVFork.m in Sources */,
 				A5FFD8E41AFEDC33008AB914 /* FVTextTypeController.swift in Sources */,
 				A594AD131AF4874100197F25 /* FVTableView.swift in Sources */,
 				A594AD1C1AF5403800197F25 /* FVTypeController.swift in Sources */,

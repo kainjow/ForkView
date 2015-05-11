@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FVFork.h"
 
 typedef struct FVResourceHeader FVResourceHeader;
 typedef struct FVResourceMap FVResourceMap;
@@ -18,6 +17,6 @@ typedef struct FVResourceMap FVResourceMap;
 
 @property (readonly, nonnull) NSArray *types;
 
-@property (readonly) FVForkType forkType;
+@property (readonly) BOOL isResourceFork;
 
 @end
