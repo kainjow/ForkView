@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class FVDataReader {
+@objc final class FVDataReader {
     private var data = NSData()
     private var pos = 0
     
@@ -60,6 +60,10 @@ final class FVDataReader {
             }
             self.data = data!
         }
+    }
+    
+    class func dataReader(URL: NSURL, resourceFork: Bool) -> FVDataReader? {
+        return FVDataReader(URL: URL, resourceFork: resourceFork)
     }
     
     func read(size: Int) -> NSData? {
