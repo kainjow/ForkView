@@ -432,7 +432,15 @@ final class FVImageTypeController: FVTypeController {
         if let rsrcData = resource.data {
             if let type = resource.type?.typeString {
                 switch type {
-                case "icns", "PICT", "PNG ", "kcns", "GIFF":
+                case "PICT":
+                    // TODO: parse basic PICT images that contain only bitmap image data
+                    if let img = imagePICTFromData(rsrcData) {
+                        return img
+                    }
+                    // 64-bit Cocoa can render some PICT, but if our
+                    // 32-bit helper didn't, this will probably fail too
+                    return NSImage(data: rsrcData)
+                case "icns", "PNG ", "kcns", "GIFF":
                     return NSImage(data: rsrcData)
                 case "ICON":
                     if rsrcData.length == 128 {
@@ -480,6 +488,33 @@ final class FVImageTypeController: FVTypeController {
             }
         }
         return nil
+    }
+    
+    func imagePICTFromData(rsrcData: NSData) -> NSImage? {
+        let url = NSBundle.mainBundle().URLForResource("PICTConverter", withExtension: nil)
+        if url == nil {
+            return nil
+        }
+        let outpath = NSTemporaryDirectory().stringByAppendingPathComponent("data.pict")
+        if !rsrcData.writeToFile(outpath, atomically: true) {
+            return nil
+        }
+        let cmd = String(format: "%@ \"%@\"", url!.path!, outpath)
+        let file = popen(cmd, "r")
+        if file == nil {
+            return nil
+        }
+        let imgData = NSMutableData()
+        let buffer = NSMutableData(length: 4096)
+        for ;; {
+            let bytesRead = fread(buffer!.mutableBytes, 1, buffer!.length, file)
+            if bytesRead <= 0 {
+                break;
+            }
+            imgData.appendBytes(buffer!.bytes, length: bytesRead)
+        }
+        pclose(file)
+        return NSImage(data: imgData)
     }
 }
 
