@@ -123,7 +123,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
     
     override func windowTitleForDocumentDisplayName(displayName: String) -> String {
         let doc = self.document as? FVDocument
-        return String(format: "%@ [%@]", displayName, doc!.resourceFile!.forkType == .Data ? "Data Fork" : "Resource Fork")
+        return String(format: "%@ [%@]", displayName, !doc!.resourceFile!.isResourceFork ? "Data Fork" : "Resource Fork")
     }
     
     func viewSelectedResource() {

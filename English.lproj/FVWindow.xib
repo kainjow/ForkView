@@ -19,29 +19,22 @@
         <window title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" animationBehavior="default" id="5" userLabel="Window">
             <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
             <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>
-            <rect key="contentRect" x="133" y="349" width="613" height="299"/>
+            <rect key="contentRect" x="133" y="349" width="615" height="300"/>
             <rect key="screenRect" x="0.0" y="0.0" width="1440" height="878"/>
-            <value key="minSize" type="size" width="94" height="86"/>
+            <value key="minSize" type="size" width="103" height="86"/>
             <view key="contentView" id="6">
-                <rect key="frame" x="0.0" y="0.0" width="613" height="299"/>
+                <rect key="frame" x="0.0" y="0.0" width="615" height="300"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <box horizontalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="100039" customClass="FVLine" customModule="ForkView" customModuleProvider="target">
-                        <rect key="frame" x="101" y="0.0" width="5" height="299"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
-                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
-                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <font key="titleFont" metaFont="system"/>
-                    </box>
                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="100040">
-                        <rect key="frame" x="103" y="0.0" width="278" height="300"/>
+                        <rect key="frame" x="104" y="0.0" width="278" height="301"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                         <clipView key="contentView" id="2ic-cJ-OaT">
-                            <rect key="frame" x="0.0" y="17" width="278" height="283"/>
+                            <rect key="frame" x="0.0" y="17" width="278" height="284"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="lastColumnOnly" alternatingRowBackgroundColors="YES" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" headerView="100053" id="100041" customClass="FVTableView" customModule="ForkView" customModuleProvider="target">
-                                    <rect key="frame" x="0.0" y="0.0" width="278" height="16"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="278" height="284"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
                                     <color key="backgroundColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -134,14 +127,14 @@
                         </tableHeaderView>
                     </scrollView>
                     <box horizontalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="hcO-Bs-Tdt" customClass="FVLine" customModule="ForkView" customModuleProvider="target">
-                        <rect key="frame" x="380" y="0.0" width="5" height="299"/>
+                        <rect key="frame" x="382" y="0.0" width="5" height="300"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
                         <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
                         <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <font key="titleFont" metaFont="system"/>
                     </box>
                     <customView id="o0H-6L-9lt">
-                        <rect key="frame" x="381" y="0.0" width="232" height="300"/>
+                        <rect key="frame" x="383" y="0.0" width="232" height="300"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                     </customView>
                     <scrollView borderType="none" autohidesScrollers="YES" horizontalLineScroll="16" horizontalPageScroll="10" verticalLineScroll="16" verticalPageScroll="10" usesPredominantAxisScrolling="NO" id="100021">
@@ -151,7 +144,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="102" height="300"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
-                                <tableView focusRingType="none" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" selectionHighlightStyle="sourceList" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="100024">
+                                <tableView focusRingType="none" appearanceType="vibrantLight" verticalHuggingPriority="750" allowsExpansionToolTips="YES" columnAutoresizingStyle="firstColumnOnly" selectionHighlightStyle="sourceList" columnReordering="NO" multipleSelection="NO" autosaveColumns="NO" rowHeight="14" id="100024">
                                     <rect key="frame" x="0.0" y="0.0" width="102" height="300"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <size key="intercellSpacing" width="3" height="2"/>
@@ -215,12 +208,19 @@
                             <autoresizingMask key="autoresizingMask"/>
                         </scroller>
                     </scrollView>
+                    <box horizontalHuggingPriority="750" title="Box" boxType="separator" titlePosition="noTitle" id="100039" customClass="FVLine" customModule="ForkView" customModuleProvider="target">
+                        <rect key="frame" x="103" y="0.0" width="5" height="300"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES"/>
+                        <color key="borderColor" white="0.0" alpha="0.41999999999999998" colorSpace="calibratedWhite"/>
+                        <color key="fillColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <font key="titleFont" metaFont="system"/>
+                    </box>
                 </subviews>
             </view>
             <connections>
                 <outlet property="delegate" destination="-2" id="17"/>
             </connections>
-            <point key="canvasLocation" x="465.5" y="367.5"/>
+            <point key="canvasLocation" x="620.5" y="357"/>
         </window>
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <arrayController editable="NO" selectsInsertedObjects="NO" avoidsEmptySelection="NO" id="100030" userLabel="Types Controller">
