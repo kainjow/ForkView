@@ -11,25 +11,29 @@
 //  some basic PICT files, but it seems to fail for most.
 
 #import <Cocoa/Cocoa.h>
+#import "PICTConverter.h"
 
 #ifndef __i386__
 #error Must be compiled 32-bit!
 #endif
 
-int main(int argc, const char * argv[]) {
+
+@implementation PICTConverter
+
+- (void)convertPICTDataToTIFF:(NSData *)pictData withReply:(void (^)(NSData *))reply
+{
     @autoreleasepool {
-        if (argc == 2) {
-            NSString *path = [[NSFileManager defaultManager] stringWithFileSystemRepresentation:argv[1] length:strlen(argv[1])];
-            NSImage *img = [[[NSImage alloc] initWithContentsOfFile:path] autorelease];
-            if (img) {
-                NSData *data = [img TIFFRepresentation];
-                if (data.length > 0) {
-                    if (write(STDOUT_FILENO, [data bytes], data.length) == data.length) {
-                        return EXIT_SUCCESS;
-                    }
-                }
+        NSImage *img = [[[NSImage alloc] initWithData:pictData] autorelease];
+        if (img) {
+            NSData *data = [img TIFFRepresentation];
+            if (data.length > 0) {
+                reply(data);
+                return;
             }
         }
+        reply(nil);
     }
-    return EXIT_FAILURE;
 }
+
+@end
+

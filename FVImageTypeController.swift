@@ -16,6 +16,47 @@ final class FVImageTypeController: FVTypeController {
     }
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
+		if resource.type!.typeString == "PICT" {
+			if let imgData = resource.data {
+				//First, see if we can get the image size via NSImage
+				let tmpCocoaImg = NSImage(data: imgData)
+				var imgSize = tmpCocoaImg?.size ?? NSSize(width: 32, height: 32)
+				
+				let connectionToService = NSXPCConnection(serviceName: "com.kainjow.PICTConverter")
+				connectionToService.remoteObjectInterface = NSXPCInterface(withProtocol: PICTConverterProtocol.self)
+				connectionToService.resume()
+				
+				let rect = NSRect(origin: .zeroPoint, size: imgSize)
+				let imgView = FVImageView(frame: rect)
+				// TODO: temporary image showing we're fetching the image.
+				//imgView.image = img
+				imgView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+				let viewController = NSViewController()
+				viewController.view = imgView
+
+				connectionToService.remoteObjectProxyWithErrorHandler({ (err) -> Void in
+					//TODO: image or some other way of showing failure.
+					NSLog("Error encountered when trying to speak with XPC service: %@", err)
+				}).convertPICTDataToTIFF(imgData, withReply: { (replyData) -> Void in
+					NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+						if let replyData = replyData {
+							let img = NSImage(data: replyData)!
+							imgView.frame = NSRect(origin: .zeroPoint, size: img.size)
+						} else if let cocoaImg = tmpCocoaImg {
+							//The frame should already be set.
+							imgView.image = cocoaImg
+						} else {
+							//TODO: image or some other way of showing failure.
+						}
+						connectionToService.invalidate()
+					})
+				})
+				return viewController
+
+			} else {
+				return nil
+			}
+		}
         let img = imageFromResource(resource)
         if img == nil {
             return nil
@@ -432,14 +473,6 @@ final class FVImageTypeController: FVTypeController {
         if let rsrcData = resource.data {
             if let type = resource.type?.typeString {
                 switch type {
-                case "PICT":
-                    // TODO: parse basic PICT images that contain only bitmap image data
-                    if let img = imagePICTFromData(rsrcData) {
-                        return img
-                    }
-                    // 64-bit Cocoa can render some PICT, but if our
-                    // 32-bit helper didn't, this will probably fail too
-                    return NSImage(data: rsrcData)
                 case "icns", "PNG ", "kcns", "GIFF":
                     return NSImage(data: rsrcData)
                 case "ICON":
@@ -488,33 +521,6 @@ final class FVImageTypeController: FVTypeController {
             }
         }
         return nil
-    }
-    
-    func imagePICTFromData(rsrcData: NSData) -> NSImage? {
-        let url = NSBundle.mainBundle().URLForResource("PICTConverter", withExtension: nil)
-        if url == nil {
-            return nil
-        }
-        let outpath = NSTemporaryDirectory().stringByAppendingPathComponent("data.pict")
-        if !rsrcData.writeToFile(outpath, atomically: true) {
-            return nil
-        }
-        let cmd = String(format: "%@ \"%@\"", url!.path!, outpath)
-        let file = popen(cmd, "r")
-        if file == nil {
-            return nil
-        }
-        let imgData = NSMutableData()
-        let buffer = NSMutableData(length: 4096)
-        for ;; {
-            let bytesRead = fread(buffer!.mutableBytes, 1, buffer!.length, file)
-            if bytesRead <= 0 {
-                break;
-            }
-            imgData.appendBytes(buffer!.bytes, length: bytesRead)
-        }
-        pclose(file)
-        return NSImage(data: imgData)
     }
 }
 

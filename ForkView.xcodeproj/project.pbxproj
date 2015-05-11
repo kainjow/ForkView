@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		1DDD582C0DA1D0D100B32029 /* FVWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58280DA1D0D100B32029 /* FVWindow.xib */; };
 		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
+		55442B7E1B01269D00359921 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55442B7B1B01269D00359921 /* main.m */; };
+		55442B7F1B01296300359921 /* PICTConverter.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = A5FFD8FE1B0048EA008AB914 /* PICTConverter.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		A54A9B28138DDCB6004F8BB9 /* FVResourceFile.m in Sources */ = {isa = PBXBuildFile; fileRef = A54A9B27138DDCB6004F8BB9 /* FVResourceFile.m */; };
 		A55408FE1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55408FD1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift */; };
@@ -25,7 +27,6 @@
 		A5FFD8E41AFEDC33008AB914 /* FVTextTypeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5FFD8E31AFEDC33008AB914 /* FVTextTypeController.swift */; };
 		A5FFD8E61B002348008AB914 /* TextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A5FFD8E51B002348008AB914 /* TextView.xib */; };
 		A5FFD9011B0048EA008AB914 /* PICTConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FFD9001B0048EA008AB914 /* PICTConverter.m */; };
-		A5FFD9071B004D8D008AB914 /* PICTConverter in Resources */ = {isa = PBXBuildFile; fileRef = A5FFD8FE1B0048EA008AB914 /* PICTConverter */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,6 +40,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		5539F2251B01253E001FCFE0 /* Embed XPC Services */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
+			dstSubfolderSpec = 16;
+			files = (
+				55442B7F1B01296300359921 /* PICTConverter.xpc in Embed XPC Services */,
+			);
+			name = "Embed XPC Services";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A5FFD8FC1B0048EA008AB914 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -54,6 +66,10 @@
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		1DDD58290DA1D0D100B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/FVWindow.xib; sourceTree = "<group>"; };
 		1DDD582B0DA1D0D100B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
+		5539F2181B01253E001FCFE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		55442B7B1B01269D00359921 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		55442B7C1B01269D00359921 /* PICTConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PICTConverter.h; sourceTree = "<group>"; usesTabs = 0; };
+		55442B7D1B01269D00359921 /* PICTConverterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PICTConverterProtocol.h; sourceTree = "<group>"; usesTabs = 0; };
 		8D15AC360486D014006FF6A4 /* ForkView-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ForkView-Info.plist"; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* ForkView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForkView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A54A9B26138DDCB6004F8BB9 /* FVResourceFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVResourceFile.h; sourceTree = "<group>"; };
@@ -73,8 +89,8 @@
 		A5A077A7198EDF0600AAFF2F /* FVLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVLine.swift; sourceTree = "<group>"; };
 		A5FFD8E31AFEDC33008AB914 /* FVTextTypeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVTextTypeController.swift; sourceTree = "<group>"; };
 		A5FFD8E51B002348008AB914 /* TextView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextView.xib; sourceTree = "<group>"; };
-		A5FFD8FE1B0048EA008AB914 /* PICTConverter */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = PICTConverter; sourceTree = BUILT_PRODUCTS_DIR; };
-		A5FFD9001B0048EA008AB914 /* PICTConverter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PICTConverter.m; sourceTree = "<group>"; };
+		A5FFD8FE1B0048EA008AB914 /* PICTConverter.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = PICTConverter.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5FFD9001B0048EA008AB914 /* PICTConverter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PICTConverter.m; sourceTree = "<group>"; usesTabs = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -100,7 +116,7 @@
 			isa = PBXGroup;
 			children = (
 				8D15AC370486D014006FF6A4 /* ForkView.app */,
-				A5FFD8FE1B0048EA008AB914 /* PICTConverter */,
+				A5FFD8FE1B0048EA008AB914 /* PICTConverter.xpc */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -143,6 +159,15 @@
 				1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5539F2171B01253E001FCFE0 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				55442B7B1B01269D00359921 /* main.m */,
+				5539F2181B01253E001FCFE0 /* Info.plist */,
+			);
+			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		A54A9F01138E0E6A004F8BB9 /* UI */ = {
@@ -194,7 +219,10 @@
 		A5FFD8FF1B0048EA008AB914 /* PICTConverter */ = {
 			isa = PBXGroup;
 			children = (
+				55442B7C1B01269D00359921 /* PICTConverter.h */,
 				A5FFD9001B0048EA008AB914 /* PICTConverter.m */,
+				55442B7D1B01269D00359921 /* PICTConverterProtocol.h */,
+				5539F2171B01253E001FCFE0 /* Supporting Files */,
 			);
 			path = PICTConverter;
 			sourceTree = "<group>";
@@ -209,6 +237,7 @@
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
+				5539F2251B01253E001FCFE0 /* Embed XPC Services */,
 			);
 			buildRules = (
 			);
@@ -235,8 +264,8 @@
 			);
 			name = PICTConverter;
 			productName = PICTConverter;
-			productReference = A5FFD8FE1B0048EA008AB914 /* PICTConverter */;
-			productType = "com.apple.product-type.tool";
+			productReference = A5FFD8FE1B0048EA008AB914 /* PICTConverter.xpc */;
+			productType = "com.apple.product-type.xpc-service";
 		};
 /* End PBXNativeTarget section */
 
@@ -277,7 +306,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5FFD9071B004D8D008AB914 /* PICTConverter in Resources */,
 				1DDD582C0DA1D0D100B32029 /* FVWindow.xib in Resources */,
 				A5FFD8E61B002348008AB914 /* TextView.xib in Resources */,
 				1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */,
@@ -311,6 +339,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55442B7E1B01269D00359921 /* main.m in Sources */,
 				A5FFD9011B0048EA008AB914 /* PICTConverter.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -366,7 +395,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				INFOPLIST_FILE = PICTConverter/Info.plist;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -388,7 +417,7 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				INFOPLIST_FILE = PICTConverter/Info.plist;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -494,6 +523,7 @@
 				A5FFD9031B0048EA008AB914 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "ForkView" */ = {
 			isa = XCConfigurationList;
