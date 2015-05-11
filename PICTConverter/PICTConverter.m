@@ -13,7 +13,7 @@
 #import <Cocoa/Cocoa.h>
 #import "PICTConverter.h"
 
-#ifndef __i386__
+#ifdef __LP64__
 #error Must be compiled 32-bit!
 #endif
 
@@ -23,8 +23,10 @@
 - (void)convertPICTDataToTIFF:(NSData *)pictData withReply:(void (^)(NSData *))reply
 {
     @autoreleasepool {
-        NSImage *img = [[[NSImage alloc] initWithData:pictData] autorelease];
-        if (img) {
+        NSPICTImageRep *pictRep = [NSPICTImageRep imageRepWithData:pictData];
+        if (pictRep) {
+            NSImage *img = [[[NSImage alloc] initWithSize:pictRep.size] autorelease];
+            [img addRepresentation:pictRep];
             NSData *data = [img TIFFRepresentation];
             if (data.length > 0) {
                 reply(data);

@@ -51,15 +51,6 @@
 			name = "Embed XPC Services";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A5FFD8FC1B0048EA008AB914 /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = /usr/share/man/man1/;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 1;
-		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -256,7 +247,6 @@
 			buildPhases = (
 				A5FFD8FA1B0048EA008AB914 /* Sources */,
 				A5FFD8FB1B0048EA008AB914 /* Frameworks */,
-				A5FFD8FC1B0048EA008AB914 /* CopyFiles */,
 			);
 			buildRules = (
 			);
