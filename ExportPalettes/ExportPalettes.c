@@ -13,6 +13,7 @@
 #endif
 
 int main (int argc, const char * argv[]) {
+    // These were removed from the headers in 10.7, but are still in the framework
     extern CTabHandle GetCTable(short);
     extern void DisposeCTable(CTabHandle);
     
