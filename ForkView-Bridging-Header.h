@@ -4,4 +4,5 @@
 
 #import "FVResourceFile.h"
 #import "FVResourceFilePriv.h"
-#import <sys/xattr.h>
+#include <sys/xattr.h>
+#import "PICTConverterProtocol.h"
