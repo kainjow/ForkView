@@ -20,6 +20,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         FVImageTypeController(),
         FVSNDTypeController(),
         FVTextTypeController(),
+		StringListView(),
     ]
     var viewController: NSViewController? = nil
     
