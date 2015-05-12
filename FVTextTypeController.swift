@@ -9,7 +9,7 @@
 import Cocoa
 
 final class FVTextTypeController: FVTypeController {
-    let supportedTypes = ["plst", "TEXT", "utf8", "utxt", "ut16", "weba", "RTF ", "rtfd"]
+    let supportedTypes = ["plst", "TEXT", "utf8", "utxt", "ut16", "weba", "RTF ", "rtfd", "STR "]
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
         let str = attributedStringFromResource(resource)
@@ -63,9 +63,23 @@ final class FVTextTypeController: FVTypeController {
             return NSString(data: rsrcData, encoding: NSUTF16BigEndianStringEncoding) as? String
         case "ut16":
             return NSString(data: rsrcData, encoding: NSUnicodeStringEncoding) as? String
+        case "STR ":
+            return stringFromPascalStringData(rsrcData)
         default:
             break;
         }
         return nil
+    }
+    
+    func stringFromPascalStringData(data: NSData) -> String? {
+        if data.length < 2 {
+            return nil
+        }
+        let ptr = UnsafePointer<UInt8>(data.bytes)
+        let strLen = Int(ptr[0])
+        if data.length < (strLen + 1) {
+            return nil
+        }
+        return NSString(bytes: ptr + 1, length: strLen, encoding: NSMacOSRomanStringEncoding) as? String
     }
 }
