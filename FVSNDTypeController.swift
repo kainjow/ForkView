@@ -14,8 +14,8 @@ import AVFoundation
 final class FVSNDTypeController: FVTypeController {
     let supportedTypes = ["snd "]
     
-    func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
-        if let asset = assetForSND(resource.data!, errmsg: &errmsg) {
+    func viewControllerFromResourceData(data: NSData, type: String, inout errmsg: String) -> NSViewController? {
+        if let asset = assetForSND(data, errmsg: &errmsg) {
             let playerView = AVPlayerView(frame: NSMakeRect(0, 0, 100, 100))
             playerView.player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
             playerView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable

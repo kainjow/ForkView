@@ -11,8 +11,8 @@ import Cocoa
 final class FVTextTypeController: FVTypeController {
     let supportedTypes = ["plst", "TEXT", "utf8", "utxt", "ut16", "weba", "RTF ", "rtfd", "STR "]
     
-    func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
-        let str = attributedStringFromResource(resource)
+    func viewControllerFromResourceData(data: NSData, type: String, inout errmsg: String) -> NSViewController? {
+        let str = attributedStringFromResource(data, type: type)
         if str == nil {
             return nil
         }
@@ -26,19 +26,14 @@ final class FVTextTypeController: FVTypeController {
         return viewController
     }
     
-    func attributedStringFromResource(resource: FVResource) -> NSAttributedString? {
-        let rsrcData = resource.data
-        if rsrcData == nil {
-            return nil
-        }
-        let type = resource.type?.typeString
-        switch type! {
+    func attributedStringFromResource(rsrcData: NSData, type: String) -> NSAttributedString? {
+        switch type {
         case "RTF ":
-            return NSAttributedString(RTF: rsrcData!, documentAttributes: nil)
+            return NSAttributedString(RTF: rsrcData, documentAttributes: nil)
         case "rtfd":
-            return NSAttributedString(RTFD: rsrcData!, documentAttributes: nil)
+            return NSAttributedString(RTFD: rsrcData, documentAttributes: nil)
         default:
-            if let str = stringFromResource(rsrcData!, type: type!) {
+            if let str = stringFromResource(rsrcData, type: type) {
                 return NSAttributedString(string: str)
             }
             break;

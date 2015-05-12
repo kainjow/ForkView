@@ -13,45 +13,41 @@ final class FVImageTypeController: FVTypeController {
 		"GIFF"
 	]
     
-    func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
-		if resource.type!.typeString == "PICT" {
-			if let imgData = resource.data {
-				//First, see if we can get the image size via NSImage
-				let tmpCocoaImg = NSImage(data: imgData)
-				var imgSize = tmpCocoaImg?.size ?? NSSize(width: 32, height: 32)
-				
-				let connectionToService = NSXPCConnection(serviceName: "com.kainjow.PICTConverter")
-				connectionToService.remoteObjectInterface = NSXPCInterface(withProtocol: PICTConverterProtocol.self)
-				connectionToService.resume()
-				
-				let rect = NSRect(origin: .zeroPoint, size: imgSize)
-				let imgView = FVImageView(frame: rect)
-				// TODO: temporary image showing we're fetching the image.
-				imgView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
-				let viewController = NSViewController()
-				viewController.view = imgView
+    func viewControllerFromResourceData(data: NSData, type: String, inout errmsg: String) -> NSViewController? {
+		if type == "PICT" {
+            //First, see if we can get the image size via NSImage
+            let tmpCocoaImg = NSImage(data: data)
+            var imgSize = tmpCocoaImg?.size ?? NSSize(width: 32, height: 32)
+            
+            let connectionToService = NSXPCConnection(serviceName: "com.kainjow.PICTConverter")
+            connectionToService.remoteObjectInterface = NSXPCInterface(withProtocol: PICTConverterProtocol.self)
+            connectionToService.resume()
+            
+            let rect = NSRect(origin: .zeroPoint, size: imgSize)
+            let imgView = FVImageView(frame: rect)
+            // TODO: temporary image showing we're fetching the image.
+            imgView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+            let viewController = NSViewController()
+            viewController.view = imgView
 
-				connectionToService.remoteObjectProxyWithErrorHandler({ (err) -> Void in
-					//TODO: image or some other way of showing failure.
-					NSLog("Error encountered when trying to speak with XPC service: %@", err)
-				}).convertPICTDataToTIFF(imgData, withReply: { (replyData) -> Void in
-					NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
-						if let replyData = replyData {
-							imgView.image = NSImage(data: replyData)!
-						} else if let cocoaImg = tmpCocoaImg {
-							imgView.image = cocoaImg
-						} else {
-							//TODO: image or some other way of showing failure.
-						}
-						connectionToService.invalidate()
-					})
-				})
-				return viewController
-			} else {
-				return nil
-			}
+            connectionToService.remoteObjectProxyWithErrorHandler({ (err) -> Void in
+                //TODO: image or some other way of showing failure.
+                NSLog("Error encountered when trying to speak with XPC service: %@", err)
+            }).convertPICTDataToTIFF(data, withReply: { (replyData) -> Void in
+                NSOperationQueue.mainQueue().addOperationWithBlock({ () -> Void in
+                    if let replyData = replyData {
+                        imgView.image = NSImage(data: replyData)!
+                    } else if let cocoaImg = tmpCocoaImg {
+                        imgView.image = cocoaImg
+                    } else {
+                        //TODO: image or some other way of showing failure.
+                    }
+                    connectionToService.invalidate()
+                })
+            })
+            return viewController
 		}
-        let img = imageFromResource(resource)
+        let img = imageFromResource(data, type: type)
         if img == nil {
             return nil
         }
@@ -463,56 +459,52 @@ final class FVImageTypeController: FVTypeController {
         return img
     }
     
-    func imageFromResource(resource: FVResource) -> NSImage? {
-        if let rsrcData = resource.data {
-            if let type = resource.type?.typeString {
-                switch type {
-                case "icns", "PNG ", "kcns", "GIFF":
-                    return NSImage(data: rsrcData)
-                case "ICON":
-                    if rsrcData.length == 128 {
-                        return imageFromBitmapData(rsrcData, size: 32)
-                    }
-                case "ICN#":
-                    if rsrcData.length == 256 {
-                        let data = rsrcData.subdataWithRange(NSMakeRange(0, 128))
-                        let mask = rsrcData.subdataWithRange(NSMakeRange(128, 128))
-                        return imageFromBitmapData(data, maskData: mask, size: 32)
-                    }
-                case "ics#":
-                    if rsrcData.length == 64 {
-                        return imageFromBitmapData(rsrcData, size: 16)
-                    }
-                case "CURS":
-                    if rsrcData.length == 68 {
-                        let data = rsrcData.subdataWithRange(NSMakeRange(0, 32))
-                        let mask = rsrcData.subdataWithRange(NSMakeRange(32, 32))
-                        return imageFromBitmapData(data, maskData: mask, size: 16)
-                    }
-                case "PAT ":
-                    if rsrcData.length == 8 {
-                        return imageFromBitmapData(rsrcData, size: 8)
-                    }
-                case "icl4":
-                    if rsrcData.length == 512 {
-                        return imageFrom4BitColorData(rsrcData, size: 32)
-                    }
-                case "icl8":
-                    if rsrcData.length == 1024 {
-                        return imageFrom8BitColorData(rsrcData, size: 32)
-                    }
-                case "ics4":
-                    if rsrcData.length == 128 {
-                        return imageFrom4BitColorData(rsrcData, size: 16)
-                    }
-                case "ics8":
-                    if rsrcData.length == 256 {
-                        return imageFrom8BitColorData(rsrcData, size: 16)
-                    }
-                default:
-                    return nil
-                }
+    func imageFromResource(rsrcData: NSData, type: String) -> NSImage? {
+        switch type {
+        case "icns", "PNG ", "kcns", "GIFF":
+            return NSImage(data: rsrcData)
+        case "ICON":
+            if rsrcData.length == 128 {
+                return imageFromBitmapData(rsrcData, size: 32)
             }
+        case "ICN#":
+            if rsrcData.length == 256 {
+                let data = rsrcData.subdataWithRange(NSMakeRange(0, 128))
+                let mask = rsrcData.subdataWithRange(NSMakeRange(128, 128))
+                return imageFromBitmapData(data, maskData: mask, size: 32)
+            }
+        case "ics#":
+            if rsrcData.length == 64 {
+                return imageFromBitmapData(rsrcData, size: 16)
+            }
+        case "CURS":
+            if rsrcData.length == 68 {
+                let data = rsrcData.subdataWithRange(NSMakeRange(0, 32))
+                let mask = rsrcData.subdataWithRange(NSMakeRange(32, 32))
+                return imageFromBitmapData(data, maskData: mask, size: 16)
+            }
+        case "PAT ":
+            if rsrcData.length == 8 {
+                return imageFromBitmapData(rsrcData, size: 8)
+            }
+        case "icl4":
+            if rsrcData.length == 512 {
+                return imageFrom4BitColorData(rsrcData, size: 32)
+            }
+        case "icl8":
+            if rsrcData.length == 1024 {
+                return imageFrom8BitColorData(rsrcData, size: 32)
+            }
+        case "ics4":
+            if rsrcData.length == 128 {
+                return imageFrom4BitColorData(rsrcData, size: 16)
+            }
+        case "ics8":
+            if rsrcData.length == 256 {
+                return imageFrom8BitColorData(rsrcData, size: 16)
+            }
+        default:
+            return nil
         }
         return nil
     }

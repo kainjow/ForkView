@@ -75,8 +75,8 @@ final class StringListObject: NSObject {
 final class StringListView: FVTypeController {
 	let supportedTypes = ["STR#"]
 	
-	func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
-		return StringListTemplate(resource: resource)
+	func viewControllerFromResourceData(data: NSData, type: String, inout errmsg: String) -> NSViewController? {
+        return StringListTemplate(resData: data, type: type)
 	}
 }
 
@@ -84,28 +84,20 @@ final class StringListTemplate: NSViewController {
 	@objc let stringList: [StringListObject]
 	@IBOutlet weak var arrayController: NSArrayController!
 
-	required init?(resource: FVResource) {
-		
-		if let resData = resource.data where resource.type!.typeString == "STR#" {
-			var tmpStrList = [StringListObject]()
-			var strIdx: Int16 = 0
-			while let aPasString = pascalStringFromData(resData, index: strIdx++) {
-				if let cStr = pascalStringToString(aPasString) {
-					tmpStrList.append(StringListObject(string: cStr, index: strIdx - 1))
-				} else {
-					tmpStrList.append(StringListObject(string: "!!Unable to decode \(strIdx - 1)!!", index: strIdx - 1))
-				}
-			}
+    required init?(resData: NSData, type: String) {
+        var tmpStrList = [StringListObject]()
+        var strIdx: Int16 = 0
+        while let aPasString = pascalStringFromData(resData, index: strIdx++) {
+            if let cStr = pascalStringToString(aPasString) {
+                tmpStrList.append(StringListObject(string: cStr, index: strIdx - 1))
+            } else {
+                tmpStrList.append(StringListObject(string: "!!Unable to decode \(strIdx - 1)!!", index: strIdx - 1))
+            }
+        }
 
-			stringList = tmpStrList
-			super.init(nibName: "StringListView", bundle: nil)
-			return
-		}
-		
-		stringList = []
-		super.init(nibName: "StringListView", bundle: nil)
-		return nil
-
+        stringList = tmpStrList
+        super.init(nibName: "StringListView", bundle: nil)
+        return
 	}
 	
 	required init?(coder: NSCoder) {
