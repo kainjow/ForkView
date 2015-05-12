@@ -10,9 +10,20 @@
 #import "PICTConverter.h"
 
 @interface ServiceDelegate : NSObject <NSXPCListenerDelegate>
+{
+    PICTConverter *converter_;
+}
 @end
 
 @implementation ServiceDelegate
+
+- (id)init
+{
+    if ((self = [super init]) != nil) {
+        converter_ = [PICTConverter new];
+    }
+    return self;
+}
 
 - (BOOL)listener:(NSXPCListener *)listener shouldAcceptNewConnection:(NSXPCConnection *)newConnection {
     // This method is where the NSXPCListener configures, accepts, and resumes a new incoming NSXPCConnection.
@@ -22,8 +33,7 @@
     newConnection.exportedInterface = [NSXPCInterface interfaceWithProtocol:@protocol(PICTConverterProtocol)];
     
     // Next, set the object that the connection exports. All messages sent on the connection to this service will be sent to the exported object to handle. The connection retains the exported object.
-    PICTConverter *exportedObject = [PICTConverter new];
-    newConnection.exportedObject = exportedObject;
+    newConnection.exportedObject = converter_;
     
     // Resuming the connection allows the system to deliver more incoming messages.
     [newConnection resume];
@@ -45,5 +55,8 @@ int main(int argc, const char *argv[])
     
     // Resuming the serviceListener starts this service. This method does not return.
     [listener resume];
+    
+    [delegate release];
+    
     return 0;
 }
