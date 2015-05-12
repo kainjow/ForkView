@@ -9,10 +9,10 @@
 /* Begin PBXBuildFile section */
 		1DDD582C0DA1D0D100B32029 /* FVWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58280DA1D0D100B32029 /* FVWindow.xib */; };
 		1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD582A0DA1D0D100B32029 /* MainMenu.xib */; };
-		55F1F88C1B0012B900518344 /* StringListTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F1F88B1B0012B900518344 /* StringListTemplate.swift */; };
-		55F1F88E1B0012C100518344 /* StringListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55F1F88D1B0012C100518344 /* StringListView.xib */; };
 		55442B7E1B01269D00359921 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 55442B7B1B01269D00359921 /* main.m */; };
 		55442B7F1B01296300359921 /* PICTConverter.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = A5FFD8FE1B0048EA008AB914 /* PICTConverter.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		55F1F88C1B0012B900518344 /* StringListTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F1F88B1B0012B900518344 /* StringListTemplate.swift */; };
+		55F1F88E1B0012C100518344 /* StringListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55F1F88D1B0012C100518344 /* StringListView.xib */; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		A54A9B28138DDCB6004F8BB9 /* FVResourceFile.m in Sources */ = {isa = PBXBuildFile; fileRef = A54A9B27138DDCB6004F8BB9 /* FVResourceFile.m */; };
 		A55408FE1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55408FD1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift */; };
@@ -57,16 +57,16 @@
 
 /* Begin PBXFileReference section */
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		1DDD58290DA1D0D100B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/FVWindow.xib; sourceTree = "<group>"; };
-		1DDD582B0DA1D0D100B32029 /* English */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = English; path = English.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		55F1F88B1B0012B900518344 /* StringListTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringListTemplate.swift; sourceTree = "<group>"; };
-		55F1F88D1B0012C100518344 /* StringListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StringListView.xib; sourceTree = "<group>"; };
 		5539F2181B01253E001FCFE0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		55442B7B1B01269D00359921 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		55442B7C1B01269D00359921 /* PICTConverter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PICTConverter.h; sourceTree = "<group>"; usesTabs = 0; };
 		55442B7D1B01269D00359921 /* PICTConverterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PICTConverterProtocol.h; sourceTree = "<group>"; usesTabs = 0; };
+		55F1F88B1B0012B900518344 /* StringListTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringListTemplate.swift; sourceTree = "<group>"; };
+		55F1F88D1B0012C100518344 /* StringListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StringListView.xib; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* ForkView-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ForkView-Info.plist"; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* ForkView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForkView.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A50F10FF1B01C143001521C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FVWindow.xib; sourceTree = "<group>"; };
+		A50F11001B01C143001521C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		A54A9B26138DDCB6004F8BB9 /* FVResourceFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVResourceFile.h; sourceTree = "<group>"; };
 		A54A9B27138DDCB6004F8BB9 /* FVResourceFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FVResourceFile.m; sourceTree = "<group>"; };
 		A54AA022138E1F81004F8BB9 /* FVResourceFilePriv.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FVResourceFilePriv.h; sourceTree = "<group>"; };
@@ -286,6 +286,7 @@
 				Japanese,
 				French,
 				German,
+				Base,
 			);
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA /* ForkView */;
 			projectDirPath = "";
@@ -356,7 +357,7 @@
 		1DDD58280DA1D0D100B32029 /* FVWindow.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1DDD58290DA1D0D100B32029 /* English */,
+				A50F10FF1B01C143001521C1 /* Base */,
 			);
 			name = FVWindow.xib;
 			sourceTree = "<group>";
@@ -364,7 +365,7 @@
 		1DDD582A0DA1D0D100B32029 /* MainMenu.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				1DDD582B0DA1D0D100B32029 /* English */,
+				A50F11001B01C143001521C1 /* Base */,
 			);
 			name = MainMenu.xib;
 			sourceTree = "<group>";
