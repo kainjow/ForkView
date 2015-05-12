@@ -12,9 +12,7 @@ import AVKit
 import AVFoundation
 
 final class FVSNDTypeController: FVTypeController {
-    func supportedTypes() -> [String] {
-        return ["snd "]
-    }
+    let supportedTypes = ["snd "]
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
         if let asset = assetForSND(resource.data!, errmsg: &errmsg) {
@@ -187,7 +185,7 @@ final class FVSNDTypeController: FVTypeController {
         
         // Generate an AudioStreamBasicDescription for conversion
         var stream = AudioStreamBasicDescription()
-        stream.mSampleRate = Float64(header.sampleRate >> 16)
+        stream.mSampleRate = fixedToFloat(header.sampleRate)
         stream.mFormatID = AudioFormatID(kAudioFormatLinearPCM)
         stream.mFormatFlags = AudioFormatFlags(kLinearPCMFormatFlagIsSignedInteger)
         stream.mBytesPerPacket = 1
@@ -237,6 +235,12 @@ final class FVSNDTypeController: FVTypeController {
         
         // Generate an AVAsset
         return AVAsset.assetWithURL(url) as? AVAsset
+    }
+    
+    private func fixedToFloat(a: UInt32) -> Double {
+        let fixed1 = Double(0x00010000)
+        
+        return Double(a) / fixed1
     }
 }
 

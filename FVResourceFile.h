@@ -13,6 +13,7 @@ typedef struct FVResourceMap FVResourceMap;
 
 @interface FVResourceFile : NSObject
 
+- (nullable instancetype)initWithContentsOfURL:(nonnull NSURL *)fileURL error:(NSError * __nullable * __nullable)error;
 + (nullable instancetype)resourceFileWithContentsOfURL:(nonnull NSURL *)fileURL error:(NSError * __nullable * __nullable)error;
 
 @property (readonly, nonnull) NSArray *types;

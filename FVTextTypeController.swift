@@ -9,41 +9,33 @@
 import Cocoa
 
 final class FVTextTypeController: FVTypeController {
-    func supportedTypes() -> [String] {
-        return ["plst", "TEXT", "utf8", "utxt", "ut16", "weba", "RTF ", "rtfd"]
-    }
+    let supportedTypes = ["plst", "TEXT", "utf8", "utxt", "ut16", "weba", "RTF ", "rtfd"]
     
     func viewControllerFromResource(resource: FVResource, inout errmsg: String) -> NSViewController? {
-        let str = attributedStringFromResource(resource)
-        if str == nil {
-            return nil
-        }
-        let viewController = NSViewController(nibName: "TextView", bundle: nil)
-        if viewController == nil {
-            return nil
-        }
-        let scrollView = viewController!.view as! NSScrollView
+        if let str = attributedStringFromResource(resource), viewController = NSViewController(nibName: "TextView", bundle: nil) {
+        let scrollView = viewController.view as! NSScrollView
         let textView = scrollView.documentView as! NSTextView
-        textView.textStorage?.setAttributedString(str!)
+        textView.textStorage?.setAttributedString(str)
         return viewController
+        } else {
+            return nil
+        }
     }
     
     func attributedStringFromResource(resource: FVResource) -> NSAttributedString? {
-        let rsrcData = resource.data
-        if rsrcData == nil {
-            return nil
-        }
-        let type = resource.type?.typeString
-        switch type! {
+        if let rsrcData = resource.data {
+        let type = resource.type!.typeString
+        switch type {
         case "RTF ":
-            return NSAttributedString(RTF: rsrcData!, documentAttributes: nil)
+            return NSAttributedString(RTF: rsrcData, documentAttributes: nil)
         case "rtfd":
-            return NSAttributedString(RTFD: rsrcData!, documentAttributes: nil)
+            return NSAttributedString(RTFD: rsrcData, documentAttributes: nil)
         default:
-            if let str = stringFromResource(rsrcData!, type: type!) {
+            if let str = stringFromResource(rsrcData, type: type) {
                 return NSAttributedString(string: str)
             }
             break;
+        }
         }
         return nil
     }
