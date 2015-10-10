@@ -18,8 +18,8 @@ final class FVSNDTypeController: FVTypeController {
         if let asset = assetForSND(data, errmsg: &errmsg) {
             let playerView = AVPlayerView(frame: NSMakeRect(0, 0, 100, 100))
             playerView.player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
-            playerView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
-            playerView.player.play()
+            playerView.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
+            playerView.player!.play()
             let viewController = FVSNDViewController()
             viewController.view = playerView
             return viewController
@@ -32,7 +32,7 @@ final class FVSNDTypeController: FVTypeController {
         // Also see "Sound Manager" legacy PDF
         let firstSoundFormat: Int16  = 0x0001 /*general sound format*/
         let secondSoundFormat: Int16 = 0x0002 /*special sampled sound format (HyperCard)*/
-        let initMono:   Int32 = 0x0080 /*monophonic channel*/
+        let _/*initMono*/:   Int32 = 0x0080 /*monophonic channel*/
         let initStereo: Int32 = 0x00C0 /*stereo channel*/
         let initMACE3:  Int32 = 0x0300 /*MACE 3:1*/
         let initMACE6:  Int32 = 0x0400 /*MACE 6:1*/
@@ -196,12 +196,8 @@ final class FVSNDTypeController: FVTypeController {
         
         // Create a temporary file for storage
         let url = NSURL(fileURLWithPath: NSTemporaryDirectory().stringByAppendingFormat("%d-%f.aif", arc4random(), NSDate().timeIntervalSinceReferenceDate))
-        if url == nil {
-            errmsg = "Can't make url for conversion"
-            return nil
-        }
         var audioFile: ExtAudioFileRef = nil
-        let createStatus = ExtAudioFileCreateWithURL(url, AudioFileTypeID(kAudioFileAIFFType), &stream, nil, UInt32(kAudioFileFlags_EraseFile), &audioFile)
+        let createStatus = ExtAudioFileCreateWithURL(url, AudioFileTypeID(kAudioFileAIFFType), &stream, nil, AudioFileFlags.EraseFile.rawValue, &audioFile)
         if createStatus != noErr {
             errmsg = "ExtAudioFileCreateWithURL failed with status \(createStatus)"
             return nil
@@ -213,7 +209,7 @@ final class FVSNDTypeController: FVTypeController {
         audioBuffer.mNumberChannels = 1
         audioBuffer.mDataByteSize = header.length
         audioBuffer.mData = UnsafeMutablePointer(srcData)
-        var audioBufferData = UnsafeMutablePointer<UInt8>(audioBuffer.mData)
+        let audioBufferData = UnsafeMutablePointer<UInt8>(audioBuffer.mData)
         for var i = 0; i < Int(header.length); ++i {
             audioBufferData[i] ^= 0x80
         }
@@ -234,14 +230,14 @@ final class FVSNDTypeController: FVTypeController {
         }
         
         // Generate an AVAsset
-        return AVAsset.assetWithURL(url) as? AVAsset
+        return AVAsset(URL: url)
     }
 }
 
 final class FVSNDViewController: NSViewController {
     override func viewWillDisappear() {
         if let playerView = self.view as? AVPlayerView {
-            playerView.player.pause()
+            playerView.player!.pause()
         }
     }
 }

@@ -19,8 +19,17 @@ import AppKit
         addWindowController(windowController!)
     }
     
-    override func readFromURL(url: NSURL, ofType typeName: String, error outError: NSErrorPointer) -> Bool {
-		resourceFile = FVResourceFile.resourceFileWithContentsOfURL(url, error: outError)
-        return resourceFile != nil
+    override func readFromURL(url: NSURL, ofType typeName: String) throws {
+        var outError: NSError! = NSError(domain: "Migrator", code: 0, userInfo: nil)
+		do {
+            resourceFile = try FVResourceFile.resourceFileWithContentsOfURL(url)
+        } catch let error as NSError {
+            outError = error
+            resourceFile = nil
+        }
+        if resourceFile != nil {
+            return
+        }
+        throw outError
     }
 }

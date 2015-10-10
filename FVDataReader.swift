@@ -8,7 +8,7 @@
 
 import Foundation
 
-@objc final class FVDataReader {
+final class FVDataReader {
     private var data = NSData()
     private var pos = 0
     
@@ -33,7 +33,10 @@ import Foundation
         let maxResourceSize = 16777216
         if !resourceFork {
             var fileSize: AnyObject?
-            URL.getResourceValue(&fileSize, forKey: NSURLFileSizeKey, error: nil)
+            do {
+                try URL.getResourceValue(&fileSize, forKey: NSURLFileSizeKey)
+            } catch _ {
+            }
             let fileSizeNum = fileSize as? NSNumber
             if fileSizeNum == nil {
                 return nil

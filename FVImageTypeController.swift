@@ -17,16 +17,16 @@ final class FVImageTypeController: FVTypeController {
 		if type == "PICT" {
             //First, see if we can get the image size via NSImage
             let tmpCocoaImg = NSImage(data: data)
-            var imgSize = tmpCocoaImg?.size ?? NSSize(width: 32, height: 32)
+            let imgSize = tmpCocoaImg?.size ?? NSSize(width: 32, height: 32)
             
             let connectionToService = NSXPCConnection(serviceName: "com.kainjow.PICTConverter")
             connectionToService.remoteObjectInterface = NSXPCInterface(withProtocol: PICTConverterProtocol.self)
             connectionToService.resume()
             
-            let rect = NSRect(origin: .zeroPoint, size: imgSize)
+            let rect = NSRect(origin: .zero, size: imgSize)
             let imgView = FVImageView(frame: rect)
             // TODO: temporary image showing we're fetching the image.
-            imgView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+            imgView.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
             let viewController = NSViewController()
             viewController.view = imgView
 
@@ -55,7 +55,7 @@ final class FVImageTypeController: FVTypeController {
         let rect = NSMakeRect(0, 0, img!.size.width, img!.size.height)
         let imgView = FVImageView(frame: rect)
         imgView.image = img
-        imgView.autoresizingMask = .ViewWidthSizable | .ViewHeightSizable
+        imgView.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
         let viewController = NSViewController()
         viewController.view = imgView
         return viewController
@@ -100,7 +100,7 @@ final class FVImageTypeController: FVTypeController {
         var maskBitVector: CFBitVectorRef
         if haveAlpha {
             if data.length != maskData!.length {
-                println("Data and mask lengths mismatch!")
+                print("Data and mask lengths mismatch!")
                 return nil
             }
             let maskPtr: UnsafePointer<UInt8> = UnsafePointer(maskData!.bytes)

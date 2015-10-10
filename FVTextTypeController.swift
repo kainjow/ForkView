@@ -44,9 +44,9 @@ final class FVTextTypeController: FVTypeController {
     func stringFromResource(rsrcData: NSData, type: String) -> String? {
         switch type {
         case "plst", "weba":
-            let plist: AnyObject? = NSPropertyListSerialization.propertyListWithData(rsrcData, options: NSPropertyListReadOptions(NSPropertyListMutabilityOptions.Immutable.rawValue), format: nil, error: nil)
+            let plist: AnyObject? = try? NSPropertyListSerialization.propertyListWithData(rsrcData, options: NSPropertyListReadOptions(rawValue: NSPropertyListMutabilityOptions.Immutable.rawValue), format: nil)
             if plist != nil {
-                if let data = NSPropertyListSerialization.dataWithPropertyList(plist!, format: .XMLFormat_v1_0, options: NSPropertyListWriteOptions(0), error: nil) {
+                if let data = try? NSPropertyListSerialization.dataWithPropertyList(plist!, format: .XMLFormat_v1_0, options: NSPropertyListWriteOptions(0)) {
                     return NSString(data: data, encoding: NSUTF8StringEncoding) as? String
                 }
             }

@@ -74,53 +74,36 @@ final public class FVResourceFile: NSObject {
         return true
     }
 
-    private init?(contentsOfURL fileURL: NSURL, error: NSErrorPointer, resourceFork: Bool) {
+    private init(contentsOfURL fileURL: NSURL, resourceFork: Bool) throws {
         if let dataReader = FVDataReader(URL: fileURL, resourceFork: resourceFork) {
             self.dataReader = dataReader
             super.init()
             
             if !readHeader(&header) {
                 
-                if error != nil {
-                    error.memory = NSError.errorWithDescription("Invalid header.")
-                }
-                
-                return nil
+                throw NSError.errorWithDescription("Invalid header.")
             }
             
             //NSLog(@"HEADER (%u, %u), (%u, %u)", header->dataOffset, header->dataLength, header->mapOffset, header->mapLength);
             
             if !readMap() {
-                if error != nil {
-                    error.memory = NSError.errorWithDescription("Invalid map.")
-                }
-                return nil;
+                throw NSError.errorWithDescription("Invalid map.");
             }
             
             if !readTypes() {
-                if error != nil {
-                    error.memory = NSError.errorWithDescription("Invalid types list.")
-                }
-                return nil;
+                throw NSError.errorWithDescription("Invalid types list.");
             }
             
             // Don't open empty (but valid) resource forks
             if types.count == 0 {
-                if error != nil {
-                    error.memory = NSError.errorWithDescription("No resources.")
-                }
-                return nil;
+                throw NSError.errorWithDescription("No resources.");
             }
             return
         } else {
             self.dataReader = nil
             super.init()
             
-            if error != nil {
-                error.memory = NSError.errorWithDescription("Bad File.")
-            }
-            
-            return nil
+            throw NSError.errorWithDescription("Bad File.")
         }
     }
     
@@ -137,7 +120,7 @@ final public class FVResourceFile: NSObject {
 
         let zeros = [Int8](count: 16, repeatedValue: 0)
         if (map.headerCopy != header) && (memcmp(&map.headerCopy, zeros, zeros.count) != 0) {
-            println("Bad match!")
+            print("Bad match!")
         }
         
         if (!dataReader.read(CUnsignedInt(sizeofValue(map.nextMap)), into: &map.nextMap) ||
@@ -170,7 +153,7 @@ final public class FVResourceFile: NSObject {
         
         
         var typesTemp = [FVResourceType]()
-        for typeIndex in 0..<numberOfTypes {
+        for _ in 0..<numberOfTypes {
             var type: OSType = 0
             var numberOfResources: UInt16 = 0
             var referenceListOffset: UInt16 = 0
@@ -216,7 +199,7 @@ final public class FVResourceFile: NSObject {
                 nameOffset = nameOffset.bigEndian
                 resHandle = resHandle.bigEndian
                 
-                var dataOffset: UInt32 = {
+                let dataOffset: UInt32 = {
                     var toRet = UInt32(dataOffsetBytes.2)
                     toRet |= UInt32(dataOffsetBytes.0) << 16
                     toRet |= UInt32(dataOffsetBytes.1) << 8
@@ -251,13 +234,13 @@ final public class FVResourceFile: NSObject {
                 resource.type = obj
                 tmpResources.append(resource)
             }
-            tmpResources.sort({ (lhs, rhs) -> Bool in
+            tmpResources.sortInPlace({ (lhs, rhs) -> Bool in
                 return lhs.ident > rhs.ident
             })
             obj.resources = tmpResources
         }
         
-        typesTemp.sort { (lhs, rhs) -> Bool in
+        typesTemp.sortInPlace { (lhs, rhs) -> Bool in
             let compVal = lhs.typeString.caseInsensitiveCompare(rhs.typeString)
             return compVal == .OrderedAscending
         }
@@ -284,20 +267,22 @@ final public class FVResourceFile: NSObject {
     //
     //}
     
-    public class func resourceFileWithContentsOfURL(fileURL: NSURL, error: NSErrorPointer) -> FVResourceFile? {
+    public class func resourceFileWithContentsOfURL(fileURL: NSURL) throws -> FVResourceFile {
         var tmpError: NSError?
         
-        if let file = FVResourceFile(contentsOfURL: fileURL, error: &tmpError, resourceFork: true) {
+        do {
+            let file = try FVResourceFile(contentsOfURL: fileURL, resourceFork: true)
             file.isResourceFork = true
             return file
-        } else if let file = FVResourceFile(contentsOfURL: fileURL, error: &tmpError, resourceFork: false) {
-            return file
+        } catch let error1 as NSError {
+            tmpError = error1
+            do {
+                let file = try FVResourceFile(contentsOfURL: fileURL, resourceFork: false)
+                return file
+            } catch let error as NSError {
+                tmpError = error
+            }
+            throw tmpError!
         }
-        
-        if error != nil {
-            error.memory = tmpError
-        }
-        
-        return nil
     }
 }
