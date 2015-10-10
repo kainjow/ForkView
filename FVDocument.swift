@@ -20,7 +20,7 @@ import AppKit
     }
     
     override func readFromURL(url: NSURL, ofType typeName: String, error outError: NSErrorPointer) -> Bool {
-		resourceFile = FVResourceFile(contentsOfURL: url, error: outError)
+		resourceFile = FVResourceFile.resourceFileWithContentsOfURL(url, error: outError)
         return resourceFile != nil
     }
 }
