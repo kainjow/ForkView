@@ -137,8 +137,6 @@ final public class FVResourceFile: NSObject {
         map.typesOffset = map.typesOffset.bigEndian
         map.namesOffset = map.namesOffset.bigEndian
 
-        //NSLog(@"MAP (%u, %u, %x, %u, %u)", map->nextMap, map->fileRef, map->attributes, map->typesOffset, map->namesOffset);
-
         return true
     }
     
@@ -150,7 +148,6 @@ final public class FVResourceFile: NSObject {
             return false
         }
         numberOfTypes = numberOfTypes.bigEndian + 1
-        
         
         var typesTemp = [FVResourceType]()
         for _ in 0..<numberOfTypes {
