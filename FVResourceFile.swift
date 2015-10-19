@@ -163,7 +163,7 @@ final public class FVResourceFile: NSObject {
                     return false;
             }
             type = type.bigEndian
-            numberOfResources = numberOfResources.bigEndian
+            numberOfResources = numberOfResources.bigEndian + 1
             referenceListOffset = referenceListOffset.bigEndian
             
             let obj = FVResourceType()
