@@ -1,6 +1,6 @@
 //
-//  pictConverter2.h
-//  pictConverter2
+//  PICTConverter.h
+//  PICTConverter
 //
 //  Created by C.W. Betts on 5/11/15.
 //  Copyright (c) 2015 Kevin Wojniak. All rights reserved.
