@@ -17,11 +17,9 @@
 #error Must be compiled 32-bit!
 #endif
 
-
 @implementation PICTConverter
 
-- (void)convertPICTDataToTIFF:(NSData *)pictData withReply:(void (^)(NSData *))reply
-{
+- (void)convertPICTDataToTIFF:(NSData *)pictData withReply:(void (^)(NSData *))reply {
     @autoreleasepool {
         NSPICTImageRep *pictRep = [NSPICTImageRep imageRepWithData:pictData];
         if (pictRep) {
@@ -38,4 +36,3 @@
 }
 
 @end
-

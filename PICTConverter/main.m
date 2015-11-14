@@ -9,16 +9,14 @@
 #import <Foundation/Foundation.h>
 #import "PICTConverter.h"
 
-@interface ServiceDelegate : NSObject <NSXPCListenerDelegate>
-{
+@interface ServiceDelegate : NSObject <NSXPCListenerDelegate> {
     PICTConverter *converter_;
 }
 @end
 
 @implementation ServiceDelegate
 
-- (id)init
-{
+- (instancetype)init {
     if ((self = [super init]) != nil) {
         converter_ = [PICTConverter new];
     }
@@ -34,8 +32,7 @@
 
 @end
 
-int main(int argc, const char *argv[])
-{
+int main(int argc, const char *argv[]) {
     // Create the delegate for the service.
     ServiceDelegate *delegate = [ServiceDelegate new];
     
