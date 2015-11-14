@@ -1,9 +1,8 @@
 //
 //  FVResourceFile.swift
-//  PPMacho
+//  ForkView
 //
 //  Created by C.W. Betts on 5/12/15.
-//
 //
 
 import Foundation
