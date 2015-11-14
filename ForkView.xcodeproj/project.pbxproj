@@ -13,7 +13,6 @@
 		55442B7F1B01296300359921 /* PICTConverter.xpc in Embed XPC Services */ = {isa = PBXBuildFile; fileRef = A5FFD8FE1B0048EA008AB914 /* PICTConverter.xpc */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		55BB99631B029915009B3EDD /* FVResourceFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BB99621B029915009B3EDD /* FVResourceFile.swift */; };
 		55F1F88C1B0012B900518344 /* StringListTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F1F88B1B0012B900518344 /* StringListTemplate.swift */; };
-		55F1F88E1B0012C100518344 /* StringListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 55F1F88D1B0012C100518344 /* StringListView.xib */; };
 		8D15AC340486D014006FF6A4 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */; };
 		A55408FE1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A55408FD1AF70A9E0052A143 /* RSVerticallyCenteredTextFieldCell.swift */; };
 		A594AD131AF4874100197F25 /* FVTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A594AD121AF4874100197F25 /* FVTableView.swift */; };
@@ -26,8 +25,9 @@
 		A5A077A1198EA0C000AAFF2F /* FVResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A077A0198EA0C000AAFF2F /* FVResource.swift */; };
 		A5A077A4198EA5DC00AAFF2F /* FVDocument.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A077A2198EA38B00AAFF2F /* FVDocument.swift */; };
 		A5A077A8198EDF0600AAFF2F /* FVLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5A077A7198EDF0600AAFF2F /* FVLine.swift */; };
+		A5BC74691BF7DFF8007B0D5D /* StringListView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A5BC746B1BF7DFF8007B0D5D /* StringListView.xib */; };
+		A5BC746C1BF7E004007B0D5D /* TextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A5BC746E1BF7E004007B0D5D /* TextView.xib */; };
 		A5FFD8E41AFEDC33008AB914 /* FVTextTypeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5FFD8E31AFEDC33008AB914 /* FVTextTypeController.swift */; };
-		A5FFD8E61B002348008AB914 /* TextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = A5FFD8E51B002348008AB914 /* TextView.xib */; };
 		A5FFD9011B0048EA008AB914 /* PICTConverter.m in Sources */ = {isa = PBXBuildFile; fileRef = A5FFD9001B0048EA008AB914 /* PICTConverter.m */; };
 /* End PBXBuildFile section */
 
@@ -63,7 +63,6 @@
 		55442B7D1B01269D00359921 /* PICTConverterProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PICTConverterProtocol.h; sourceTree = "<group>"; usesTabs = 0; };
 		55BB99621B029915009B3EDD /* FVResourceFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVResourceFile.swift; sourceTree = "<group>"; };
 		55F1F88B1B0012B900518344 /* StringListTemplate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StringListTemplate.swift; sourceTree = "<group>"; };
-		55F1F88D1B0012C100518344 /* StringListView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StringListView.xib; sourceTree = "<group>"; };
 		8D15AC360486D014006FF6A4 /* ForkView-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ForkView-Info.plist"; sourceTree = "<group>"; };
 		8D15AC370486D014006FF6A4 /* ForkView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ForkView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A50F10FF1B01C143001521C1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/FVWindow.xib; sourceTree = "<group>"; };
@@ -80,8 +79,9 @@
 		A5A077A0198EA0C000AAFF2F /* FVResource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVResource.swift; sourceTree = "<group>"; };
 		A5A077A2198EA38B00AAFF2F /* FVDocument.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVDocument.swift; sourceTree = "<group>"; };
 		A5A077A7198EDF0600AAFF2F /* FVLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVLine.swift; sourceTree = "<group>"; };
+		A5BC746A1BF7DFF8007B0D5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/StringListView.xib; sourceTree = "<group>"; };
+		A5BC746D1BF7E004007B0D5D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/TextView.xib; sourceTree = "<group>"; };
 		A5FFD8E31AFEDC33008AB914 /* FVTextTypeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVTextTypeController.swift; sourceTree = "<group>"; };
-		A5FFD8E51B002348008AB914 /* TextView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TextView.xib; sourceTree = "<group>"; };
 		A5FFD8FE1B0048EA008AB914 /* PICTConverter.xpc */ = {isa = PBXFileReference; explicitFileType = "wrapper.xpc-service"; includeInIndex = 0; path = PICTConverter.xpc; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5FFD9001B0048EA008AB914 /* PICTConverter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PICTConverter.m; sourceTree = "<group>"; usesTabs = 0; };
 /* End PBXFileReference section */
@@ -142,8 +142,8 @@
 				8D15AC360486D014006FF6A4 /* ForkView-Info.plist */,
 				1DDD58280DA1D0D100B32029 /* FVWindow.xib */,
 				1DDD582A0DA1D0D100B32029 /* MainMenu.xib */,
-				A5FFD8E51B002348008AB914 /* TextView.xib */,
-				55F1F88D1B0012C100518344 /* StringListView.xib */,
+				A5BC746E1BF7E004007B0D5D /* TextView.xib */,
+				A5BC746B1BF7DFF8007B0D5D /* StringListView.xib */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -303,9 +303,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1DDD582C0DA1D0D100B32029 /* FVWindow.xib in Resources */,
-				A5FFD8E61B002348008AB914 /* TextView.xib in Resources */,
+				A5BC746C1BF7E004007B0D5D /* TextView.xib in Resources */,
 				1DDD582D0DA1D0D100B32029 /* MainMenu.xib in Resources */,
-				55F1F88E1B0012C100518344 /* StringListView.xib in Resources */,
+				A5BC74691BF7DFF8007B0D5D /* StringListView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,6 +367,22 @@
 				A50F11001B01C143001521C1 /* Base */,
 			);
 			name = MainMenu.xib;
+			sourceTree = "<group>";
+		};
+		A5BC746B1BF7DFF8007B0D5D /* StringListView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A5BC746A1BF7DFF8007B0D5D /* Base */,
+			);
+			name = StringListView.xib;
+			sourceTree = "<group>";
+		};
+		A5BC746E1BF7E004007B0D5D /* TextView.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				A5BC746D1BF7E004007B0D5D /* Base */,
+			);
+			name = TextView.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
