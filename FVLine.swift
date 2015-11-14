@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Kevin Wojniak. All rights reserved.
 //
 
-import AppKit
+import Cocoa
 
 final class FVLine: NSBox {
     override func drawRect(dirtyRect: NSRect) {

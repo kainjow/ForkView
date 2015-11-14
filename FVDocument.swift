@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Kevin Wojniak. All rights reserved.
 //
 
-import AppKit
+import Cocoa
 
 @NSApplicationMain final class FVDocument: NSDocument, NSApplicationDelegate {
     var resourceFile: FVResourceFile? = nil
