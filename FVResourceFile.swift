@@ -264,18 +264,18 @@ final public class FVResourceFile: NSObject {
     //}
     
     public class func resourceFileWithContentsOfURL(fileURL: NSURL) throws -> FVResourceFile {
-        var tmpError: NSError?
+        var tmpError: ErrorType?
         
         do {
             let file = try FVResourceFile(contentsOfURL: fileURL, resourceFork: true)
             file.isResourceFork = true
             return file
-        } catch let error1 as NSError {
+        } catch let error1 {
             tmpError = error1
             do {
                 let file = try FVResourceFile(contentsOfURL: fileURL, resourceFork: false)
                 return file
-            } catch let error as NSError {
+            } catch let error {
                 tmpError = error
             }
             throw tmpError!
