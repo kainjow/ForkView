@@ -44,7 +44,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
     
     func tableViewMenuForSelection() -> NSMenu? {
         let menu = NSMenu()
-        menu.addItemWithTitle("Export\u{2026}", action:Selector("export"), keyEquivalent:"")
+        menu.addItemWithTitle("Export\u{2026}", action:#selector(FVWindowController.export), keyEquivalent:"")
         return menu
     }
 
@@ -54,7 +54,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
     
     func export() {
         let savePanel = NSSavePanel()
-        savePanel.beginSheetModalForWindow(self.window!, completionHandler: { (Int result) in
+        savePanel.beginSheetModalForWindow(self.window!, completionHandler: { (result) in
             if result == NSFileHandlingPanelOKButton {
                 self.selectedResource()?.data?.writeToURL(savePanel.URL!, atomically:true)
             }
@@ -105,7 +105,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         parentWinFrame.origin = parentWin!.frame.origin
         
         let styleMask = NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask
-        let window = NSWindow(contentRect: winFrame, styleMask: styleMask, backing: .Buffered, `defer`: true)
+        let window = NSWindow(contentRect: winFrame, styleMask: styleMask, backing: .Buffered, defer: true)
         window.releasedWhenClosed = true
         window.contentView = controller!.view
         window.minSize = minSize

@@ -7,20 +7,15 @@
 //
 
 import Foundation
+import Darwin.POSIX.sys.xattr
 
 final class FVDataReader {
     private var data = NSData()
-    private var pos = 0
+    private(set) var position = 0
     
     var length: Int {
         get {
             return data.length
-        }
-    }
-    
-    var position: Int {
-        get {
-            return pos
         }
     }
     
@@ -37,31 +32,28 @@ final class FVDataReader {
                 try URL.getResourceValue(&fileSize, forKey: NSURLFileSizeKey)
             } catch _ {
             }
-            let fileSizeNum = fileSize as? NSNumber
-            if fileSizeNum == nil {
+            guard let fileSizeNum = fileSize as? NSNumber else {
                 return nil
             }
-            if fileSizeNum!.integerValue == 0 || fileSizeNum!.integerValue >= maxResourceSize {
+            if fileSizeNum.integerValue == 0 || fileSizeNum.integerValue >= maxResourceSize {
                 return nil
             }
-            let data = NSData(contentsOfURL: URL)
-            if data == nil {
+            guard let data = NSData(contentsOfURL: URL) else {
                 return nil
             }
-            self.data = data!
+            self.data = data
         } else {
             let rsrcSize = getxattr(URL.path!, XATTR_RESOURCEFORK_NAME, nil, 0, 0, 0)
             if rsrcSize <= 0 || rsrcSize >= maxResourceSize {
                 return nil
             }
-            let data = NSMutableData(length: rsrcSize)
-            if data == nil {
+            guard let data = NSMutableData(length: rsrcSize) else {
                 return nil
             }
-            if getxattr(URL.path!, XATTR_RESOURCEFORK_NAME, data!.mutableBytes, rsrcSize, 0, 0) != rsrcSize {
+            if getxattr(URL.path!, XATTR_RESOURCEFORK_NAME, data.mutableBytes, rsrcSize, 0, 0) != rsrcSize {
                 return nil
             }
-            self.data = data!
+            self.data = data
         }
     }
     
@@ -70,20 +62,19 @@ final class FVDataReader {
     }
     
     func read(size: Int) -> NSData? {
-        if (pos + size > self.length) {
+        if (position + size > self.length) {
             return nil
         }
-        let subdata = data.subdataWithRange(NSMakeRange(pos, size))
-        pos += size
+        let subdata = data.subdataWithRange(NSMakeRange(position, size))
+        position += size
         return subdata
     }
     
     func read(size: CUnsignedInt, into buf: UnsafeMutablePointer<Void>) -> Bool {
-        let data = self.read(Int(size))
-        if data == nil {
+        guard let data = self.read(Int(size)) else {
             return false
         }
-        data!.getBytes(buf)
+        data.getBytes(buf)
         return true
     }
     
@@ -91,7 +82,7 @@ final class FVDataReader {
         if (offset >= self.length) {
             return false
         }
-        pos = offset
+        position = offset
         return true
     }
     

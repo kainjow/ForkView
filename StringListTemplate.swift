@@ -27,13 +27,15 @@ private func pascalStringFromData(aResource: NSData, index indexID: Int16) -> [U
 	data += 2
 	
 	// looking for data.  data is in order
-	while (--aId >= 0) {
+    aId -= 1
+	while aId >= 0 {
 		let toAdd = Int(data.memory) + 1;
 		curSize += toAdd
-		if (curSize >= handSize) {
+		if curSize >= handSize {
 			return nil;
 		}
 		data += toAdd
+        aId -= 1
 	}
 	
 	return {
@@ -77,12 +79,13 @@ final class StringListTemplate: NSViewController {
     required init?(resData: NSData, type: String) {
         var tmpStrList = [StringListObject]()
         var strIdx: Int16 = 0
-        while let aPasString = pascalStringFromData(resData, index: strIdx++) {
+        while let aPasString = pascalStringFromData(resData, index: strIdx) {
             if let cStr = pascalStringToString(aPasString) {
-                tmpStrList.append(StringListObject(string: cStr, index: strIdx - 1))
+                tmpStrList.append(StringListObject(string: cStr, index: Int(strIdx)))
             } else {
-                tmpStrList.append(StringListObject(string: "!!Unable to decode \(strIdx - 1)!!", index: strIdx - 1))
+                tmpStrList.append(StringListObject(string: "!!Unable to decode \(strIdx)!!", index: Int(strIdx)))
             }
+            strIdx += 1
         }
 
         stringList = tmpStrList
