@@ -104,7 +104,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         var parentWinFrame = parentWin!.frameRectForContentRect(parentWin!.contentView!.frame)
         parentWinFrame.origin = parentWin!.frame.origin
         
-        let styleMask = NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask
+        let styleMask: NSWindowStyleMask = [.Titled, .Closable, .Miniaturizable, .Resizable]
         let window = NSWindow(contentRect: winFrame, styleMask: styleMask, backing: .Buffered, defer: true)
         window.releasedWhenClosed = true
         window.contentView = controller!.view

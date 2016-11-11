@@ -51,7 +51,7 @@ class RSVerticallyCenteredTextFieldCell: NSTextFieldCell {
         mIsEditingOrSelecting = false
     }
 
-    override func editWithFrame(aRect: NSRect, inView controlView: NSView, editor textObj: NSText, delegate anObject: AnyObject?, event theEvent: NSEvent) {
+    override func editWithFrame(aRect: NSRect, inView controlView: NSView, editor textObj: NSText, delegate anObject: AnyObject?, event theEvent: NSEvent?) {
         let rect = drawingRectForBounds(aRect)
         mIsEditingOrSelecting = true
         super.editWithFrame(rect, inView: controlView, editor: textObj, delegate: anObject, event: theEvent)
