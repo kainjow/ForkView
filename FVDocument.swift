@@ -19,7 +19,7 @@ import Cocoa
         addWindowController(windowController!)
     }
     
-    override func readFromURL(url: NSURL, ofType typeName: String) throws {
-        resourceFile = try FVResourceFile.resourceFileWithContentsOfURL(url)
+    override func read(from url: URL, ofType typeName: String) throws {
+        resourceFile = try FVResourceFile.resourceFileWithContentsOfURL(fileURL: url)
     }
 }

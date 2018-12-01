@@ -11,7 +11,7 @@ import Cocoa
 final class FVTextTypeController: FVTypeController {
     let supportedTypes = ["plst", "TEXT", "utf8", "utxt", "ut16", "weba", "RTF ", "rtfd", "STR "]
     
-    func viewControllerFromResourceData(data: NSData, type: String, inout errmsg: String) -> NSViewController? {
+    func viewControllerFromResourceData(data: NSData, type: String, errmsg: inout String) -> NSViewController? {
         guard let str = attributedStringFromResource(data, type: type) else {
             return nil
         }

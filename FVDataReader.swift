@@ -61,7 +61,7 @@ final class FVDataReader {
         return FVDataReader(URL: URL, resourceFork: resourceFork)
     }
     
-    func read(size: Int) -> NSData? {
+    func read(_ size: Int) -> NSData? {
         if (position + size > self.length) {
             return nil
         }
@@ -70,7 +70,7 @@ final class FVDataReader {
         return subdata
     }
     
-    func read(size: CUnsignedInt, into buf: UnsafeMutablePointer<Void>) -> Bool {
+    func read(_ size: CUnsignedInt, into buf: UnsafeMutablePointer<Void>) -> Bool {
         guard let data = self.read(Int(size)) else {
             return false
         }
@@ -78,7 +78,7 @@ final class FVDataReader {
         return true
     }
     
-    func seekTo(offset: Int) -> Bool {
+    func seekTo(_ offset: Int) -> Bool {
         if (offset >= self.length) {
             return false
         }
@@ -90,8 +90,8 @@ final class FVDataReader {
         case Little, Big
     }
     
-    func readUInt16(endian: Endian, inout _ val: UInt16) -> Bool {
-        if let dat = read(sizeof(UInt16)) {
+    func readUInt16(_ endian: Endian, _ val: inout UInt16) -> Bool {
+        if let dat = read(MemoryLayout<UInt16>.size) {
             dat.getBytes(&val)
             val = endian == .Big ? UInt16(bigEndian: val) : UInt16(littleEndian: val)
             return true
@@ -99,8 +99,8 @@ final class FVDataReader {
         return false
     }
 
-    func readInt16(endian: Endian, inout _ val: Int16) -> Bool {
-        if let dat = read(sizeof(Int16)) {
+    func readInt16(_ endian: Endian, _ val: inout Int16) -> Bool {
+        if let dat = read(MemoryLayout<Int16>.size) {
             dat.getBytes(&val)
             val = endian == .Big ? Int16(bigEndian: val) : Int16(littleEndian: val)
             return true
@@ -108,8 +108,8 @@ final class FVDataReader {
         return false
     }
 
-    func readUInt32(endian: Endian, inout _ val: UInt32) -> Bool {
-        if let dat = read(sizeof(UInt32)) {
+    func readUInt32(_ endian: Endian, _ val: inout UInt32) -> Bool {
+        if let dat = read(MemoryLayout<UInt32>.size) {
             dat.getBytes(&val)
             val = endian == .Big ? UInt32(bigEndian: val) : UInt32(littleEndian: val)
             return true
@@ -117,8 +117,8 @@ final class FVDataReader {
         return false
     }
     
-    func readInt32(endian: Endian, inout _ val: Int32) -> Bool {
-        if let dat = read(sizeof(Int32)) {
+    func readInt32(_ endian: Endian, _ val: inout Int32) -> Bool {
+        if let dat = read(MemoryLayout<Int32>.size) {
             dat.getBytes(&val)
             val = endian == .Big ? Int32(bigEndian: val) : Int32(littleEndian: val)
             return true
@@ -126,16 +126,16 @@ final class FVDataReader {
         return false
     }
     
-    func readUInt8(inout val: UInt8) -> Bool {
-        if let dat = read(sizeof(UInt8)) {
+    func readUInt8(_ val: inout UInt8) -> Bool {
+        if let dat = read(MemoryLayout<UInt8>.size) {
             dat.getBytes(&val)
             return true
         }
         return false
     }
 
-    func readInt8(inout val: Int8) -> Bool {
-        if let dat = read(sizeof(Int8)) {
+    func readInt8(_ val: inout Int8) -> Bool {
+        if let dat = read(MemoryLayout<Int8>.size) {
             dat.getBytes(&val)
             return true
         }

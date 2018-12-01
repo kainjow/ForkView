@@ -48,8 +48,8 @@ private func pascalStringFromData(aResource: NSData, index indexID: Int16) -> [U
 	}()
 }
 
-private func pascalStringToString(aStr: UnsafePointer<UInt8>) -> String? {
-	return CFStringCreateWithPascalString(kCFAllocatorDefault, aStr, CFStringBuiltInEncodings.MacRoman.rawValue) as String
+private func pascalStringToString(_ aStr: UnsafePointer<UInt8>) -> String? {
+	return CFStringCreateWithPascalString(kCFAllocatorDefault, aStr, CFStringBuiltInEncodings.macRoman.rawValue) as String
 }
 
 final class StringListObject: NSObject {
@@ -67,7 +67,7 @@ final class StringListObject: NSObject {
 final class StringListView: FVTypeController {
 	let supportedTypes = ["STR#"]
 	
-	func viewControllerFromResourceData(data: NSData, type: String, inout errmsg: String) -> NSViewController? {
+	func viewControllerFromResourceData(data: NSData, type: String, errmsg: inout String) -> NSViewController? {
         return StringListTemplate(resData: data, type: type)
 	}
 }
@@ -79,7 +79,7 @@ final class StringListTemplate: NSViewController {
     required init?(resData: NSData, type: String) {
         var tmpStrList = [StringListObject]()
         var strIdx: Int16 = 0
-        while let aPasString = pascalStringFromData(resData, index: strIdx) {
+        while let aPasString = pascalStringFromData(aResource: resData, index: strIdx) {
             if let cStr = pascalStringToString(aPasString) {
                 tmpStrList.append(StringListObject(string: cStr, index: Int(strIdx)))
             } else {

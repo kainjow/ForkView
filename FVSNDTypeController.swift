@@ -14,11 +14,11 @@ import AVFoundation
 final class FVSNDTypeController: FVTypeController {
     let supportedTypes = ["snd "]
     
-    func viewControllerFromResourceData(data: NSData, type: String, inout errmsg: String) -> NSViewController? {
-        if let asset = assetForSND(data, errmsg: &errmsg) {
+    func viewControllerFromResourceData(data: NSData, type: String, errmsg: inout String) -> NSViewController? {
+        if let asset = assetForSND(data: data, errmsg: &errmsg) {
             let playerView = AVPlayerView(frame: NSMakeRect(0, 0, 100, 100))
             playerView.player = AVPlayer(playerItem: AVPlayerItem(asset: asset))
-            playerView.autoresizingMask = [.ViewWidthSizable, .ViewHeightSizable]
+            playerView.autoresizingMask = [.width, .height]
             playerView.player!.play()
             let viewController = FVSNDViewController()
             viewController.view = playerView
@@ -27,7 +27,7 @@ final class FVSNDTypeController: FVTypeController {
         return nil
     }
 
-    func assetForSND(data: NSData, inout errmsg: String) -> AVAsset? {
+    func assetForSND(data: NSData, errmsg: inout String) -> AVAsset? {
         // See Sound.h in Carbon
         // Also see "Sound Manager" legacy PDF
         let firstSoundFormat: Int16  = 0x0001 /*general sound format*/
@@ -195,9 +195,9 @@ final class FVSNDTypeController: FVTypeController {
         stream.mBitsPerChannel = 8
         
         // Create a temporary file for storage
-        let url = NSURL(fileURLWithPath: NSTemporaryDirectory().stringByAppendingFormat("%d-%f.aif", arc4random(), NSDate().timeIntervalSinceReferenceDate))
-        var audioFile: ExtAudioFileRef = nil
-        let createStatus = ExtAudioFileCreateWithURL(url, AudioFileTypeID(kAudioFileAIFFType), &stream, nil, AudioFileFlags.EraseFile.rawValue, &audioFile)
+        let url = URL(fileURLWithPath: NSTemporaryDirectory().appendingFormat("%d-%f.aif", arc4random(), NSDate().timeIntervalSinceReferenceDate))
+        var audioFile: ExtAudioFileRef?
+        let createStatus = ExtAudioFileCreateWithURL(url as CFURL, AudioFileTypeID(kAudioFileAIFFType), &stream, nil, AudioFileFlags.eraseFile.rawValue, &audioFile)
         if createStatus != noErr {
             errmsg = "ExtAudioFileCreateWithURL failed with status \(createStatus)"
             return nil

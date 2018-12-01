@@ -8,7 +8,7 @@
 import Foundation
 
 extension NSError {
-    private class func errorWithDescription(description: String) -> NSError {
+    fileprivate class func errorWithDescription(_ description: String) -> NSError {
         return NSError(domain: "FVResourceErrorDomain", code: -1, userInfo: [NSLocalizedFailureReasonErrorKey: description])
     }
 }
@@ -34,7 +34,7 @@ final public class FVResourceFile: NSObject {
     private var map = ResourceMap()
     private let dataReader: FVDataReader!
     
-    private struct ResourceHeader: Equatable {
+    fileprivate struct ResourceHeader: Equatable {
         var dataOffset: UInt32 = 0
         var mapOffset: UInt32 = 0
         var dataLength: UInt32 = 0
@@ -50,12 +50,12 @@ final public class FVResourceFile: NSObject {
         var namesOffset: UInt16 = 0
     }
 
-    private func readHeader(inout aHeader: ResourceHeader) -> Bool {
+    private func readHeader(_ aHeader: inout ResourceHeader) -> Bool {
         // read the header values
-        if (!dataReader.read(CUnsignedInt(sizeofValue(aHeader.dataOffset)), into: &aHeader.dataOffset) ||
-            !dataReader.read(CUnsignedInt(sizeofValue(aHeader.mapOffset)), into: &aHeader.mapOffset) ||
-            !dataReader.read(CUnsignedInt(sizeofValue(aHeader.dataLength)), into: &aHeader.dataLength) ||
-            !dataReader.read(CUnsignedInt(sizeofValue(aHeader.mapLength)), into: &aHeader.mapLength)) {
+        if (!dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: aHeader.dataOffset)), into: &aHeader.dataOffset) ||
+            !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: aHeader.mapOffset)), into: &aHeader.mapOffset) ||
+            !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: aHeader.dataLength)), into: &aHeader.dataLength) ||
+            !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: aHeader.mapLength)), into: &aHeader.mapLength)) {
                 return false
         }
         
@@ -117,16 +117,16 @@ final public class FVResourceFile: NSObject {
             return false;
         }
 
-        let zeros = [Int8](count: 16, repeatedValue: 0)
+        let zeros = [Int8](repeating: 0, count: 16)
         if (map.headerCopy != header) && (memcmp(&map.headerCopy, zeros, zeros.count) != 0) {
             print("Bad match!")
         }
         
-        if (!dataReader.read(CUnsignedInt(sizeofValue(map.nextMap)), into: &map.nextMap) ||
-            !dataReader.read(CUnsignedInt(sizeofValue(map.fileRef)), into: &map.fileRef) ||
-            !dataReader.read(CUnsignedInt(sizeofValue(map.attributes)), into: &map.attributes) ||
-            !dataReader.read(CUnsignedInt(sizeofValue(map.typesOffset)), into: &map.typesOffset) ||
-            !dataReader.read(CUnsignedInt(sizeofValue(map.namesOffset)), into: &map.namesOffset)) {
+        if (!dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: map.nextMap)), into: &map.nextMap) ||
+            !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: map.fileRef)), into: &map.fileRef) ||
+            !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: map.attributes)), into: &map.attributes) ||
+            !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: map.typesOffset)), into: &map.typesOffset) ||
+            !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: map.namesOffset)), into: &map.namesOffset)) {
                 return false
         }
         
@@ -143,7 +143,7 @@ final public class FVResourceFile: NSObject {
         let typesOffset = dataReader.position
         
         var numberOfTypes: UInt16 = 0
-        if !dataReader.read(CUnsignedInt(sizeofValue(numberOfTypes)), into: &numberOfTypes) {
+        if !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: numberOfTypes)), into: &numberOfTypes) {
             return false
         }
         numberOfTypes = numberOfTypes.bigEndian + 1
@@ -153,9 +153,9 @@ final public class FVResourceFile: NSObject {
             var type: OSType = 0
             var numberOfResources: UInt16 = 0
             var referenceListOffset: UInt16 = 0
-            if !dataReader.read(CUnsignedInt(sizeofValue(type)), into: &type) ||
-                !dataReader.read(CUnsignedInt(sizeofValue(numberOfResources)), into: &numberOfResources) ||
-                !dataReader.read(CUnsignedInt(sizeofValue(referenceListOffset)), into: &referenceListOffset) {
+            if !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: type)), into: &type) ||
+                !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: numberOfResources)), into: &numberOfResources) ||
+                !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: referenceListOffset)), into: &referenceListOffset) {
                     return false;
             }
             type = type.bigEndian
@@ -183,11 +183,11 @@ final public class FVResourceFile: NSObject {
                 var dataOffsetBytes: (UInt8, UInt8, UInt8) = (0, 0, 0)
                 var resHandle: UInt32 = 0
                 
-                if !dataReader.read(UInt32(sizeofValue(resourceID)), into: &resourceID) ||
-                    !dataReader.read(UInt32(sizeofValue(nameOffset)), into: &nameOffset) ||
-                    !dataReader.read(UInt32(sizeofValue(attributes)), into: &attributes) ||
-                    !dataReader.read(UInt32(sizeofValue(dataOffsetBytes)), into: &dataOffsetBytes) ||
-                    !dataReader.read(UInt32(sizeofValue(resHandle)), into: &resHandle) {
+                if !dataReader.read(UInt32(MemoryLayout.size(ofValue: resourceID)), into: &resourceID) ||
+                    !dataReader.read(UInt32(MemoryLayout.size(ofValue: nameOffset)), into: &nameOffset) ||
+                    !dataReader.read(UInt32(MemoryLayout.size(ofValue: attributes)), into: &attributes) ||
+                    !dataReader.read(UInt32(MemoryLayout.size(ofValue: dataOffsetBytes)), into: &dataOffsetBytes) ||
+                    !dataReader.read(UInt32(MemoryLayout.size(ofValue: resHandle)), into: &resHandle) {
                         return false;
                 }
                 
@@ -203,18 +203,18 @@ final public class FVResourceFile: NSObject {
                     return toRet
                 }()
                 
-                var name = Array<Int8>(count: 256, repeatedValue: 0)
+                var name = Array<Int8>(repeating: 0, count: 256)
                 var nameLength: UInt8 = 0
                 
                 if (nameOffset != -1) && (dataReader.seekTo(Int(header.mapOffset) + Int(map.namesOffset) + Int(nameOffset))) {
-                    if !dataReader.read(UInt32(sizeofValue(nameLength)), into: &nameLength) || !dataReader.read(UInt32(nameLength), into: &name) {
+                    if !dataReader.read(UInt32(MemoryLayout.size(ofValue: nameLength)), into: &nameLength) || !dataReader.read(UInt32(nameLength), into: &name) {
                         nameLength = 0;
                     }
                 }
                 name[Int(nameLength)] = 0;
                 
                 var dataLength: UInt32 = 0
-                if dataReader.seekTo(Int(header.dataOffset + dataOffset)) && dataReader.read(UInt32(sizeofValue(dataLength)), into: &dataLength) {
+                if dataReader.seekTo(Int(header.dataOffset + dataOffset)) && dataReader.read(UInt32(MemoryLayout.size(ofValue: dataLength)), into: &dataLength) {
                     dataLength = dataLength.bigEndian
                 }
 
@@ -222,7 +222,7 @@ final public class FVResourceFile: NSObject {
                 let resource = FVResource()
                 resource.ident = resourceID
                 resource.dataSize = dataLength
-                resource.dataOffset = dataOffset + UInt32(sizeofValue(dataOffset))
+                resource.dataOffset = dataOffset + UInt32(MemoryLayout.size(ofValue: dataOffset))
                 if strlen(name) != 0 {
                     resource.name = String(CString: name, encoding: NSMacOSRomanStringEncoding)!
                 }
@@ -263,7 +263,7 @@ final public class FVResourceFile: NSObject {
     //
     //}
     
-    public class func resourceFileWithContentsOfURL(fileURL: NSURL) throws -> FVResourceFile {
+    public class func resourceFileWithContentsOfURL(fileURL: URL) throws -> FVResourceFile {
         var tmpError: ErrorType?
         
         do {
