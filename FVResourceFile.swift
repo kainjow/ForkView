@@ -224,21 +224,21 @@ final public class FVResourceFile: NSObject {
                 resource.dataSize = dataLength
                 resource.dataOffset = dataOffset + UInt32(MemoryLayout.size(ofValue: dataOffset))
                 if strlen(name) != 0 {
-                    resource.name = String(CString: name, encoding: NSMacOSRomanStringEncoding)!
+                    resource.name = String(cString: name, encoding: String.Encoding.macOSRoman)!
                 }
                 resource.file = self
                 resource.type = obj
                 tmpResources.append(resource)
             }
-            tmpResources.sortInPlace({ (lhs, rhs) -> Bool in
+            tmpResources.sort { (lhs, rhs) -> Bool in
                 return lhs.ident > rhs.ident
-            })
-            obj.resources = tmpResources
+            }
+            obj.resources = tmpResources as NSArray
         }
         
-        typesTemp.sortInPlace { (lhs, rhs) -> Bool in
+        typesTemp.sort { (lhs, rhs) -> Bool in
             let compVal = lhs.typeString.caseInsensitiveCompare(rhs.typeString)
-            return compVal == .OrderedAscending
+            return compVal == .orderedAscending
         }
         
         types = typesTemp

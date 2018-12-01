@@ -167,8 +167,7 @@ final class FVSNDTypeController: FVTypeController {
             errmsg = "Missing header data"
             return nil
         }
-        let sampleData = reader.read(Int(header.length))
-        if sampleData == nil {
+        guard let sampleData = reader.read(Int(header.length)) else {
             errmsg = "Missing samples"
             return nil
         }
@@ -204,7 +203,7 @@ final class FVSNDTypeController: FVTypeController {
         }
         
         // Configure the AudioBufferList
-        let srcData = UnsafePointer<UInt8>(sampleData!.bytes)
+        let srcData = UnsafePointer<UInt8>(sampleData.bytes)
         var audioBuffer = AudioBuffer()
         audioBuffer.mNumberChannels = 1
         audioBuffer.mDataByteSize = header.length
@@ -223,14 +222,16 @@ final class FVSNDTypeController: FVTypeController {
         }
         
         // Finish up
-        let disposeStatus = ExtAudioFileDispose(audioFile)
-        if disposeStatus != noErr {
-            errmsg = "ExtAudioFileDispose failed with status \(disposeStatus)"
-            return nil
+        if let file = audioFile {
+            let disposeStatus = ExtAudioFileDispose(file)
+            if disposeStatus != noErr {
+                errmsg = "ExtAudioFileDispose failed with status \(disposeStatus)"
+                return nil
+            }
         }
         
         // Generate an AVAsset
-        return AVAsset(URL: url)
+        return AVAsset(url: url)
     }
 }
 
