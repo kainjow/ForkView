@@ -15,21 +15,19 @@ final class FVTextTypeController: FVTypeController {
         guard let str = attributedStringFromResource(data, type: type) else {
             return nil
         }
-        guard let viewController = NSViewController(nibName: "TextView", bundle: nil) else {
-            return nil
-        }
+        let viewController = NSViewController(nibName: "TextView", bundle: nil)
         let scrollView = viewController.view as! NSScrollView
         let textView = scrollView.documentView as! NSTextView
         textView.textStorage?.setAttributedString(str)
         return viewController
     }
     
-    func attributedStringFromResource(rsrcData: NSData, type: String) -> NSAttributedString? {
+    func attributedStringFromResource(_ rsrcData: NSData, type: String) -> NSAttributedString? {
         switch type {
         case "RTF ":
-            return NSAttributedString(RTF: rsrcData, documentAttributes: nil)
+            return NSAttributedString(rtf: rsrcData as Data, documentAttributes: nil)
         case "rtfd":
-            return NSAttributedString(RTFD: rsrcData, documentAttributes: nil)
+            return NSAttributedString(rtfd: rsrcData as Data, documentAttributes: nil)
         default:
             if let str = stringFromResource(rsrcData, type: type) {
                 return NSAttributedString(string: str)
@@ -39,23 +37,23 @@ final class FVTextTypeController: FVTypeController {
         return nil
     }
     
-    func stringFromResource(rsrcData: NSData, type: String) -> String? {
+    func stringFromResource(_ rsrcData: NSData, type: String) -> String? {
         switch type {
         case "plst", "weba":
-            let plist: AnyObject? = try? NSPropertyListSerialization.propertyListWithData(rsrcData, options: NSPropertyListReadOptions(rawValue: NSPropertyListMutabilityOptions.Immutable.rawValue), format: nil)
+            let plist = try? PropertyListSerialization.propertyList(from: rsrcData as Data, options: [.mutableContainers], format: nil)
             if plist != nil {
-                if let data = try? NSPropertyListSerialization.dataWithPropertyList(plist!, format: .XMLFormat_v1_0, options: NSPropertyListWriteOptions(0)) {
-                    return NSString(data: data, encoding: NSUTF8StringEncoding) as? String
+                if let data = try? PropertyListSerialization.data(fromPropertyList: plist!, format: .xml, options: PropertyListSerialization.WriteOptions(0) ) {
+                    return String(data: data, encoding: .utf8)
                 }
             }
         case "TEXT":
-            return String(data: rsrcData, encoding: NSMacOSRomanStringEncoding)
+            return String(data: rsrcData as Data, encoding: .macOSRoman)
         case "utf8":
-            return String(data: rsrcData, encoding: NSUTF8StringEncoding)
+            return String(data: rsrcData as Data, encoding: .utf8)
         case "utxt":
-            return String(data: rsrcData, encoding: NSUTF16BigEndianStringEncoding)
+            return String(data: rsrcData as Data, encoding: .utf16BigEndian)
         case "ut16":
-            return String(data: rsrcData, encoding: NSUnicodeStringEncoding)
+            return String(data: rsrcData as Data, encoding: .unicode)
         case "STR ":
             return stringFromPascalStringData(rsrcData)
         default:
@@ -64,15 +62,16 @@ final class FVTextTypeController: FVTypeController {
         return nil
     }
     
-    func stringFromPascalStringData(data: NSData) -> String? {
+    func stringFromPascalStringData(_ data: NSData) -> String? {
         if data.length < 2 {
             return nil
         }
-        let ptr = UnsafePointer<UInt8>(data.bytes)
+        let ptr = data.bytes.assumingMemoryBound(to: UInt8.self)
         let strLen = Int(ptr[0])
         if data.length < (strLen + 1) {
             return nil
         }
-        return String(bytes: ptr.successor(), length: strLen, encoding: NSMacOSRomanStringEncoding)
+        let strData = Data(bytes: ptr.successor(), count: strLen)
+        return String(bytes: strData, encoding: .macOSRoman)
     }
 }

@@ -195,20 +195,23 @@ final class FVSNDTypeController: FVTypeController {
         
         // Create a temporary file for storage
         let url = URL(fileURLWithPath: NSTemporaryDirectory().appendingFormat("%d-%f.aif", arc4random(), NSDate().timeIntervalSinceReferenceDate))
-        var audioFile: ExtAudioFileRef?
-        let createStatus = ExtAudioFileCreateWithURL(url as CFURL, AudioFileTypeID(kAudioFileAIFFType), &stream, nil, AudioFileFlags.eraseFile.rawValue, &audioFile)
-        if createStatus != noErr {
+        var audioFileTmp: ExtAudioFileRef?
+        let createStatus = ExtAudioFileCreateWithURL(url as CFURL, AudioFileTypeID(kAudioFileAIFFType), &stream, nil, AudioFileFlags.eraseFile.rawValue, &audioFileTmp)
+        guard createStatus != noErr, let audioFile = audioFileTmp else {
             errmsg = "ExtAudioFileCreateWithURL failed with status \(createStatus)"
             return nil
         }
         
         // Configure the AudioBufferList
-        let srcData = UnsafePointer<UInt8>(sampleData.bytes)
+        let srcData = UnsafeMutableRawPointer(mutating: sampleData.bytes.assumingMemoryBound(to: UInt8.self))
         var audioBuffer = AudioBuffer()
         audioBuffer.mNumberChannels = 1
         audioBuffer.mDataByteSize = header.length
-        audioBuffer.mData = UnsafeMutablePointer(srcData)
-        let audioBufferData = UnsafeMutablePointer<UInt8>(audioBuffer.mData)
+        audioBuffer.mData = srcData
+        guard let audioBufferData = UnsafeMutablePointer(mutating: audioBuffer.mData?.assumingMemoryBound(to: UInt8.self)) else {
+            errmsg = "Failed to create buffer"
+            return nil
+        }
         for i in 0 ..< Int(header.length) {
             audioBufferData[i] ^= 0x80
         }
@@ -222,12 +225,10 @@ final class FVSNDTypeController: FVTypeController {
         }
         
         // Finish up
-        if let file = audioFile {
-            let disposeStatus = ExtAudioFileDispose(file)
-            if disposeStatus != noErr {
-                errmsg = "ExtAudioFileDispose failed with status \(disposeStatus)"
-                return nil
-            }
+        let disposeStatus = ExtAudioFileDispose(audioFile)
+        if disposeStatus != noErr {
+            errmsg = "ExtAudioFileDispose failed with status \(disposeStatus)"
+            return nil
         }
         
         // Generate an AVAsset

@@ -15,8 +15,8 @@ private func pascalStringFromData(aResource: NSData, index indexID: Int16) -> [U
 	var curSize = 2
 	var aId = indexID
 	
-	var data = UnsafePointer<UInt8>(aResource.bytes)
-	let count = UnsafePointer<Int16>(aResource.bytes).memory.bigEndian
+	var data = aResource.bytes.assumingMemoryBound(to: UInt8.self)
+	let count = aResource.bytes.assumingMemoryBound(to: Int16.self)[0].bigEndian
 	
 	// First 2 bytes are the count of strings that this resource has.
 	if count < aId {
@@ -29,7 +29,7 @@ private func pascalStringFromData(aResource: NSData, index indexID: Int16) -> [U
 	// looking for data.  data is in order
     aId -= 1
 	while aId >= 0 {
-		let toAdd = Int(data.memory) + 1;
+		let toAdd = Int(data.pointee) + 1;
 		curSize += toAdd
 		if curSize >= handSize {
 			return nil;
@@ -40,7 +40,7 @@ private func pascalStringFromData(aResource: NSData, index indexID: Int16) -> [U
 	
 	return {
 		var aRet = [UInt8]()
-		for i in 0...Int(data.memory) {
+		for i in 0...Int(data.pointee) {
 			aRet.append(data[i])
 		}
 		
