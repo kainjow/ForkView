@@ -33,7 +33,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         
         tableView.customDelegate = self
         
-        NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: self.window, queue: nil) { (note: NSNotification) in
+        NotificationCenter.default.addObserver(forName: NSWindow.willCloseNotification, object: self.window, queue: nil) { note in
             for windowController in self.windowControllers {
                 windowController.close()
             }
@@ -44,7 +44,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
     
     func tableViewMenuForSelection() -> NSMenu? {
         let menu = NSMenu()
-        menu.addItemWithTitle("Export\u{2026}", action:#selector(FVWindowController.export), keyEquivalent:"")
+        menu.addItem(withTitle: "Export\u{2026}", action: #selector(export), keyEquivalent: "")
         return menu
     }
 
@@ -52,27 +52,27 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         return resourcesArrayController.selectedObjects.last as? FVResource
     }
     
-    func export() {
+    @objc func export() {
         let savePanel = NSSavePanel()
-        savePanel.beginSheetModalForWindow(self.window!, completionHandler: { (result) in
-            if result == NSFileHandlingPanelOKButton {
-                self.selectedResource()?.data?.writeToURL(savePanel.URL!, atomically:true)
+        savePanel.beginSheetModal(for: self.window!) { result in
+            if result.rawValue == NSFileHandlingPanelOKButton {
+                self.selectedResource()?.data?.write(to: savePanel.url!, atomically: true)
             }
-        })
+        }
     }
     
     func openSelectedResource() {
         if let resource = self.selectedResource() {
-            openResource(resource)
+            openResource(resource: resource)
         }
     }
     
     func controllerForResource(resource: FVResource, errmsg: inout String) -> NSViewController? {
-        if let rsrcData = resource.data where rsrcData.length > 0 {
+        if let rsrcData = resource.data, rsrcData.length > 0 {
             if let type = resource.type?.typeString {
                 for controller in typeControllers {
-                    if let _ = controller.supportedTypes.indexOf(type) {
-                        return controller.viewControllerFromResourceData(rsrcData, type: type, errmsg: &errmsg)
+                    if controller.supportedTypes.contains(type) {
+                        return controller.viewControllerFromResourceData(data: rsrcData, type: type, errmsg: &errmsg)
                     }
                 }
             }
@@ -84,7 +84,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
 
     func openResource(resource: FVResource) {
         var errmsg = String()
-        let controller = controllerForResource(resource, errmsg: &errmsg)
+        let controller = controllerForResource(resource: resource, errmsg: &errmsg)
         if controller == nil {
             return
         }
@@ -101,17 +101,17 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         }
         
         let parentWin = self.window
-        var parentWinFrame = parentWin!.frameRectForContentRect(parentWin!.contentView!.frame)
+        var parentWinFrame = parentWin!.frameRect(forContentRect: parentWin!.contentView!.frame)
         parentWinFrame.origin = parentWin!.frame.origin
         
-        let styleMask: NSWindowStyleMask = [.Titled, .Closable, .Miniaturizable, .Resizable]
-        let window = NSWindow(contentRect: winFrame, styleMask: styleMask, backing: .Buffered, defer: true)
-        window.releasedWhenClosed = true
+        let styleMask: NSWindow.StyleMask = [.titled, .closable, .miniaturizable, .resizable]
+        let window = NSWindow(contentRect: winFrame, styleMask: styleMask, backing: .buffered, defer: true)
+        window.isReleasedWhenClosed = true
         window.contentView = controller!.view
         window.minSize = minSize
         
-        let newPoint = window.cascadeTopLeftFromPoint(NSMakePoint(NSMinX(parentWinFrame), NSMaxY(parentWinFrame)))
-        window.cascadeTopLeftFromPoint(newPoint)
+        let newPoint = window.cascadeTopLeft(from: NSMakePoint(NSMinX(parentWinFrame), NSMaxY(parentWinFrame)))
+        window.cascadeTopLeft(from: newPoint)
         
         let windowController = NSWindowController(window: window)
         windowController.showWindow(nil)
@@ -119,14 +119,14 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         let filename = (self.document as? NSDocument)?.fileURL?.lastPathComponent
         window.title = String(format: "%@ ID = %u from %@", resource.type!.typeString, resource.ident, filename!);
 
-        NSNotificationCenter.defaultCenter().addObserverForName(NSWindowWillCloseNotification, object: window, queue: nil) { (note: NSNotification) -> Void in
-            if let index = self.windowControllers.indexOf(windowController) {
-                self.windowControllers.removeAtIndex(index)
+        NotificationCenter.default.addObserver(forName: NSWindow.willCloseNotification, object: window, queue: nil) { note in
+            if let index = self.windowControllers.firstIndex(of: windowController) {
+                self.windowControllers.remove(at: index)
             }
         }
     }
     
-    override func windowTitleForDocumentDisplayName(displayName: String) -> String {
+    override func windowTitle(forDocumentDisplayName displayName: String) -> String {
         let doc = self.document as? FVDocument
         return String(format: "%@ [%@]", displayName, !doc!.resourceFile!.isResourceFork ? "Data Fork" : "Resource Fork")
     }
@@ -139,7 +139,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         var view: NSView? = nil
         if let resource = self.selectedResource() {
             var errmsg = String()
-            if let controller = controllerForResource(resource, errmsg: &errmsg) {
+            if let controller = controllerForResource(resource: resource, errmsg: &errmsg) {
                 self.viewController = controller
                 view = controller.view
             } else {
@@ -155,7 +155,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         self.typeView.addSubview(view!)
     }
     
-    func tableViewSelectionDidChange(note: NSNotification) {
+    func tableViewSelectionDidChange(_ note: Notification) {
         viewSelectedResource()
     }
 }

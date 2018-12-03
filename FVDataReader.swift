@@ -23,34 +23,37 @@ final class FVDataReader {
         self.data = data
     }
     
-    init?(URL: NSURL, resourceFork: Bool) {
+    init?(url: NSURL, resourceFork: Bool) {
         // Apple's docs say "The maximum size of the resource fork in a file is 16 megabytes"
         let maxResourceSize = 16777216
         if !resourceFork {
             var fileSize: AnyObject?
             do {
-                try URL.getResourceValue(&fileSize, forKey: NSURLFileSizeKey)
+                try url.getResourceValue(&fileSize, forKey: .fileSizeKey)
             } catch _ {
             }
             guard let fileSizeNum = fileSize as? NSNumber else {
                 return nil
             }
-            if fileSizeNum.integerValue == 0 || fileSizeNum.integerValue >= maxResourceSize {
+            if fileSizeNum.intValue == 0 || fileSizeNum.intValue >= maxResourceSize {
                 return nil
             }
-            guard let data = NSData(contentsOfURL: URL) else {
+            guard let data = NSData(contentsOf: url as URL) else {
                 return nil
             }
             self.data = data
         } else {
-            let rsrcSize = getxattr(URL.path!, XATTR_RESOURCEFORK_NAME, nil, 0, 0, 0)
+            guard let path = url.path else {
+                return nil
+            }
+            let rsrcSize = getxattr(path, XATTR_RESOURCEFORK_NAME, nil, 0, 0, 0)
             if rsrcSize <= 0 || rsrcSize >= maxResourceSize {
                 return nil
             }
             guard let data = NSMutableData(length: rsrcSize) else {
                 return nil
             }
-            if getxattr(URL.path!, XATTR_RESOURCEFORK_NAME, data.mutableBytes, rsrcSize, 0, 0) != rsrcSize {
+            if getxattr(path, XATTR_RESOURCEFORK_NAME, data.mutableBytes, rsrcSize, 0, 0) != rsrcSize {
                 return nil
             }
             self.data = data
@@ -58,19 +61,19 @@ final class FVDataReader {
     }
     
     class func dataReader(URL: NSURL, resourceFork: Bool) -> FVDataReader? {
-        return FVDataReader(URL: URL, resourceFork: resourceFork)
+        return FVDataReader(url: URL, resourceFork: resourceFork)
     }
     
     func read(_ size: Int) -> NSData? {
         if (position + size > self.length) {
             return nil
         }
-        let subdata = data.subdataWithRange(NSMakeRange(position, size))
+        let subdata = data.subdata(with: NSMakeRange(position, size))
         position += size
-        return subdata
+        return subdata as NSData
     }
     
-    func read(_ size: CUnsignedInt, into buf: UnsafeMutablePointer<Void>) -> Bool {
+    func read(_ size: CUnsignedInt, into buf: UnsafeMutableRawPointer) -> Bool {
         guard let data = self.read(Int(size)) else {
             return false
         }

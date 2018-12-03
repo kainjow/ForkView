@@ -74,7 +74,7 @@ final public class FVResourceFile: NSObject {
     }
 
     private init(contentsOfURL fileURL: NSURL, resourceFork: Bool) throws {
-        if let dataReader = FVDataReader(URL: fileURL, resourceFork: resourceFork) {
+        if let dataReader = FVDataReader(url: fileURL, resourceFork: resourceFork) {
             self.dataReader = dataReader
             super.init()
             
@@ -264,16 +264,15 @@ final public class FVResourceFile: NSObject {
     //}
     
     public class func resourceFileWithContentsOfURL(fileURL: URL) throws -> FVResourceFile {
-        var tmpError: ErrorType?
-        
+        let url = fileURL as NSURL
         do {
-            let file = try FVResourceFile(contentsOfURL: fileURL, resourceFork: true)
+            let file = try FVResourceFile(contentsOfURL: url, resourceFork: true)
             file.isResourceFork = true
             return file
         } catch let error1 {
-            tmpError = error1
+            var tmpError: Error? = error1
             do {
-                let file = try FVResourceFile(contentsOfURL: fileURL, resourceFork: false)
+                let file = try FVResourceFile(contentsOfURL: url, resourceFork: false)
                 return file
             } catch let error {
                 tmpError = error

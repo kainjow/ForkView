@@ -17,6 +17,6 @@ final public class FVResource: NSObject {
     public var file: FVResourceFile? = nil
     
     public var data: NSData? {
-        return file?.dataForResource(self)
+        return file?.dataForResource(resource: self)
     }
 }

@@ -15,13 +15,13 @@ protocol FVTableViewDelegate {
 final class FVTableView: NSTableView {
     var customDelegate: FVTableViewDelegate?
     
-    override func menuForEvent(event: NSEvent) -> NSMenu? {
-        let row = rowAtPoint(convertPoint(event.locationInWindow, fromView:nil))
+    override func menu(for event: NSEvent) -> NSMenu? {
+        let row = self.row(at: convert(event.locationInWindow, from: nil))
         if row == -1 {
             return nil
         }
         
-        selectRowIndexes(NSIndexSet(index: row), byExtendingSelection: false)
+        selectRowIndexes(NSIndexSet(index: row) as IndexSet, byExtendingSelection: false)
         self.window?.makeFirstResponder(self)
         
         return customDelegate?.tableViewMenuForSelection()
