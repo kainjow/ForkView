@@ -203,7 +203,7 @@ final public class FVResourceFile: NSObject {
                     return toRet
                 }()
 
-                var name = Array<Int8>(repeating: 0, count: 256)
+                var name = [Int8](repeating: 0, count: 256)
                 var nameLength: UInt8 = 0
 
                 if (nameOffset != -1) && (dataReader.seekTo(Int(header.mapOffset) + Int(map.namesOffset) + Int(nameOffset))) {
