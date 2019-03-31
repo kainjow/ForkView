@@ -77,7 +77,7 @@ final class FVDataReader {
         guard let data = self.read(Int(size)) else {
             return false
         }
-        data.getBytes(buf)
+        data.getBytes(buf, length: Int(size))
         return true
     }
     
@@ -95,7 +95,7 @@ final class FVDataReader {
     
     func readUInt16(_ endian: Endian, _ val: inout UInt16) -> Bool {
         if let dat = read(MemoryLayout<UInt16>.size) {
-            dat.getBytes(&val)
+            dat.getBytes(&val, length: MemoryLayout<UInt16>.size)
             val = endian == .Big ? UInt16(bigEndian: val) : UInt16(littleEndian: val)
             return true
         }
@@ -104,7 +104,7 @@ final class FVDataReader {
 
     func readInt16(_ endian: Endian, _ val: inout Int16) -> Bool {
         if let dat = read(MemoryLayout<Int16>.size) {
-            dat.getBytes(&val)
+            dat.getBytes(&val, length: MemoryLayout<Int16>.size)
             val = endian == .Big ? Int16(bigEndian: val) : Int16(littleEndian: val)
             return true
         }
@@ -113,7 +113,7 @@ final class FVDataReader {
 
     func readUInt32(_ endian: Endian, _ val: inout UInt32) -> Bool {
         if let dat = read(MemoryLayout<UInt32>.size) {
-            dat.getBytes(&val)
+            dat.getBytes(&val, length: MemoryLayout<UInt32>.size)
             val = endian == .Big ? UInt32(bigEndian: val) : UInt32(littleEndian: val)
             return true
         }
@@ -122,7 +122,7 @@ final class FVDataReader {
     
     func readInt32(_ endian: Endian, _ val: inout Int32) -> Bool {
         if let dat = read(MemoryLayout<Int32>.size) {
-            dat.getBytes(&val)
+            dat.getBytes(&val, length: MemoryLayout<Int32>.size)
             val = endian == .Big ? Int32(bigEndian: val) : Int32(littleEndian: val)
             return true
         }
@@ -131,7 +131,7 @@ final class FVDataReader {
     
     func readUInt8(_ val: inout UInt8) -> Bool {
         if let dat = read(MemoryLayout<UInt8>.size) {
-            dat.getBytes(&val)
+            dat.getBytes(&val, length: MemoryLayout<UInt8>.size)
             return true
         }
         return false
@@ -139,7 +139,7 @@ final class FVDataReader {
 
     func readInt8(_ val: inout Int8) -> Bool {
         if let dat = read(MemoryLayout<Int8>.size) {
-            dat.getBytes(&val)
+            dat.getBytes(&val, length: MemoryLayout<Int8>.size)
             return true
         }
         return false
