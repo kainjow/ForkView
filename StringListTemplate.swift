@@ -53,8 +53,8 @@ private func pascalStringToString(_ aStr: UnsafePointer<UInt8>) -> String? {
 }
 
 final class StringListObject: NSObject {
-	let name: String
-	let index: Int
+	@objc let name: String
+	@objc let index: Int
 	
 	init(string: String, index: Int) {
 		self.name = string
