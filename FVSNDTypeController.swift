@@ -97,7 +97,7 @@ final class FVSNDTypeController: FVTypeController {
                 errmsg = "Bad header"
                 return nil
             }
-            if modifierPart.modNumber != 5  {
+            if modifierPart.modNumber != 5 {
                 errmsg = "Unknown modNumber value \(modifierPart.modNumber)"
                 return nil
             }
