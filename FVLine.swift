@@ -10,7 +10,7 @@ import Cocoa
 
 final class FVLine: NSBox {
     override func draw(_ dirtyRect: NSRect) {
-        var bounds: NSRect = NSInsetRect(self.bounds, -1.0, -1.0)
+        var bounds = self.bounds.insetBy(dx: -1.0, dy: -1.0)
         bounds.origin.x += 1
         NSColor(calibratedWhite: 0.6, alpha: 1.0).set()
         bounds.frame()

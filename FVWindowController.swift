@@ -90,13 +90,13 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         }
 
         let view = controller?.view
-        let minSize = NSMakeSize(150, 150)
+        let minSize = NSSize(width: 150, height: 150)
         var winFrame = view!.frame
 
-        if NSWidth(winFrame) < minSize.width {
+        if winFrame.width < minSize.width {
             winFrame.size.width = minSize.width
         }
-        if NSHeight(winFrame) < minSize.height {
+        if winFrame.height < minSize.height {
             winFrame.size.height = minSize.height
         }
 
@@ -110,7 +110,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         window.contentView = controller!.view
         window.minSize = minSize
 
-        let newPoint = window.cascadeTopLeft(from: NSMakePoint(NSMinX(parentWinFrame), NSMaxY(parentWinFrame)))
+        let newPoint = window.cascadeTopLeft(from: NSMakePoint(parentWinFrame.minX, parentWinFrame.maxY))
         window.cascadeTopLeft(from: newPoint)
 
         let windowController = NSWindowController(window: window)
