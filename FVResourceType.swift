@@ -9,12 +9,12 @@
 import Foundation
 
 final public class FVResourceType: NSObject {
-    public var type: OSType = 0
-    public var count: UInt32 = 0
-    public var offset: UInt32 = 0
-    public var resources: NSArray = []
+    @objc var type: OSType = 0
+    @objc var count: UInt32 = 0
+    @objc var offset: UInt32 = 0
+    @objc var resources: NSArray = []
 
-    public var typeString: String {
+    @objc var typeString: String {
         return UTCreateStringForOSType(type).takeRetainedValue() as String
     }
 };

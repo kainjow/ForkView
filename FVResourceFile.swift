@@ -28,8 +28,9 @@ private func ==(lhs: FVResourceFile.ResourceHeader, rhs: FVResourceFile.Resource
 }
 
 final public class FVResourceFile: NSObject {
-    private(set) var types: [FVResourceType] = []
-    private(set) var isResourceFork = false
+    @objc var types: [FVResourceType] = []
+    @objc var isResourceFork = false
+    
     private var header = ResourceHeader()
     private var map = ResourceMap()
     private let dataReader: FVDataReader!

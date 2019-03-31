@@ -9,7 +9,7 @@
 import Cocoa
 
 @NSApplicationMain final class FVDocument: NSDocument, NSApplicationDelegate {
-    var resourceFile: FVResourceFile? = nil
+    @objc var resourceFile: FVResourceFile? = nil
     var windowController: NSWindowController? = nil
     
     override func makeWindowControllers() {
