@@ -53,10 +53,10 @@ final public class FVResourceFile: NSObject {
 
     private func readHeader(_ aHeader: inout ResourceHeader) -> Bool {
         // read the header values
-        if (!dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: aHeader.dataOffset)), into: &aHeader.dataOffset) ||
+        if !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: aHeader.dataOffset)), into: &aHeader.dataOffset) ||
             !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: aHeader.mapOffset)), into: &aHeader.mapOffset) ||
             !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: aHeader.dataLength)), into: &aHeader.dataLength) ||
-            !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: aHeader.mapLength)), into: &aHeader.mapLength)) {
+            !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: aHeader.mapLength)), into: &aHeader.mapLength) {
                 return false
         }
 
@@ -67,7 +67,7 @@ final public class FVResourceFile: NSObject {
         aHeader.mapLength = aHeader.mapLength.bigEndian
 
         let fileLength = UInt32(dataReader.length)
-        if ((aHeader.dataOffset + aHeader.dataLength > fileLength) || (aHeader.mapOffset + aHeader.mapLength > fileLength)) {
+        if (aHeader.dataOffset + aHeader.dataLength > fileLength) || (aHeader.mapOffset + aHeader.mapLength > fileLength) {
             return false
         }
 
@@ -122,11 +122,11 @@ final public class FVResourceFile: NSObject {
             print("Bad match!")
         }
 
-        if (!dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: map.nextMap)), into: &map.nextMap) ||
+        if !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: map.nextMap)), into: &map.nextMap) ||
             !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: map.fileRef)), into: &map.fileRef) ||
             !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: map.attributes)), into: &map.attributes) ||
             !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: map.typesOffset)), into: &map.typesOffset) ||
-            !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: map.namesOffset)), into: &map.namesOffset)) {
+            !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: map.namesOffset)), into: &map.namesOffset) {
                 return false
         }
 

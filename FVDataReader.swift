@@ -65,7 +65,7 @@ final class FVDataReader {
     }
 
     func read(_ size: Int) -> NSData? {
-        if (position + size > self.length) {
+        if position + size > self.length {
             return nil
         }
         let subdata = data.subdata(with: NSMakeRange(position, size))
@@ -82,7 +82,7 @@ final class FVDataReader {
     }
 
     func seekTo(_ offset: Int) -> Bool {
-        if (offset >= self.length) {
+        if offset >= self.length {
             return false
         }
         position = offset
