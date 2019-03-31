@@ -36,8 +36,8 @@ final class FVSNDTypeController: FVTypeController {
         let secondSoundFormat: Int16 = 0x0002 /*special sampled sound format (HyperCard)*/
         let _/*initMono*/:   Int32 = 0x0080 /*monophonic channel*/
         let initStereo: Int32 = 0x00C0 /*stereo channel*/
-        let initMACE3:  Int32 = 0x0300 /*MACE 3:1*/
-        let initMACE6:  Int32 = 0x0400 /*MACE 6:1*/
+        let initMACE3: Int32 = 0x0300 /*MACE 3:1*/
+        let initMACE6: Int32 = 0x0400 /*MACE 6:1*/
         let nullCmd: UInt16   = 0
         let soundCmd: UInt16  = 80
         let bufferCmd: UInt16 = 81
