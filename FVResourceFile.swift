@@ -258,11 +258,6 @@ final public class FVResourceFile: NSObject {
         return nil
     }
 
-    // TODO: implement, but how?
-    //convenience init?(contentsOfURL fileURL: NSURL, error: NSErrorPointer) {
-    //
-    //}
-
     public class func resourceFileWithContentsOfURL(fileURL: URL) throws -> FVResourceFile {
         let url = fileURL as NSURL
         do {
