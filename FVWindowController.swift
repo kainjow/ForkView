@@ -55,7 +55,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
     @objc func export() {
         let savePanel = NSSavePanel()
         savePanel.beginSheetModal(for: self.window!) { result in
-            if result.rawValue == NSFileHandlingPanelOKButton {
+            if result == .OK {
                 self.selectedResource()?.data?.write(to: savePanel.url!, atomically: true)
             }
         }
