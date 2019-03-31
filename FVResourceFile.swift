@@ -61,10 +61,10 @@ final public class FVResourceFile: NSObject {
         }
         
         // swap from big endian to host
-        aHeader.dataOffset = aHeader.dataOffset.bigEndian;
-        aHeader.mapOffset = aHeader.mapOffset.bigEndian;
-        aHeader.dataLength = aHeader.dataLength.bigEndian;
-        aHeader.mapLength = aHeader.mapLength.bigEndian;
+        aHeader.dataOffset = aHeader.dataOffset.bigEndian
+        aHeader.mapOffset = aHeader.mapOffset.bigEndian
+        aHeader.dataLength = aHeader.dataLength.bigEndian
+        aHeader.mapLength = aHeader.mapLength.bigEndian
 
         let fileLength = UInt32(dataReader.length)
         if ((aHeader.dataOffset + aHeader.dataLength > fileLength) || (aHeader.mapOffset + aHeader.mapLength > fileLength)) {
@@ -87,16 +87,16 @@ final public class FVResourceFile: NSObject {
             //NSLog(@"HEADER (%u, %u), (%u, %u)", header->dataOffset, header->dataLength, header->mapOffset, header->mapLength);
             
             if !readMap() {
-                throw NSError.errorWithDescription("Invalid map.");
+                throw NSError.errorWithDescription("Invalid map.")
             }
             
             if !readTypes() {
-                throw NSError.errorWithDescription("Invalid types list.");
+                throw NSError.errorWithDescription("Invalid types list.")
             }
             
             // Don't open empty (but valid) resource forks
             if types.count == 0 {
-                throw NSError.errorWithDescription("No resources.");
+                throw NSError.errorWithDescription("No resources.")
             }
             return
         } else {
@@ -110,12 +110,12 @@ final public class FVResourceFile: NSObject {
     private func readMap() -> Bool {
         // seek to the map offset
         if !dataReader.seekTo(Int(header.mapOffset)) {
-            return false;
+            return false
         }
         
         // read the map values
         if !readHeader(&map.headerCopy) {
-            return false;
+            return false
         }
 
         let zeros = [Int8](repeating: 0, count: 16)
@@ -157,14 +157,14 @@ final public class FVResourceFile: NSObject {
             if !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: type)), into: &type) ||
                 !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: numberOfResources)), into: &numberOfResources) ||
                 !dataReader.read(CUnsignedInt(MemoryLayout.size(ofValue: referenceListOffset)), into: &referenceListOffset) {
-                    return false;
+                    return false
             }
             type = type.bigEndian
             numberOfResources = numberOfResources.bigEndian + 1
             referenceListOffset = referenceListOffset.bigEndian
             
             let obj = FVResourceType()
-            obj.type = type;
+            obj.type = type
             obj.count = UInt32(numberOfResources)
             obj.offset = UInt32(referenceListOffset)
             typesTemp.append(obj)
@@ -189,7 +189,7 @@ final public class FVResourceFile: NSObject {
                     !dataReader.read(UInt32(MemoryLayout.size(ofValue: attributes)), into: &attributes) ||
                     !dataReader.read(UInt32(MemoryLayout.size(ofValue: dataOffsetBytes)), into: &dataOffsetBytes) ||
                     !dataReader.read(UInt32(MemoryLayout.size(ofValue: resHandle)), into: &resHandle) {
-                        return false;
+                        return false
                 }
                 
                 resourceID = resourceID.bigEndian
@@ -209,10 +209,10 @@ final public class FVResourceFile: NSObject {
                 
                 if (nameOffset != -1) && (dataReader.seekTo(Int(header.mapOffset) + Int(map.namesOffset) + Int(nameOffset))) {
                     if !dataReader.read(UInt32(MemoryLayout.size(ofValue: nameLength)), into: &nameLength) || !dataReader.read(UInt32(nameLength), into: &name) {
-                        nameLength = 0;
+                        nameLength = 0
                     }
                 }
-                name[Int(nameLength)] = 0;
+                name[Int(nameLength)] = 0
                 
                 var dataLength: UInt32 = 0
                 if dataReader.seekTo(Int(header.dataOffset + dataOffset)) && dataReader.read(UInt32(MemoryLayout.size(ofValue: dataLength)), into: &dataLength) {
@@ -248,11 +248,11 @@ final public class FVResourceFile: NSObject {
 
     internal func dataForResource(resource: FVResource) -> NSData? {
         if !dataReader.seekTo(Int(header.dataOffset + resource.dataOffset)) {
-            return nil;
+            return nil
         }
         if let data = NSMutableData(length: Int(resource.dataSize)) {
             if !dataReader.read(resource.dataSize, into: data.mutableBytes) {
-                return nil;
+                return nil
             }
             return data
         }

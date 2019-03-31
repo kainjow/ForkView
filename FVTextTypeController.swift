@@ -32,7 +32,7 @@ final class FVTextTypeController: FVTypeController {
             if let str = stringFromResource(rsrcData, type: type) {
                 return NSAttributedString(string: str)
             }
-            break;
+            break
         }
         return nil
     }
@@ -57,7 +57,7 @@ final class FVTextTypeController: FVTypeController {
         case "STR ":
             return stringFromPascalStringData(rsrcData)
         default:
-            break;
+            break
         }
         return nil
     }

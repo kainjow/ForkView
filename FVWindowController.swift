@@ -117,7 +117,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         windowController.showWindow(nil)
         windowControllers.append(windowController)
         let filename = (self.document as? NSDocument)?.fileURL?.lastPathComponent
-        window.title = String(format: "%@ ID = %u from %@", resource.type!.typeString, resource.ident, filename!);
+        window.title = String(format: "%@ ID = %u from %@", resource.type!.typeString, resource.ident, filename!)
 
         NotificationCenter.default.addObserver(forName: NSWindow.willCloseNotification, object: window, queue: nil) { note in
             if let index = self.windowControllers.firstIndex(of: windowController) {

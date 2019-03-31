@@ -29,10 +29,10 @@ private func pascalStringFromData(aResource: NSData, index indexID: Int16) -> [U
 	// looking for data.  data is in order
     aId -= 1
 	while aId >= 0 {
-		let toAdd = Int(data.pointee) + 1;
+		let toAdd = Int(data.pointee) + 1
 		curSize += toAdd
 		if curSize >= handSize {
-			return nil;
+			return nil
 		}
 		data += toAdd
         aId -= 1
