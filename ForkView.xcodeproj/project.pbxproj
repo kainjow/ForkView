@@ -28,19 +28,6 @@
 		A5FFD8E41AFEDC33008AB914 /* FVTextTypeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5FFD8E31AFEDC33008AB914 /* FVTextTypeController.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXCopyFilesBuildPhase section */
-		5539F2251B01253E001FCFE0 /* Embed XPC Services */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "$(CONTENTS_FOLDER_PATH)/XPCServices";
-			dstSubfolderSpec = 16;
-			files = (
-			);
-			name = "Embed XPC Services";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
-
 /* Begin PBXFileReference section */
 		1058C7A7FEA54F5311CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		55BB99621B029915009B3EDD /* FVResourceFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FVResourceFile.swift; sourceTree = "<group>"; };
@@ -181,7 +168,6 @@
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
-				5539F2251B01253E001FCFE0 /* Embed XPC Services */,
 			);
 			buildRules = (
 			);
