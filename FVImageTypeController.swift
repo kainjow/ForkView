@@ -8,6 +8,7 @@
 
 import Cocoa
 
+// swiftlint:disable type_body_length
 final class FVImageTypeController: FVTypeController {
     let supportedTypes = ["icns", "PICT", "PNG ", "ICON", "ICN#", "ics#", "CURS", "PAT ", "icl4", "icl8", "kcns", "ics4", "ics8",
 		"GIFF"
@@ -27,16 +28,20 @@ final class FVImageTypeController: FVTypeController {
     }
 
     private struct FVRGBAColor {
+        // swiftlint:disable identifier_name
         var r: UInt8
         var g: UInt8
         var b: UInt8
         var a: UInt8
+        // swiftlint:enable identifier_name
     }
 
     private struct FVRGBColor {
+        // swiftlint:disable identifier_name
         var r: UInt8
         var g: UInt8
         var b: UInt8
+        // swiftlint:enable identifier_name
     }
 
     func makeBitmap(_ size: Int) -> NSBitmapImageRep? {
@@ -89,12 +94,12 @@ final class FVImageTypeController: FVTypeController {
             print("Failed to get rgb colors")
             return nil
         }
-        for i in 0 ..< numPixels {
-            let value: UInt8 = CFBitVectorGetBitAtIndex(bitVector, i) == 1 ? 0 : 255
-            colorPtr[i].r = value
-            colorPtr[i].g = value
-            colorPtr[i].b = value
-            colorPtr[i].a = !haveAlpha ? 255 : (CFBitVectorGetBitAtIndex(maskBitVector, i) == 1 ? 255 : 0)
+        for idx in 0 ..< numPixels {
+            let value: UInt8 = CFBitVectorGetBitAtIndex(bitVector, idx) == 1 ? 0 : 255
+            colorPtr[idx].r = value
+            colorPtr[idx].g = value
+            colorPtr[idx].b = value
+            colorPtr[idx].a = !haveAlpha ? 255 : (CFBitVectorGetBitAtIndex(maskBitVector, idx) == 1 ? 255 : 0)
         }
 
         let img = NSImage()
@@ -137,21 +142,21 @@ final class FVImageTypeController: FVTypeController {
             return nil
         }
         var ptrIndex = 0
-        for i in 0 ..< numPixels {
+        for idx in 0 ..< numPixels {
             let index: UInt8
-            if i & 1 == 0 {
+            if idx & 1 == 0 {
                 index = (ptr[ptrIndex] & 0xF0) >> 4
             } else {
                 index = (ptr[ptrIndex] & 0x0F)
             }
-            if i > 0 && (i & 1) == 1 {
+            if idx > 0 && (idx & 1) == 1 {
                 ptrIndex += 1
             }
             let rgb = palette[Int(index)]
-            colorPtr[i].r = rgb.r
-            colorPtr[i].g = rgb.g
-            colorPtr[i].b = rgb.b
-            colorPtr[i].a = 255
+            colorPtr[idx].r = rgb.r
+            colorPtr[idx].g = rgb.g
+            colorPtr[idx].b = rgb.b
+            colorPtr[idx].a = 255
         }
 
         let img = NSImage()
@@ -159,6 +164,7 @@ final class FVImageTypeController: FVTypeController {
         return img
     }
 
+    // swiftlint:disable function_body_length
     func imageFrom8BitColorData(data: NSData, size: Int) -> NSImage? {
         let palette: [FVRGBColor] = [
             FVRGBColor(r: 255, g: 255, b: 255),
@@ -432,18 +438,19 @@ final class FVImageTypeController: FVTypeController {
             return nil
         }
         let ptr = data.bytes.assumingMemoryBound(to: UInt8.self)
-        for i in 0 ..< numPixels {
-            let rgb = palette[Int(ptr[i])]
-            colorPtr[i].r = rgb.r
-            colorPtr[i].g = rgb.g
-            colorPtr[i].b = rgb.b
-            colorPtr[i].a = 255
+        for idx in 0 ..< numPixels {
+            let rgb = palette[Int(ptr[idx])]
+            colorPtr[idx].r = rgb.r
+            colorPtr[idx].g = rgb.g
+            colorPtr[idx].b = rgb.b
+            colorPtr[idx].a = 255
         }
 
         let img = NSImage()
         img.addRepresentation(bitmap)
         return img
     }
+    // swiftlint:enable function_body_length
 
     func imageFromResource(_ rsrcData: NSData, type: String) -> NSImage? {
         switch type {
@@ -495,6 +502,7 @@ final class FVImageTypeController: FVTypeController {
         return nil
     }
 }
+// swiftlint:enable type_body_length
 
 final class FVImageView: NSImageView {
     override var acceptsFirstResponder: Bool {

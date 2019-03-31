@@ -1,3 +1,4 @@
+//  swiftlint:disable line_length
 //
 //  Originally created by Daniel Jalkut on 6/17/06.
 //  Copyright 2006 Red Sweater Software. All rights reserved.

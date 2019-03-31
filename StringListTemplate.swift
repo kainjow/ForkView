@@ -40,8 +40,8 @@ private func pascalStringFromData(aResource: NSData, index indexID: Int16) -> [U
 
 	return {
 		var aRet = [UInt8]()
-		for i in 0...Int(data.pointee) {
-			aRet.append(data[i])
+		for idx in 0...Int(data.pointee) {
+			aRet.append(data[idx])
 		}
 
 		return aRet

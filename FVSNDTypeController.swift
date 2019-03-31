@@ -27,6 +27,8 @@ final class FVSNDTypeController: FVTypeController {
         return nil
     }
 
+    // swiftlint:disable function_body_length
+    // swiftlint:disable cyclomatic_complexity
     func assetForSND(data: NSData, errmsg: inout String) -> AVAsset? {
         // See Sound.h in Carbon
         // Also see "Sound Manager" legacy PDF
@@ -78,16 +80,16 @@ final class FVSNDTypeController: FVTypeController {
 
         // Read the SndListResource or Snd2ListResource
         var format = Int16()
-        if !reader.readInt16(.Big, &format) {
+        if !reader.readInt16(.big, &format) {
             errmsg = "Missing header"
             return nil
         }
         if format == firstSoundFormat {
             var numModifiers = Int16()
             var modifierPart = ModRef()
-            if !reader.readInt16(.Big, &numModifiers) ||
-                !reader.readUInt16(.Big, &modifierPart.modNumber) ||
-                !reader.readInt32(.Big, &modifierPart.modInit) {
+            if !reader.readInt16(.big, &numModifiers) ||
+                !reader.readUInt16(.big, &modifierPart.modNumber) ||
+                !reader.readInt32(.big, &modifierPart.modInit) {
                 errmsg = "Missing header"
                 return nil
             }
@@ -109,7 +111,7 @@ final class FVSNDTypeController: FVTypeController {
             }
         } else if format == secondSoundFormat {
             var refCount = Int16()
-            if !reader.readInt16(.Big, &refCount) {
+            if !reader.readInt16(.big, &refCount) {
                 errmsg = "Missing header"
                 return nil
             }
@@ -119,10 +121,10 @@ final class FVSNDTypeController: FVTypeController {
         }
 
         // Read SndCommands
-        var header_offset = Int()
+        var headerOffset = Int()
         var numCommands = Int16()
         var commandPart = SndCommand()
-        if !reader.readInt16(.Big, &numCommands) {
+        if !reader.readInt16(.big, &numCommands) {
             errmsg = "Missing header"
             return nil
         }
@@ -131,9 +133,9 @@ final class FVSNDTypeController: FVTypeController {
             return nil
         }
         for _ in Int16(0) ..< numCommands {
-            if !reader.readUInt16(.Big, &commandPart.cmd) ||
-                !reader.readInt16(.Big, &commandPart.param1) ||
-                !reader.readInt32(.Big, &commandPart.param2) {
+            if !reader.readUInt16(.big, &commandPart.cmd) ||
+                !reader.readInt16(.big, &commandPart.param1) ||
+                !reader.readInt32(.big, &commandPart.param2) {
                     errmsg = "Missing command"
                     return nil
             }
@@ -142,11 +144,11 @@ final class FVSNDTypeController: FVTypeController {
             commandPart.cmd &= ~0x8000
             switch commandPart.cmd {
             case soundCmd, bufferCmd:
-                if header_offset != 0 {
+                if headerOffset != 0 {
                     errmsg = "Duplicate commands"
                     return nil
                 }
-                header_offset = Int(commandPart.param2)
+                headerOffset = Int(commandPart.param2)
             case nullCmd:
                 break
             default:
@@ -157,11 +159,11 @@ final class FVSNDTypeController: FVTypeController {
 
         // Read SoundHeader
         var header = SoundHeader()
-        if !reader.readUInt32(.Big, &header.samplePtr) ||
-            !reader.readUInt32(.Big, &header.length) ||
-            !reader.readUInt32(.Big, &header.sampleRate) ||
-            !reader.readUInt32(.Big, &header.loopStart) ||
-            !reader.readUInt32(.Big, &header.loopEnd) ||
+        if !reader.readUInt32(.big, &header.samplePtr) ||
+            !reader.readUInt32(.big, &header.length) ||
+            !reader.readUInt32(.big, &header.sampleRate) ||
+            !reader.readUInt32(.big, &header.loopStart) ||
+            !reader.readUInt32(.big, &header.loopEnd) ||
             !reader.readUInt8(&header.encode) ||
             !reader.readUInt8(&header.baseFrequency) {
             errmsg = "Missing header data"
@@ -212,8 +214,8 @@ final class FVSNDTypeController: FVTypeController {
             errmsg = "Failed to create buffer"
             return nil
         }
-        for i in 0 ..< Int(header.length) {
-            audioBufferData[i] ^= 0x80
+        for idx in 0 ..< Int(header.length) {
+            audioBufferData[idx] ^= 0x80
         }
         var bufferList = AudioBufferList(mNumberBuffers: 1, mBuffers: audioBuffer)
 
@@ -234,6 +236,8 @@ final class FVSNDTypeController: FVTypeController {
         // Generate an AVAsset
         return AVAsset(url: url)
     }
+    // swiftlint:enable cyclomatic_complexity
+    // swiftlint:enable function_body_length
 }
 
 final class FVSNDViewController: NSViewController {
