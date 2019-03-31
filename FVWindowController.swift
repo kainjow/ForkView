@@ -22,7 +22,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         FVTextTypeController(),
 		StringListView(),
     ]
-    var viewController: NSViewController? = nil
+    var viewController: NSViewController?
 
     class func windowController() -> Self {
         return self.init(windowNibName: "FVWindow")
@@ -136,7 +136,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
             subview.removeFromSuperview()
         }
         self.viewController = nil
-        var view: NSView? = nil
+        var view: NSView?
         if let resource = self.selectedResource() {
             var errmsg = String()
             if let controller = controllerForResource(resource: resource, errmsg: &errmsg) {

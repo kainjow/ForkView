@@ -13,8 +13,8 @@ final public class FVResource: NSObject {
     @objc var name: String = ""
     @objc var dataSize: UInt32 = 0
     @objc var dataOffset: UInt32 = 0
-    @objc var type: FVResourceType? = nil
-    @objc var file: FVResourceFile? = nil
+    @objc var type: FVResourceType?
+    @objc var file: FVResourceFile?
 
     @objc var data: NSData? {
         return file?.dataForResource(resource: self)
