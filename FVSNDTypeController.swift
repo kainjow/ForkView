@@ -197,7 +197,7 @@ final class FVSNDTypeController: FVTypeController {
         let url = URL(fileURLWithPath: NSTemporaryDirectory().appendingFormat("%d-%f.aif", arc4random(), NSDate().timeIntervalSinceReferenceDate))
         var audioFileTmp: ExtAudioFileRef?
         let createStatus = ExtAudioFileCreateWithURL(url as CFURL, AudioFileTypeID(kAudioFileAIFFType), &stream, nil, AudioFileFlags.eraseFile.rawValue, &audioFileTmp)
-        guard createStatus != noErr, let audioFile = audioFileTmp else {
+        guard createStatus == noErr, let audioFile = audioFileTmp else {
             errmsg = "ExtAudioFileCreateWithURL failed with status \(createStatus)"
             return nil
         }
