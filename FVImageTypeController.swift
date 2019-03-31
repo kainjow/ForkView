@@ -447,7 +447,7 @@ final class FVImageTypeController: FVTypeController {
     
     func imageFromResource(_ rsrcData: NSData, type: String) -> NSImage? {
         switch type {
-        case "icns", "PNG ", "kcns", "GIFF":
+        case "icns", "PNG ", "kcns", "GIFF", "PICT":
             return NSImage(data: rsrcData as Data)
         case "ICON":
             if rsrcData.length == 128 {
