@@ -506,14 +506,10 @@ final class FVImageTypeController: FVTypeController {
 
 final class FVImageView: NSImageView {
     override var acceptsFirstResponder: Bool {
-        get {
-            return true
-        }
+        return true
     }
 
     override var needsPanelToBecomeKey: Bool {
-        get {
-            return true
-        }
+        return true
     }
 }

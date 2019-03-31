@@ -14,9 +14,7 @@ final class FVDataReader {
     private(set) var position = 0
 
     var length: Int {
-        get {
-            return data.length
-        }
+        return data.length
     }
 
     init(_ data: NSData) {
