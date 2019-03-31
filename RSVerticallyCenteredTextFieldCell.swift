@@ -19,7 +19,7 @@ import Cocoa
 
 class RSVerticallyCenteredTextFieldCell: NSTextFieldCell {
     private var mIsEditingOrSelecting = false
-    
+
     override func drawingRect(forBounds rect: NSRect) -> NSRect {
         // Get the parent's idea of where we should draw
         var newRect = super.drawingRect(forBounds: rect)
@@ -40,7 +40,7 @@ class RSVerticallyCenteredTextFieldCell: NSTextFieldCell {
                 newRect.origin.y += (heightDelta / 2)
             }
         }
-	
+
         return newRect
     }
 

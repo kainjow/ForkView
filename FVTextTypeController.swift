@@ -10,7 +10,7 @@ import Cocoa
 
 final class FVTextTypeController: FVTypeController {
     let supportedTypes = ["plst", "TEXT", "utf8", "utxt", "ut16", "weba", "RTF ", "rtfd", "STR "]
-    
+
     func viewControllerFromResourceData(data: NSData, type: String, errmsg: inout String) -> NSViewController? {
         guard let str = attributedStringFromResource(data, type: type) else {
             return nil
@@ -21,7 +21,7 @@ final class FVTextTypeController: FVTypeController {
         textView.textStorage?.setAttributedString(str)
         return viewController
     }
-    
+
     func attributedStringFromResource(_ rsrcData: NSData, type: String) -> NSAttributedString? {
         switch type {
         case "RTF ":
@@ -36,7 +36,7 @@ final class FVTextTypeController: FVTypeController {
         }
         return nil
     }
-    
+
     func stringFromResource(_ rsrcData: NSData, type: String) -> String? {
         switch type {
         case "plst", "weba":
@@ -61,7 +61,7 @@ final class FVTextTypeController: FVTypeController {
         }
         return nil
     }
-    
+
     func stringFromPascalStringData(_ data: NSData) -> String? {
         if data.length < 2 {
             return nil

@@ -14,18 +14,18 @@ private func pascalStringFromData(aResource: NSData, index indexID: Int16) -> [U
 	let handSize = aResource.length
 	var curSize = 2
 	var aId = indexID
-	
+
 	var data = aResource.bytes.assumingMemoryBound(to: UInt8.self)
 	let count = aResource.bytes.assumingMemoryBound(to: Int16.self)[0].bigEndian
-	
+
 	// First 2 bytes are the count of strings that this resource has.
 	if count < aId {
 		return nil
 	}
-	
+
 	// skip count
 	data += 2
-	
+
 	// looking for data.  data is in order
     aId -= 1
 	while aId >= 0 {
@@ -37,13 +37,13 @@ private func pascalStringFromData(aResource: NSData, index indexID: Int16) -> [U
 		data += toAdd
         aId -= 1
 	}
-	
+
 	return {
 		var aRet = [UInt8]()
 		for i in 0...Int(data.pointee) {
 			aRet.append(data[i])
 		}
-		
+
 		return aRet
 	}()
 }
@@ -55,18 +55,18 @@ private func pascalStringToString(_ aStr: UnsafePointer<UInt8>) -> String? {
 final class StringListObject: NSObject {
 	@objc let name: String
 	@objc let index: Int
-	
+
 	init(string: String, index: Int) {
 		self.name = string
 		self.index = index
-		
+
 		super.init()
 	}
 }
 
 final class StringListView: FVTypeController {
 	let supportedTypes = ["STR#"]
-	
+
 	func viewControllerFromResourceData(data: NSData, type: String, errmsg: inout String) -> NSViewController? {
         return StringListTemplate(resData: data, type: type)
 	}
@@ -92,7 +92,7 @@ final class StringListTemplate: NSViewController {
         super.init(nibName: "StringListView", bundle: nil)
         return
 	}
-	
+
 	required init?(coder: NSCoder) {
 		fatalError("init(coder:) has not been implemented")
 	}

@@ -14,7 +14,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
     @IBOutlet weak var typeView: NSView!
     @IBOutlet weak var noSelectionView: NSView!
     @IBOutlet weak var noSelectionLabel: NSTextField!
-    
+
     var windowControllers = [NSWindowController]()
     let typeControllers: [FVTypeController] = [
         FVImageTypeController(),
@@ -23,25 +23,25 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
 		StringListView(),
     ]
     var viewController: NSViewController? = nil
-    
+
     class func windowController() -> Self {
         return self.init(windowNibName: "FVWindow")
     }
-    
+
     override func windowDidLoad() {
         super.windowDidLoad()
-        
+
         tableView.customDelegate = self
-        
+
         NotificationCenter.default.addObserver(forName: NSWindow.willCloseNotification, object: self.window, queue: nil) { note in
             for windowController in self.windowControllers {
                 windowController.close()
             }
         }
-        
+
         viewSelectedResource()
     }
-    
+
     func tableViewMenuForSelection() -> NSMenu? {
         let menu = NSMenu()
         menu.addItem(withTitle: "Export\u{2026}", action: #selector(export), keyEquivalent: "")
@@ -51,7 +51,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
     func selectedResource() -> FVResource? {
         return resourcesArrayController.selectedObjects.last as? FVResource
     }
-    
+
     @objc func export() {
         let savePanel = NSSavePanel()
         savePanel.beginSheetModal(for: self.window!) { result in
@@ -60,13 +60,13 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
             }
         }
     }
-    
+
     func openSelectedResource() {
         if let resource = self.selectedResource() {
             openResource(resource: resource)
         }
     }
-    
+
     func controllerForResource(resource: FVResource, errmsg: inout String) -> NSViewController? {
         if let rsrcData = resource.data, rsrcData.length > 0 {
             if let type = resource.type?.typeString {
@@ -88,31 +88,31 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         if controller == nil {
             return
         }
-        
+
         let view = controller?.view
         let minSize = NSMakeSize(150, 150)
         var winFrame = view!.frame
-        
+
         if NSWidth(winFrame) < minSize.width {
             winFrame.size.width = minSize.width
         }
         if NSHeight(winFrame) < minSize.height {
             winFrame.size.height = minSize.height
         }
-        
+
         let parentWin = self.window
         var parentWinFrame = parentWin!.frameRect(forContentRect: parentWin!.contentView!.frame)
         parentWinFrame.origin = parentWin!.frame.origin
-        
+
         let styleMask: NSWindow.StyleMask = [.titled, .closable, .miniaturizable, .resizable]
         let window = NSWindow(contentRect: winFrame, styleMask: styleMask, backing: .buffered, defer: true)
         window.isReleasedWhenClosed = true
         window.contentView = controller!.view
         window.minSize = minSize
-        
+
         let newPoint = window.cascadeTopLeft(from: NSMakePoint(NSMinX(parentWinFrame), NSMaxY(parentWinFrame)))
         window.cascadeTopLeft(from: newPoint)
-        
+
         let windowController = NSWindowController(window: window)
         windowController.showWindow(nil)
         windowControllers.append(windowController)
@@ -125,12 +125,12 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
             }
         }
     }
-    
+
     override func windowTitle(forDocumentDisplayName displayName: String) -> String {
         let doc = self.document as? FVDocument
         return String(format: "%@ [%@]", displayName, !doc!.resourceFile!.isResourceFork ? "Data Fork" : "Resource Fork")
     }
-    
+
     func viewSelectedResource() {
         for subview in self.typeView.subviews {
             subview.removeFromSuperview()
@@ -154,7 +154,7 @@ final class FVWindowController: NSWindowController, FVTableViewDelegate, NSTable
         view!.frame = self.typeView.bounds
         self.typeView.addSubview(view!)
     }
-    
+
     func tableViewSelectionDidChange(_ note: Notification) {
         viewSelectedResource()
     }

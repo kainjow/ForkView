@@ -12,17 +12,17 @@ import Darwin.POSIX.sys.xattr
 final class FVDataReader {
     private var data = NSData()
     private(set) var position = 0
-    
+
     var length: Int {
         get {
             return data.length
         }
     }
-    
+
     init(_ data: NSData) {
         self.data = data
     }
-    
+
     init?(url: NSURL, resourceFork: Bool) {
         // Apple's docs say "The maximum size of the resource fork in a file is 16 megabytes"
         let maxResourceSize = 16777216
@@ -59,11 +59,11 @@ final class FVDataReader {
             self.data = data
         }
     }
-    
+
     class func dataReader(URL: NSURL, resourceFork: Bool) -> FVDataReader? {
         return FVDataReader(url: URL, resourceFork: resourceFork)
     }
-    
+
     func read(_ size: Int) -> NSData? {
         if (position + size > self.length) {
             return nil
@@ -72,7 +72,7 @@ final class FVDataReader {
         position += size
         return subdata as NSData
     }
-    
+
     func read(_ size: CUnsignedInt, into buf: UnsafeMutableRawPointer) -> Bool {
         guard let data = self.read(Int(size)) else {
             return false
@@ -80,7 +80,7 @@ final class FVDataReader {
         data.getBytes(buf, length: Int(size))
         return true
     }
-    
+
     func seekTo(_ offset: Int) -> Bool {
         if (offset >= self.length) {
             return false
@@ -88,11 +88,11 @@ final class FVDataReader {
         position = offset
         return true
     }
-    
+
     enum Endian {
         case Little, Big
     }
-    
+
     func readUInt16(_ endian: Endian, _ val: inout UInt16) -> Bool {
         if let dat = read(MemoryLayout<UInt16>.size) {
             dat.getBytes(&val, length: MemoryLayout<UInt16>.size)
@@ -119,7 +119,7 @@ final class FVDataReader {
         }
         return false
     }
-    
+
     func readInt32(_ endian: Endian, _ val: inout Int32) -> Bool {
         if let dat = read(MemoryLayout<Int32>.size) {
             dat.getBytes(&val, length: MemoryLayout<Int32>.size)
@@ -128,7 +128,7 @@ final class FVDataReader {
         }
         return false
     }
-    
+
     func readUInt8(_ val: inout UInt8) -> Bool {
         if let dat = read(MemoryLayout<UInt8>.size) {
             dat.getBytes(&val, length: MemoryLayout<UInt8>.size)

@@ -13,7 +13,7 @@ import AVFoundation
 
 final class FVSNDTypeController: FVTypeController {
     let supportedTypes = ["snd "]
-    
+
     func viewControllerFromResourceData(data: NSData, type: String, errmsg: inout String) -> NSViewController? {
         if let asset = assetForSND(data: data, errmsg: &errmsg) {
             let playerView = AVPlayerView(frame: NSMakeRect(0, 0, 100, 100))
@@ -73,9 +73,9 @@ final class FVSNDTypeController: FVTypeController {
             var encode: UInt8 = 0
             var baseFrequency: UInt8 = 0
         }
-        
+
         let reader = FVDataReader(data)
-        
+
         // Read the SndListResource or Snd2ListResource
         var format = Int16()
         if !reader.readInt16(.Big, &format) {
@@ -117,7 +117,7 @@ final class FVSNDTypeController: FVTypeController {
             errmsg = "Unknown format \(format)"
             return nil
         }
-        
+
         // Read SndCommands
         var header_offset = Int()
         var numCommands = Int16()
@@ -154,7 +154,7 @@ final class FVSNDTypeController: FVTypeController {
                 return nil
             }
         }
-        
+
         // Read SoundHeader
         var header = SoundHeader()
         if !reader.readUInt32(.Big, &header.samplePtr) ||
@@ -181,7 +181,7 @@ final class FVSNDTypeController: FVTypeController {
             }
             return nil
         }
-        
+
         // Generate an AudioStreamBasicDescription for conversion
         var stream = AudioStreamBasicDescription()
         stream.mSampleRate = Float64(header.sampleRate >> 16)
@@ -192,7 +192,7 @@ final class FVSNDTypeController: FVTypeController {
         stream.mBytesPerFrame = 1
         stream.mChannelsPerFrame = 1
         stream.mBitsPerChannel = 8
-        
+
         // Create a temporary file for storage
         let url = URL(fileURLWithPath: NSTemporaryDirectory().appendingFormat("%d-%f.aif", arc4random(), NSDate().timeIntervalSinceReferenceDate))
         var audioFileTmp: ExtAudioFileRef?
@@ -201,7 +201,7 @@ final class FVSNDTypeController: FVTypeController {
             errmsg = "ExtAudioFileCreateWithURL failed with status \(createStatus)"
             return nil
         }
-        
+
         // Configure the AudioBufferList
         let srcData = UnsafeMutableRawPointer(mutating: sampleData.bytes.assumingMemoryBound(to: UInt8.self))
         var audioBuffer = AudioBuffer()
@@ -216,21 +216,21 @@ final class FVSNDTypeController: FVTypeController {
             audioBufferData[i] ^= 0x80
         }
         var bufferList = AudioBufferList(mNumberBuffers: 1, mBuffers: audioBuffer)
-        
+
         // Write the data to the file
         let writeStatus = ExtAudioFileWrite(audioFile, header.length, &bufferList)
         if writeStatus != noErr {
             errmsg = "ExtAudioFileWrite failed with status \(writeStatus)"
             return nil
         }
-        
+
         // Finish up
         let disposeStatus = ExtAudioFileDispose(audioFile)
         if disposeStatus != noErr {
             errmsg = "ExtAudioFileDispose failed with status \(disposeStatus)"
             return nil
         }
-        
+
         // Generate an AVAsset
         return AVAsset(url: url)
     }

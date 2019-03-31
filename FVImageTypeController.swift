@@ -12,7 +12,7 @@ final class FVImageTypeController: FVTypeController {
     let supportedTypes = ["icns", "PICT", "PNG ", "ICON", "ICN#", "ics#", "CURS", "PAT ", "icl4", "icl8", "kcns", "ics4", "ics8",
 		"GIFF"
 	]
-    
+
     func viewControllerFromResourceData(data: NSData, type: String, errmsg: inout String) -> NSViewController? {
         guard let img = imageFromResource(data, type: type) else {
             return nil
@@ -25,7 +25,7 @@ final class FVImageTypeController: FVTypeController {
         viewController.view = imgView
         return viewController
     }
-    
+
     private struct FVRGBAColor {
         var r: UInt8
         var g: UInt8
@@ -38,7 +38,7 @@ final class FVImageTypeController: FVTypeController {
         var g: UInt8
         var b: UInt8
     }
-    
+
     func makeBitmap(_ size: Int) -> NSBitmapImageRep? {
         return NSBitmapImageRep(
             bitmapDataPlanes: nil,
@@ -60,7 +60,7 @@ final class FVImageTypeController: FVTypeController {
         guard let bitVector = CFBitVectorCreate(kCFAllocatorDefault, ptr, data.length * 8) else {
             return nil
         }
-        
+
         let haveAlpha: Bool
         let maskBitVector: CFBitVector
         if let maskData = maskData {
@@ -76,7 +76,7 @@ final class FVImageTypeController: FVTypeController {
             maskBitVector = CFBitVectorCreate(kCFAllocatorDefault, ptr, data.length * 8)
             haveAlpha = false
         }
-        
+
         guard let bitmap = makeBitmap(size) else {
             return nil
         }
@@ -96,15 +96,15 @@ final class FVImageTypeController: FVTypeController {
             colorPtr[i].b = value
             colorPtr[i].a = !haveAlpha ? 255 : (CFBitVectorGetBitAtIndex(maskBitVector, i) == 1 ? 255 : 0)
         }
-        
+
         let img = NSImage()
         img.addRepresentation(bitmap)
         return img
     }
-    
+
     func imageFrom4BitColorData(_ data: NSData, size: Int) -> NSImage? {
         let ptr = data.bytes.assumingMemoryBound(to: UInt8.self)
-        
+
         let palette: [FVRGBColor] = [
             FVRGBColor(r: 255, g: 255, b: 255),
             FVRGBColor(r: 251, g: 242, b: 5),
@@ -123,7 +123,7 @@ final class FVImageTypeController: FVTypeController {
             FVRGBColor(r: 63, g: 63, b: 63),
             FVRGBColor(r: 0, g: 0, b: 0),
         ]
-        
+
         guard let bitmap = makeBitmap(size) else {
             return nil
         }
@@ -153,7 +153,7 @@ final class FVImageTypeController: FVTypeController {
             colorPtr[i].b = rgb.b
             colorPtr[i].a = 255
         }
-        
+
         let img = NSImage()
         img.addRepresentation(bitmap)
         return img
@@ -418,7 +418,7 @@ final class FVImageTypeController: FVTypeController {
             FVRGBColor(r: 17, g: 17, b: 17),
             FVRGBColor(r: 0, g: 0, b: 0),
         ]
-        
+
         guard let bitmap = makeBitmap(size) else {
             return nil
         }
@@ -439,12 +439,12 @@ final class FVImageTypeController: FVTypeController {
             colorPtr[i].b = rgb.b
             colorPtr[i].a = 255
         }
-        
+
         let img = NSImage()
         img.addRepresentation(bitmap)
         return img
     }
-    
+
     func imageFromResource(_ rsrcData: NSData, type: String) -> NSImage? {
         switch type {
         case "icns", "PNG ", "kcns", "GIFF", "PICT":
