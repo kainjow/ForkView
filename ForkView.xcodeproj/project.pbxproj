@@ -164,7 +164,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C05733C708A9546B00998B17 /* Build configuration list for PBXNativeTarget "ForkView" */;
 			buildPhases = (
-				A55FF7DD22505E810076B839 /* Run SwiftLine */,
+				A55FF7DD22505E810076B839 /* Run SwiftLint */,
 				8D15AC2B0486D014006FF6A4 /* Resources */,
 				8D15AC300486D014006FF6A4 /* Sources */,
 				8D15AC330486D014006FF6A4 /* Frameworks */,
@@ -227,7 +227,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		A55FF7DD22505E810076B839 /* Run SwiftLine */ = {
+		A55FF7DD22505E810076B839 /* Run SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -236,7 +236,7 @@
 			);
 			inputPaths = (
 			);
-			name = "Run SwiftLine";
+			name = "Run SwiftLint";
 			outputFileListPaths = (
 			);
 			outputPaths = (
