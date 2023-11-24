@@ -1,3 +1,5 @@
+**This project has been archived. Consider using [ResForge](https://github.com/andrews05/ResForge).**
+
 # ForkView
 
 macOS [resource fork](https://en.wikipedia.org/wiki/Resource_fork) viewer written in Swift.
